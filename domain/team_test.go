@@ -47,3 +47,33 @@ func TestAllTheTeamBacklogAreNotDoneAtBeginning(t *testing.T) {
 		assert.False(t, story.done)
 	}
 }
+
+func TestTeamScoresZeroAtBeginning(t *testing.T) {
+	team := NewTeam("A Team")
+
+	assert.Equal(t, 0, team.Score())
+}
+
+func TestTeamScoresWhenAStoryIsDone(t *testing.T) {
+	team := NewTeam("A Team")
+
+	team.Done("EC-001")
+
+	assert.Equal(t, 1, team.Score())
+}
+
+func TestTeamScoresWhenSeveralStoriesAreDone(t *testing.T) {
+	team := NewTeam("A Team")
+
+	team.Done("EC-001", "EC-002", "EC-003")
+
+	assert.Equal(t, 3, team.Score())
+}
+
+func TestTeamDoesNotScoreWhenStoryDoesNotExist(t *testing.T) {
+	team := NewTeam("A Team")
+
+	team.Done("Wrong-Id")
+
+	assert.Equal(t, 0, team.Score())
+}

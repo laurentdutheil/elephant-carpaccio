@@ -46,3 +46,24 @@ func (t Team) Name() string {
 func (t Team) Backlog() []UserStory {
 	return t.backlog
 }
+
+func (t Team) Done(userStoryId ...string) {
+	for _, id := range userStoryId {
+		for i, story := range t.backlog {
+			if id == story.id {
+				t.backlog[i].done = true
+				break
+			}
+		}
+	}
+}
+
+func (t Team) Score() int {
+	score := 0
+	for _, story := range t.backlog {
+		if story.done {
+			score += story.valuePoint
+		}
+	}
+	return score
+}
