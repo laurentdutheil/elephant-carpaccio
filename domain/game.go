@@ -1,12 +1,13 @@
 package domain
 
+import "fmt"
+
 type Game struct {
-	teams           []*Team
-	iterationLogger *IterationLogger
+	teams []*Team
 }
 
 func NewGame() *Game {
-	return &Game{iterationLogger: NewIterationLogger()}
+	return &Game{}
 }
 
 func (g *Game) Register(teamName string) {
@@ -19,10 +20,15 @@ func (g *Game) Teams() []*Team {
 
 func (g *Game) LogIteration() {
 	for _, team := range g.teams {
-		g.iterationLogger.LogIterationScore(team)
+		team.LogIterationScore()
 	}
 }
 
 func (g *Game) PrintBoard() string {
-	return g.iterationLogger.String()
+	result := ""
+	for _, team := range g.teams {
+		result += team.name + ": "
+		result += fmt.Sprintln(team.IterationScores())
+	}
+	return result
 }
