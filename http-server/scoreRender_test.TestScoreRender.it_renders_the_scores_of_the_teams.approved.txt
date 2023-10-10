@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Elephant Carpaccio</title>
+    <meta charset="UTF-8"/>
+    <meta name="description" content="Have fun playing Elephant Carpaccio!" lang="en"/>
+</head>
+<body>
+<main>
+    <p>A Team: [3 5 8]
+The fantastic four: [3 5 8]
+</p>
+</main>
+<footer>
+    <ul>
+        <li><a href="https://docs.google.com/document/d/1Ls6pTmhY_LV8LwFiboUXoFXenXZl0qVZWPZ8J4uoqpI/edit#heading=h.oyitr9asho0e">Elephant Carpaccio exercise handout</a></li>
+        <li><a href="https://docs.google.com/document/u/1/d/1TCuuu-8Mm14oxsOnlk8DqfZAA1cvtYu9WGv67Yj_sSk/pub">Facilitation guide</a></li>
+    </ul>
+</footer>
+</body>
+</html>
