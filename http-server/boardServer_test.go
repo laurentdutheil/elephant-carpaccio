@@ -26,6 +26,21 @@ func TestHandleRoot(t *testing.T) {
 	mockRenderer.AssertExpectations(t)
 }
 
+func TestHandleRegistration(t *testing.T) {
+	mockRenderer := &MockRenderer{}
+	game := NewGame()
+	server := NewBoardServer(mockRenderer, game)
+	request, _ := http.NewRequest(http.MethodGet, "/register", nil)
+	response := httptest.NewRecorder()
+
+	mockRenderer.On("RenderRegistration", response, game).Return(nil)
+
+	server.ServeHTTP(response, request)
+
+	assert.Equal(t, response.Code, http.StatusOK)
+	mockRenderer.AssertExpectations(t)
+}
+
 type MockRenderer struct {
 	mock.Mock
 }

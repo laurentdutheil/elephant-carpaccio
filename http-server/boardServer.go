@@ -16,6 +16,7 @@ func NewBoardServer(renderer Renderer, game *Game) *BoardServer {
 
 	router := http.NewServeMux()
 	router.HandleFunc("/", s.handleRoot)
+	router.HandleFunc("/register", s.handleRegistration)
 
 	s.Handler = router
 
@@ -24,4 +25,8 @@ func NewBoardServer(renderer Renderer, game *Game) *BoardServer {
 
 func (s BoardServer) handleRoot(writer http.ResponseWriter, request *http.Request) {
 	_ = s.templateRenderer.RenderBoard(writer, s.game)
+}
+
+func (s BoardServer) handleRegistration(writer http.ResponseWriter, request *http.Request) {
+	_ = s.templateRenderer.RenderRegistration(writer, s.game)
 }
