@@ -13,6 +13,11 @@ var (
 	templates embed.FS
 )
 
+type Renderer interface {
+	RenderBoard(w io.Writer, game *Game) error
+	RenderRegistration(w io.Writer, game *Game) error
+}
+
 type TemplateRenderer struct {
 	template *template.Template
 }
