@@ -29,3 +29,7 @@ func NewScoreRenderer() (*ScoreRenderer, error) {
 func (r ScoreRenderer) RenderBoard(w io.Writer, game *Game) error {
 	return r.template.ExecuteTemplate(w, "index.gohtml", game)
 }
+
+func (r ScoreRenderer) RenderRegistration(w io.Writer, game *Game) error {
+	return r.template.ExecuteTemplate(w, "registration.gohtml", game)
+}

@@ -1,0 +1,31 @@
+{{- /*gotype: elephant_carpaccio/domain.Game*/ -}}
+{{template "top" .}}
+<div class="container">
+    <div class="row">
+        <form class="eight columns">
+            <div>
+                <label for="teamName">Team name</label>
+                <input class="u-full-width" id="teamName">
+            </div>
+            <input class="button" type="submit" value="Register">
+        </form>
+        <table class="four columns">
+            <thead>
+            <tr>
+                <th>Registered Teams</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{range .Teams}}
+                <tr>
+                    <td>{{.Name}}</td>
+                </tr> 
+            {{end}}
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <a class="button button-primary u-full-width" href="">Start Game</a>
+    </div>
+</div>
+{{template "footer" .}}
