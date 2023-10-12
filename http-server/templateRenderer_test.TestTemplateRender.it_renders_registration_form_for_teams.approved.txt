@@ -17,10 +17,10 @@
     <main>
 <div class="container">
     <div class="row">
-        <form class="eight columns">
+        <form class="eight columns" method="post">
             <div>
                 <label for="teamName">Team name</label>
-                <input class="u-full-width" id="teamName">
+                <input class="u-full-width" id="teamName" name="teamName">
             </div>
             <input class="button" type="submit" value="Register">
         </form>

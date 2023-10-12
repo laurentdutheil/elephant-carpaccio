@@ -37,7 +37,12 @@ func (s BoardServer) handleRoot(writer http.ResponseWriter, request *http.Reques
 }
 
 func (s BoardServer) handleRegistration(writer http.ResponseWriter, request *http.Request) {
-	_ = s.templateRenderer.RenderRegistration(writer, s.game)
+	if request.Method == http.MethodGet {
+		_ = s.templateRenderer.RenderRegistration(writer, s.game)
+	} else if request.Method == http.MethodPost {
+		s.game.Register(request.FormValue("teamName"))
+		http.Redirect(writer, request, request.URL.String(), http.StatusFound)
+	}
 }
 
 func (s BoardServer) staticHandler() http.Handler {

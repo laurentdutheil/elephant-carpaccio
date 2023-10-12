@@ -6,6 +6,8 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
+	"strings"
 	"testing"
 
 	. "elephant_carpaccio/domain"
@@ -26,7 +28,7 @@ func TestHandleRoot(t *testing.T) {
 	mockRenderer.AssertExpectations(t)
 }
 
-func TestHandleRegistration(t *testing.T) {
+func TestHandleRegistrationPage(t *testing.T) {
 	mockRenderer := &MockRenderer{}
 	game := NewGame()
 	server := NewBoardServer(mockRenderer, game)
@@ -42,15 +44,31 @@ func TestHandleRegistration(t *testing.T) {
 }
 
 func TestHandleStatic(t *testing.T) {
-	mockRenderer := &MockRenderer{}
 	game := NewGame()
-	server := NewBoardServer(mockRenderer, game)
+	server := NewBoardServer(nil, game)
 	request, _ := http.NewRequest(http.MethodGet, "/static/css/", nil)
 	response := httptest.NewRecorder()
 
 	server.ServeHTTP(response, request)
 
 	assert.Equal(t, http.StatusOK, response.Code)
+}
+
+func TestHandleRegistrationPost(t *testing.T) {
+	game := NewGame()
+	server := NewBoardServer(nil, game)
+	data := url.Values{}
+	data.Set("teamName", "A Team")
+	request, _ := http.NewRequest(http.MethodPost, "/register", strings.NewReader(data.Encode()))
+	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	response := httptest.NewRecorder()
+
+	server.ServeHTTP(response, request)
+
+	assert.Equal(t, "A Team", game.Teams()[0].Name())
+	// test the redirection to the register page
+	assert.Equal(t, "/register", response.Result().Header.Get("Location"))
+	assert.Equal(t, http.StatusFound, response.Code)
 }
 
 type MockRenderer struct {
