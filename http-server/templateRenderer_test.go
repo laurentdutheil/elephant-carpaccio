@@ -8,10 +8,10 @@ import (
 	. "elephant_carpaccio/domain"
 )
 
-func TestScoreRender(t *testing.T) {
+func TestTemplateRender(t *testing.T) {
 	game := simulateGame()
 
-	scoreRenderer, _ := NewScoreRenderer()
+	scoreRenderer, _ := NewRenderer()
 
 	t.Run("it renders the scores of the teams", func(t *testing.T) {
 		buf := bytes.Buffer{}

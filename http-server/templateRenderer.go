@@ -13,23 +13,23 @@ var (
 	templates embed.FS
 )
 
-type ScoreRenderer struct {
+type TemplateRenderer struct {
 	template *template.Template
 }
 
-func NewScoreRenderer() (*ScoreRenderer, error) {
+func NewRenderer() (*TemplateRenderer, error) {
 	t, err := template.ParseFS(templates, "templates/*.gohtml")
 	if err != nil {
 		return nil, err
 	}
 
-	return &ScoreRenderer{template: t}, nil
+	return &TemplateRenderer{template: t}, nil
 }
 
-func (r ScoreRenderer) RenderBoard(w io.Writer, game *Game) error {
+func (r TemplateRenderer) RenderBoard(w io.Writer, game *Game) error {
 	return r.template.ExecuteTemplate(w, "index.gohtml", game)
 }
 
-func (r ScoreRenderer) RenderRegistration(w io.Writer, game *Game) error {
+func (r TemplateRenderer) RenderRegistration(w io.Writer, game *Game) error {
 	return r.template.ExecuteTemplate(w, "registration.gohtml", game)
 }
