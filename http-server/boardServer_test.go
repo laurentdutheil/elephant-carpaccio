@@ -22,7 +22,7 @@ func TestHandleRoot(t *testing.T) {
 
 	server.ServeHTTP(response, request)
 
-	assert.Equal(t, response.Code, http.StatusOK)
+	assert.Equal(t, http.StatusOK, response.Code)
 	mockRenderer.AssertExpectations(t)
 }
 
@@ -37,8 +37,20 @@ func TestHandleRegistration(t *testing.T) {
 
 	server.ServeHTTP(response, request)
 
-	assert.Equal(t, response.Code, http.StatusOK)
+	assert.Equal(t, http.StatusOK, response.Code)
 	mockRenderer.AssertExpectations(t)
+}
+
+func TestHandleStatic(t *testing.T) {
+	mockRenderer := &MockRenderer{}
+	game := NewGame()
+	server := NewBoardServer(mockRenderer, game)
+	request, _ := http.NewRequest(http.MethodGet, "/static/css/", nil)
+	response := httptest.NewRecorder()
+
+	server.ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusOK, response.Code)
 }
 
 type MockRenderer struct {
