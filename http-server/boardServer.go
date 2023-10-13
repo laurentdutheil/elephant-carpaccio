@@ -5,6 +5,7 @@ import (
 	"embed"
 	"io/fs"
 	"net/http"
+	"strings"
 )
 
 var (
@@ -27,6 +28,7 @@ func NewBoardServer(renderer Renderer, game *Game) *BoardServer {
 	router.Handle("/static/", s.staticHandler())
 	router.HandleFunc("/register", s.handleRegistration)
 	router.HandleFunc("/demo", s.handleDemoIndex)
+	router.HandleFunc("/demo/", s.handleDemoScoring)
 
 	s.Handler = router
 
@@ -53,4 +55,14 @@ func (s BoardServer) staticHandler() http.Handler {
 
 func (s BoardServer) handleDemoIndex(writer http.ResponseWriter, _ *http.Request) {
 	_ = s.templateRenderer.RenderDemoIndex(writer, s.game)
+}
+
+func (s BoardServer) handleDemoScoring(writer http.ResponseWriter, request *http.Request) {
+	teamName := strings.TrimPrefix(request.URL.Path, "/demo/")
+
+	selectedTeam := s.game.FindTeamByName(teamName)
+
+	if selectedTeam != nil {
+		_ = s.templateRenderer.RenderDemoScoring(writer, selectedTeam)
+	}
 }

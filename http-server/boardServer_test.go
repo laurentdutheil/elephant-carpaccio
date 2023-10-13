@@ -78,6 +78,20 @@ func TestBoardServer(t *testing.T) {
 		mockRenderer.AssertExpectations(t)
 	})
 
+	t.Run("handle demo scoring page for a team", func(t *testing.T) {
+		game.Register("A Team")
+		request, _ := http.NewRequest(http.MethodGet, "/demo/A Team", nil)
+		response := httptest.NewRecorder()
+
+		team := game.Teams()[0]
+		mockRenderer.On("RenderDemoScoring", response, team).Return(nil)
+
+		server.ServeHTTP(response, request)
+
+		assert.Equal(t, http.StatusOK, response.Code)
+		mockRenderer.AssertExpectations(t)
+	})
+
 }
 
 type MockRenderer struct {
