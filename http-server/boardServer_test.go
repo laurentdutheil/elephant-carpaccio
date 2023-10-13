@@ -65,6 +65,19 @@ func TestBoardServer(t *testing.T) {
 		assert.Equal(t, "/register", response.Result().Header.Get("Location"))
 		assert.Equal(t, http.StatusFound, response.Code)
 	})
+
+	t.Run("handle demo index page", func(t *testing.T) {
+		request, _ := http.NewRequest(http.MethodGet, "/demo", nil)
+		response := httptest.NewRecorder()
+
+		mockRenderer.On("RenderDemoIndex", response, game).Return(nil)
+
+		server.ServeHTTP(response, request)
+
+		assert.Equal(t, http.StatusOK, response.Code)
+		mockRenderer.AssertExpectations(t)
+	})
+
 }
 
 type MockRenderer struct {

@@ -26,6 +26,7 @@ func NewBoardServer(renderer Renderer, game *Game) *BoardServer {
 	router.HandleFunc("/", s.handleBoardPage)
 	router.Handle("/static/", s.staticHandler())
 	router.HandleFunc("/register", s.handleRegistration)
+	router.HandleFunc("/demo", s.handleDemoIndex)
 
 	s.Handler = router
 
@@ -48,4 +49,8 @@ func (s BoardServer) handleRegistration(writer http.ResponseWriter, request *htt
 
 func (s BoardServer) staticHandler() http.Handler {
 	return http.StripPrefix("/static/", http.FileServer(http.FS(staticFS)))
+}
+
+func (s BoardServer) handleDemoIndex(writer http.ResponseWriter, _ *http.Request) {
+	_ = s.templateRenderer.RenderDemoIndex(writer, s.game)
 }
