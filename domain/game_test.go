@@ -14,6 +14,16 @@ func TestRegisterTeam(t *testing.T) {
 	assert.Contains(t, teams, NewTeam("A Team"))
 }
 
+func TestDontRegisterTeamIfNameIsBlank(t *testing.T) {
+	game := NewGame()
+	game.Register("")
+
+	teams := game.Teams()
+
+	assert.NotContains(t, teams, NewTeam(""))
+	assert.Len(t, teams, 0)
+}
+
 func TestLogIterationsScoreForAllTeam(t *testing.T) {
 	game := NewGame()
 	game.Register("A Team")

@@ -11,7 +11,9 @@ func NewGame() *Game {
 }
 
 func (g *Game) Register(teamName string) {
-	g.teams = append(g.teams, NewTeam(teamName))
+	if teamName != "" {
+		g.teams = append(g.teams, NewTeam(teamName))
+	}
 }
 
 func (g *Game) Teams() []*Team {
