@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Elephant Carpaccio</title>
+    <meta charset="UTF-8"/>
+    <meta name="description" content="Learn and have fun playing Elephant Carpaccio!" lang="en"/>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href="/static/css/normalize.css">
+    <link rel="stylesheet" href="/static/css/skeleton.css">
+</head>
+<body>
+    <main>
+<div class="container">
+    <form method="post">
+        <div class="row">
+            <table class="u-full-width">
+                <caption>Witch user stories are done?</caption>
+                <thead>
+                <tr>
+                    <th>User Story</th>
+                    <th>Done?</th>
+                </tr>
+                </thead>
+                <tbody>
+                
+                    <tr>
+                        <td>Hello World</td>
+                        <td><label><input type="checkbox" value="true" id="EC-001" name="EC-001"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>Can fill parameters</td>
+                        <td><label><input type="checkbox" value="true" id="EC-002" name="EC-002"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>Compute order value without tax</td>
+                        <td><label><input type="checkbox" value="true" id="EC-003" name="EC-003"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>Can handle float for &#39;number of items&#39; AND &#39;price by item&#39;</td>
+                        <td><label><input type="checkbox" value="true" id="EC-004" name="EC-004"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>Tax for UT</td>
+                        <td><label><input type="checkbox" value="true" id="EC-005" name="EC-005"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>Tax for NV</td>
+                        <td><label><input type="checkbox" value="true" id="EC-006" name="EC-006"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>Tax for TX</td>
+                        <td><label><input type="checkbox" value="true" id="EC-007" name="EC-007"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>Tax for AL</td>
+                        <td><label><input type="checkbox" value="true" id="EC-008" name="EC-008"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>Tax for CA</td>
+                        <td><label><input type="checkbox" value="false" id="EC-009" name="EC-009"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>15% Discount</td>
+                        <td><label><input type="checkbox" value="false" id="EC-010" name="EC-010"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>10% Discount</td>
+                        <td><label><input type="checkbox" value="false" id="EC-011" name="EC-011"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>7% Discount</td>
+                        <td><label><input type="checkbox" value="false" id="EC-012" name="EC-012"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>5% Discount</td>
+                        <td><label><input type="checkbox" value="false" id="EC-013" name="EC-013"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>3% Discount</td>
+                        <td><label><input type="checkbox" value="false" id="EC-014" name="EC-014"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>Can handle rounding for result (two digits after the decimal point)</td>
+                        <td><label><input type="checkbox" value="false" id="EC-015" name="EC-015"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>Prompts are clear. Display currency</td>
+                        <td><label><input type="checkbox" value="false" id="EC-016" name="EC-016"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>Display details (order value, tax, discount</td>
+                        <td><label><input type="checkbox" value="false" id="EC-017" name="EC-017"></label></td>
+                    </tr>
+                
+                    <tr>
+                        <td>Do not have to re-launch the application for each test</td>
+                        <td><label><input type="checkbox" value="false" id="EC-018" name="EC-018"></label></td>
+                    </tr>
+                
+                </tbody>
+            </table>
+            <input class="button-primary u-full-width" type="submit" value="Validate Demo">
+        </div>
+    </form>
+</div>
+</main>
+    <footer class="twelve columns">
+        <a href="https://docs.google.com/document/d/1Ls6pTmhY_LV8LwFiboUXoFXenXZl0qVZWPZ8J4uoqpI/edit#heading=h.oyitr9asho0e" target="_blank">Elephant Carpaccio exercise handout</a>
+        &nbsp;&nbsp;&nbsp;
+        <a href="https://docs.google.com/document/u/1/d/1TCuuu-8Mm14oxsOnlk8DqfZAA1cvtYu9WGv67Yj_sSk/pub" target="_blank">Facilitation guide</a>
+    </footer>
+</body>
+</html>

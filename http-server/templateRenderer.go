@@ -17,6 +17,7 @@ type Renderer interface {
 	RenderBoard(w io.Writer, game *Game) error
 	RenderRegistration(w io.Writer, game *Game) error
 	RenderDemoIndex(w io.Writer, game *Game) error
+	RenderDemoScoring(w io.Writer, team *Team) error
 }
 
 type TemplateRenderer struct {
@@ -42,4 +43,8 @@ func (r TemplateRenderer) RenderRegistration(w io.Writer, game *Game) error {
 
 func (r TemplateRenderer) RenderDemoIndex(w io.Writer, game *Game) error {
 	return r.template.ExecuteTemplate(w, "demo-index.gohtml", game)
+}
+
+func (r TemplateRenderer) RenderDemoScoring(w io.Writer, team *Team) error {
+	return r.template.ExecuteTemplate(w, "demo-team.gohtml", team)
 }

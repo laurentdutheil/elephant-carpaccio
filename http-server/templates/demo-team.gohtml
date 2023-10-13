@@ -1,0 +1,29 @@
+{{- /*gotype: elephant_carpaccio/domain.Team*/ -}}
+{{template "top" .}}
+<div class="container">
+    <form method="post">
+        <div class="row">
+            <table class="u-full-width">
+                <caption>Witch user stories are done?</caption>
+                <thead>
+                <tr>
+                    <th>User Story</th>
+                    <th>Done?</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{range .Backlog}}
+                    <tr>
+                        <td>{{.Description}}</td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" value="{{.Done}}" id="{{.Id}}" name="{{.Id}}"></label></td>
+                    </tr>
+                {{end}}
+                </tbody>
+            </table>
+            <input class="button-primary u-full-width" type="submit" value="Validate Demo">
+        </div>
+    </form>
+</div>
+{{template "footer" .}}

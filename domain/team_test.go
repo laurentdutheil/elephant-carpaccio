@@ -44,7 +44,7 @@ func TestTeamHaveADefaultBacklogAtBeginning(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.description, func(t *testing.T) {
-			assert.Contains(t, backlog, UserStory{id: test.id, description: test.description, valuePoint: test.valuePoint})
+			assert.Contains(t, backlog, UserStory{Id: test.id, Description: test.description, valuePoint: test.valuePoint})
 		})
 	}
 }
@@ -55,7 +55,7 @@ func TestAllTheTeamBacklogAreNotDoneAtBeginning(t *testing.T) {
 	backlog := team.Backlog()
 
 	for _, story := range backlog {
-		assert.False(t, story.done)
+		assert.False(t, story.Done)
 	}
 }
 

@@ -1,10 +1,10 @@
 package domain
 
 type UserStory struct {
-	id          StoryId
-	description string
+	Id          StoryId
+	Description string
 	valuePoint  int
-	done        bool
+	Done        bool
 }
 
 type StoryId string
@@ -13,8 +13,8 @@ type Backlog []UserStory
 
 func (b Backlog) Done(id StoryId) {
 	for i, story := range b {
-		if id == story.id {
-			b[i].done = true
+		if id == story.Id {
+			b[i].Done = true
 			break
 		}
 	}
@@ -23,7 +23,7 @@ func (b Backlog) Done(id StoryId) {
 func (b Backlog) Score() int {
 	score := 0
 	for _, story := range b {
-		if story.done {
+		if story.Done {
 			score += story.valuePoint
 		}
 	}
@@ -33,23 +33,23 @@ func (b Backlog) Score() int {
 
 func defaultBacklog() Backlog {
 	return Backlog{
-		{id: "EC-001", description: "Hello World", valuePoint: 1},
-		{id: "EC-002", description: "Can fill parameters", valuePoint: 1},
-		{id: "EC-003", description: "Compute order value without tax", valuePoint: 1},
-		{id: "EC-004", description: "Can handle float for 'number of items' AND 'price by item'", valuePoint: 1},
-		{id: "EC-005", description: "Tax for UT", valuePoint: 1},
-		{id: "EC-006", description: "Tax for NV", valuePoint: 1},
-		{id: "EC-007", description: "Tax for TX", valuePoint: 1},
-		{id: "EC-008", description: "Tax for AL", valuePoint: 1},
-		{id: "EC-009", description: "Tax for CA", valuePoint: 1},
-		{id: "EC-010", description: "15% Discount", valuePoint: 1},
-		{id: "EC-011", description: "10% Discount", valuePoint: 1},
-		{id: "EC-012", description: "7% Discount", valuePoint: 1},
-		{id: "EC-013", description: "5% Discount", valuePoint: 1},
-		{id: "EC-014", description: "3% Discount", valuePoint: 1},
-		{id: "EC-015", description: "Can handle rounding for result (two digits after the decimal point)", valuePoint: 1},
-		{id: "EC-016", description: "Prompts are clear. Display currency", valuePoint: 1},
-		{id: "EC-017", description: "Display details (order value, tax, discount", valuePoint: 1},
-		{id: "EC-018", description: "Do not have to re-launch the application for each test", valuePoint: 1},
+		{Id: "EC-001", Description: "Hello World", valuePoint: 1},
+		{Id: "EC-002", Description: "Can fill parameters", valuePoint: 1},
+		{Id: "EC-003", Description: "Compute order value without tax", valuePoint: 1},
+		{Id: "EC-004", Description: "Can handle float for 'number of items' AND 'price by item'", valuePoint: 1},
+		{Id: "EC-005", Description: "Tax for UT", valuePoint: 1},
+		{Id: "EC-006", Description: "Tax for NV", valuePoint: 1},
+		{Id: "EC-007", Description: "Tax for TX", valuePoint: 1},
+		{Id: "EC-008", Description: "Tax for AL", valuePoint: 1},
+		{Id: "EC-009", Description: "Tax for CA", valuePoint: 1},
+		{Id: "EC-010", Description: "15% Discount", valuePoint: 1},
+		{Id: "EC-011", Description: "10% Discount", valuePoint: 1},
+		{Id: "EC-012", Description: "7% Discount", valuePoint: 1},
+		{Id: "EC-013", Description: "5% Discount", valuePoint: 1},
+		{Id: "EC-014", Description: "3% Discount", valuePoint: 1},
+		{Id: "EC-015", Description: "Can handle rounding for result (two digits after the decimal point)", valuePoint: 1},
+		{Id: "EC-016", Description: "Prompts are clear. Display currency", valuePoint: 1},
+		{Id: "EC-017", Description: "Display details (order value, tax, discount", valuePoint: 1},
+		{Id: "EC-018", Description: "Do not have to re-launch the application for each test", valuePoint: 1},
 	}
 }

@@ -42,6 +42,17 @@ func TestTemplateRender(t *testing.T) {
 
 		approvals.VerifyString(t, buf.String())
 	})
+
+	t.Run("it renders backlog of a team for demo", func(t *testing.T) {
+		buf := bytes.Buffer{}
+
+		team := game.Teams()[0]
+		if err := scoreRenderer.RenderDemoScoring(&buf, team); err != nil {
+			t.Fatal(err)
+		}
+
+		approvals.VerifyString(t, buf.String())
+	})
 }
 
 func simulateGame() *Game {

@@ -98,3 +98,8 @@ func (m *MockRenderer) RenderDemoIndex(w io.Writer, game *Game) error {
 	args := m.Called(w, game)
 	return args.Error(0)
 }
+
+func (m *MockRenderer) RenderDemoScoring(w io.Writer, team *Team) error {
+	args := m.Called(w, team)
+	return args.Error(0)
+}
