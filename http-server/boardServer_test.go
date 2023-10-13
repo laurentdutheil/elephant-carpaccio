@@ -80,3 +80,8 @@ func (m *MockRenderer) RenderRegistration(w io.Writer, game *Game) error {
 	args := m.Called(w, game)
 	return args.Error(0)
 }
+
+func (m *MockRenderer) RenderDemoIndex(w io.Writer, game *Game) error {
+	args := m.Called(w, game)
+	return args.Error(0)
+}

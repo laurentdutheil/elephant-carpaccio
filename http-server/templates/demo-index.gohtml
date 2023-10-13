@@ -1,0 +1,22 @@
+{{- /*gotype: elephant_carpaccio/domain.Game*/ -}}
+{{template "top" .}}
+<div class="container">
+    <div class="row">
+        <table class="u-full-width">
+            <caption>Choose a Team for a demo</caption>
+            <thead>
+            <tr>
+                <th>Teams</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{range .Teams}}
+                <tr>
+                    <td><a href="/demo/{{.Name}}">{{.Name}}</a></td>
+                </tr> 
+            {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{template "footer" .}}

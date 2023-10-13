@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Elephant Carpaccio</title>
+    <meta charset="UTF-8"/>
+    <meta name="description" content="Learn and have fun playing Elephant Carpaccio!" lang="en"/>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href="/static/css/normalize.css">
+    <link rel="stylesheet" href="/static/css/skeleton.css">
+</head>
+<body>
+    <main>
+<div class="container">
+    <div class="row">
+        <table class="u-full-width">
+            <caption>Choose a Team for a demo</caption>
+            <thead>
+            <tr>
+                <th>Teams</th>
+            </tr>
+            </thead>
+            <tbody>
+            
+                <tr>
+                    <td><a href="/demo/A%20Team">A Team</a></td>
+                </tr> 
+            
+                <tr>
+                    <td><a href="/demo/The%20fantastic%20four">The fantastic four</a></td>
+                </tr> 
+            
+            </tbody>
+        </table>
+    </div>
+</div>
+</main>
+    <footer class="twelve columns">
+        <a href="https://docs.google.com/document/d/1Ls6pTmhY_LV8LwFiboUXoFXenXZl0qVZWPZ8J4uoqpI/edit#heading=h.oyitr9asho0e" target="_blank">Elephant Carpaccio exercise handout</a>
+        &nbsp;&nbsp;&nbsp;
+        <a href="https://docs.google.com/document/u/1/d/1TCuuu-8Mm14oxsOnlk8DqfZAA1cvtYu9WGv67Yj_sSk/pub" target="_blank">Facilitation guide</a>
+    </footer>
+</body>
+</html>

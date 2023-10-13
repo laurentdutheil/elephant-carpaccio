@@ -32,6 +32,16 @@ func TestTemplateRender(t *testing.T) {
 
 		approvals.VerifyString(t, buf.String())
 	})
+
+	t.Run("it renders list of teams for demo", func(t *testing.T) {
+		buf := bytes.Buffer{}
+
+		if err := scoreRenderer.RenderDemoIndex(&buf, game); err != nil {
+			t.Fatal(err)
+		}
+
+		approvals.VerifyString(t, buf.String())
+	})
 }
 
 func simulateGame() *Game {
