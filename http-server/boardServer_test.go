@@ -13,62 +13,58 @@ import (
 	. "elephant_carpaccio/domain"
 )
 
-func TestHandleRoot(t *testing.T) {
+func TestBoardServer(t *testing.T) {
 	mockRenderer := &MockRenderer{}
 	game := NewGame()
 	server := NewBoardServer(mockRenderer, game)
-	request, _ := http.NewRequest(http.MethodGet, "/", nil)
-	response := httptest.NewRecorder()
 
-	mockRenderer.On("RenderBoard", response, game).Return(nil)
+	t.Run("handle board page", func(t *testing.T) {
+		request, _ := http.NewRequest(http.MethodGet, "/", nil)
+		response := httptest.NewRecorder()
 
-	server.ServeHTTP(response, request)
+		mockRenderer.On("RenderBoard", response, game).Return(nil)
 
-	assert.Equal(t, http.StatusOK, response.Code)
-	mockRenderer.AssertExpectations(t)
-}
+		server.ServeHTTP(response, request)
 
-func TestHandleRegistrationPage(t *testing.T) {
-	mockRenderer := &MockRenderer{}
-	game := NewGame()
-	server := NewBoardServer(mockRenderer, game)
-	request, _ := http.NewRequest(http.MethodGet, "/register", nil)
-	response := httptest.NewRecorder()
+		assert.Equal(t, http.StatusOK, response.Code)
+		mockRenderer.AssertExpectations(t)
+	})
 
-	mockRenderer.On("RenderRegistration", response, game).Return(nil)
+	t.Run("handle static files", func(t *testing.T) {
+		request, _ := http.NewRequest(http.MethodGet, "/static/css/", nil)
+		response := httptest.NewRecorder()
 
-	server.ServeHTTP(response, request)
+		server.ServeHTTP(response, request)
 
-	assert.Equal(t, http.StatusOK, response.Code)
-	mockRenderer.AssertExpectations(t)
-}
+		assert.Equal(t, http.StatusOK, response.Code)
+	})
 
-func TestHandleStatic(t *testing.T) {
-	game := NewGame()
-	server := NewBoardServer(nil, game)
-	request, _ := http.NewRequest(http.MethodGet, "/static/css/", nil)
-	response := httptest.NewRecorder()
+	t.Run("handle registration page", func(t *testing.T) {
+		request, _ := http.NewRequest(http.MethodGet, "/register", nil)
+		response := httptest.NewRecorder()
 
-	server.ServeHTTP(response, request)
+		mockRenderer.On("RenderRegistration", response, game).Return(nil)
 
-	assert.Equal(t, http.StatusOK, response.Code)
-}
+		server.ServeHTTP(response, request)
 
-func TestHandleRegistrationPost(t *testing.T) {
-	game := NewGame()
-	server := NewBoardServer(nil, game)
-	data := url.Values{}
-	data.Set("teamName", "A Team")
-	request, _ := http.NewRequest(http.MethodPost, "/register", strings.NewReader(data.Encode()))
-	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	response := httptest.NewRecorder()
+		assert.Equal(t, http.StatusOK, response.Code)
+		mockRenderer.AssertExpectations(t)
+	})
 
-	server.ServeHTTP(response, request)
+	t.Run("handle registration post", func(t *testing.T) {
+		data := url.Values{}
+		data.Set("teamName", "A Team")
+		request, _ := http.NewRequest(http.MethodPost, "/register", strings.NewReader(data.Encode()))
+		request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		response := httptest.NewRecorder()
 
-	assert.Equal(t, "A Team", game.Teams()[0].Name())
-	// test the redirection to the register page
-	assert.Equal(t, "/register", response.Result().Header.Get("Location"))
-	assert.Equal(t, http.StatusFound, response.Code)
+		server.ServeHTTP(response, request)
+
+		assert.Equal(t, "A Team", game.Teams()[0].Name())
+		// test the redirection to the register page
+		assert.Equal(t, "/register", response.Result().Header.Get("Location"))
+		assert.Equal(t, http.StatusFound, response.Code)
+	})
 }
 
 type MockRenderer struct {

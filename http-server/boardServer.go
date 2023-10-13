@@ -23,23 +23,24 @@ func NewBoardServer(renderer Renderer, game *Game) *BoardServer {
 	s := &BoardServer{templateRenderer: renderer, game: game}
 
 	router := http.NewServeMux()
-	router.HandleFunc("/", s.handleRoot)
-	router.HandleFunc("/register", s.handleRegistration)
+	router.HandleFunc("/", s.handleBoardPage)
 	router.Handle("/static/", s.staticHandler())
+	router.HandleFunc("/register", s.handleRegistration)
 
 	s.Handler = router
 
 	return s
 }
 
-func (s BoardServer) handleRoot(writer http.ResponseWriter, request *http.Request) {
+func (s BoardServer) handleBoardPage(writer http.ResponseWriter, _ *http.Request) {
 	_ = s.templateRenderer.RenderBoard(writer, s.game)
 }
 
 func (s BoardServer) handleRegistration(writer http.ResponseWriter, request *http.Request) {
-	if request.Method == http.MethodGet {
+	switch request.Method {
+	case http.MethodGet:
 		_ = s.templateRenderer.RenderRegistration(writer, s.game)
-	} else if request.Method == http.MethodPost {
+	case http.MethodPost:
 		s.game.Register(request.FormValue("teamName"))
 		http.Redirect(writer, request, request.URL.String(), http.StatusFound)
 	}
