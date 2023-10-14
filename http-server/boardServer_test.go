@@ -14,11 +14,12 @@ import (
 )
 
 func TestBoardServer(t *testing.T) {
-	mockRenderer := &MockRenderer{}
-	game := NewGame()
-	server := NewBoardServer(mockRenderer, game)
 
 	t.Run("handle board page", func(t *testing.T) {
+		mockRenderer := &MockRenderer{}
+		game := NewGame()
+		server := NewBoardServer(mockRenderer, game)
+
 		request, _ := http.NewRequest(http.MethodGet, "/", nil)
 		response := httptest.NewRecorder()
 
@@ -31,6 +32,9 @@ func TestBoardServer(t *testing.T) {
 	})
 
 	t.Run("handle static files", func(t *testing.T) {
+		game := NewGame()
+		server := NewBoardServer(nil, game)
+
 		request, _ := http.NewRequest(http.MethodGet, "/static/css/", nil)
 		response := httptest.NewRecorder()
 
@@ -40,6 +44,10 @@ func TestBoardServer(t *testing.T) {
 	})
 
 	t.Run("handle registration page", func(t *testing.T) {
+		mockRenderer := &MockRenderer{}
+		game := NewGame()
+		server := NewBoardServer(mockRenderer, game)
+
 		request, _ := http.NewRequest(http.MethodGet, "/register", nil)
 		response := httptest.NewRecorder()
 
@@ -52,6 +60,9 @@ func TestBoardServer(t *testing.T) {
 	})
 
 	t.Run("handle registration post", func(t *testing.T) {
+		game := NewGame()
+		server := NewBoardServer(nil, game)
+
 		data := url.Values{}
 		data.Set("teamName", "A Team")
 		request, _ := http.NewRequest(http.MethodPost, "/register", strings.NewReader(data.Encode()))
@@ -67,6 +78,10 @@ func TestBoardServer(t *testing.T) {
 	})
 
 	t.Run("handle demo index page", func(t *testing.T) {
+		mockRenderer := &MockRenderer{}
+		game := NewGame()
+		server := NewBoardServer(mockRenderer, game)
+
 		request, _ := http.NewRequest(http.MethodGet, "/demo", nil)
 		response := httptest.NewRecorder()
 
@@ -79,7 +94,11 @@ func TestBoardServer(t *testing.T) {
 	})
 
 	t.Run("handle demo scoring page for a team", func(t *testing.T) {
+		mockRenderer := &MockRenderer{}
+		game := NewGame()
+		server := NewBoardServer(mockRenderer, game)
 		game.Register("A Team")
+
 		request, _ := http.NewRequest(http.MethodGet, "/demo/A Team", nil)
 		response := httptest.NewRecorder()
 
@@ -92,6 +111,42 @@ func TestBoardServer(t *testing.T) {
 		mockRenderer.AssertExpectations(t)
 	})
 
+	t.Run("handle demo scoring post", func(t *testing.T) {
+		game := NewGame()
+		server := NewBoardServer(nil, game)
+		game.Register("A Team")
+
+		data := url.Values{}
+		data.Set("EC-001", "EC-001")
+		data.Set("EC-002", "EC-002")
+		data.Set("EC-003", "EC-003")
+		data.Set("EC-004", "EC-004")
+		request, _ := http.NewRequest(http.MethodPost, "/demo/A Team", strings.NewReader(data.Encode()))
+		request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		response := httptest.NewRecorder()
+
+		server.ServeHTTP(response, request)
+
+		assert.Equal(t, "A Team: [4]\n", game.PrintBoard())
+		team := game.Teams()[0]
+		assertStoriesDone(t, team, []StoryId{"EC-001", "EC-002", "EC-003", "EC-004"})
+		// test the redirection to the register page
+		assert.Equal(t, "/demo", response.Result().Header.Get("Location"))
+		assert.Equal(t, http.StatusFound, response.Code)
+	})
+
+}
+
+func assertStoriesDone(t *testing.T, team *Team, storyIds []StoryId) {
+	var storiesDone []UserStory
+	for _, story := range team.Backlog() {
+		if story.Done {
+			storiesDone = append(storiesDone, story)
+		}
+	}
+	for _, story := range storiesDone {
+		assert.Contains(t, storyIds, story.Id)
+	}
 }
 
 type MockRenderer struct {

@@ -28,7 +28,6 @@ func (b Backlog) Score() int {
 		}
 	}
 	return score
-
 }
 
 func defaultBacklog() Backlog {

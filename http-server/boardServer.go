@@ -63,6 +63,19 @@ func (s BoardServer) handleDemoScoring(writer http.ResponseWriter, request *http
 	selectedTeam := s.game.FindTeamByName(teamName)
 
 	if selectedTeam != nil {
-		_ = s.templateRenderer.RenderDemoScoring(writer, selectedTeam)
+		switch request.Method {
+		case http.MethodGet:
+			_ = s.templateRenderer.RenderDemoScoring(writer, selectedTeam)
+		case http.MethodPost:
+			var storiesDone []StoryId
+			for _, story := range selectedTeam.Backlog() {
+				if request.FormValue(string(story.Id)) != "" {
+					storiesDone = append(storiesDone, story.Id)
+				}
+			}
+			selectedTeam.Done(storiesDone...)
+			selectedTeam.LogIterationScore()
+			http.Redirect(writer, request, "/demo", http.StatusFound)
+		}
 	}
 }
