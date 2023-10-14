@@ -15,7 +15,7 @@
                 {{range .Backlog}}
                     <tr>
                         <td>{{.Description}}</td>
-                        <td><label><input type="checkbox" value="{{.Done}}" id="{{.Id}}" name="{{.Id}}"></label></td>
+                        <td><label><input type="checkbox" value="{{.Id}}" id="{{.Id}}" name="{{.Id}}" {{if .Done}}checked{{end}}></label></td>
                     </tr>
                 {{end}}
                 </tbody>
