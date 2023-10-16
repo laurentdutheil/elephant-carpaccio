@@ -5,14 +5,16 @@
         <table class="u-full-width">
             <caption>Choose a Team for a demo</caption>
             <thead>
-            <tr>
-                <th>Teams</th>
+            <tr class="u-full-width">
+                <th class="ten columns u-pull-left">Teams</th>
+                <th class="two columns u-pull-right">Iteration</th>
             </tr>
             </thead>
             <tbody>
             {{range .Teams}}
-                <tr>
-                    <td><a href="/demo/{{.Name}}">{{.Name}}</a></td>
+                <tr class="u-full-width">
+                    <td class="ten columns u-pull-left"><a href="/demo/{{.Name}}">{{.Name}}</a></td>
+                    <td class="two columns u-pull-right">{{len .IterationScores}}</td>
                 </tr> 
             {{end}}
             </tbody>
