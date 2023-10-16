@@ -44,7 +44,7 @@
         </table>
     </div>
     <div class="row">
-        <a class="button button-primary u-full-width" href="">Start Game</a>
+        <a class="button button-primary u-full-width" href="/">Start Game</a>
     </div>
 </div>
 </main>
