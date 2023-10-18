@@ -67,15 +67,20 @@ func (s BoardServer) handleDemoScoring(writer http.ResponseWriter, request *http
 		case http.MethodGet:
 			_ = s.templateRenderer.RenderDemoScoring(writer, selectedTeam)
 		case http.MethodPost:
-			var storiesDone []StoryId
-			for _, story := range selectedTeam.Backlog() {
-				if request.FormValue(string(story.Id)) != "" {
-					storiesDone = append(storiesDone, story.Id)
-				}
-			}
+			storiesDone := s.extractStoryIdsSelected(request)
 			selectedTeam.Done(storiesDone...)
 			selectedTeam.LogIterationScore()
 			http.Redirect(writer, request, "/demo", http.StatusFound)
 		}
 	}
+}
+
+func (s BoardServer) extractStoryIdsSelected(request *http.Request) []StoryId {
+	_ = request.ParseForm()
+	var storiesDone []StoryId
+	values := request.Form["Done"]
+	for _, selectedStoryId := range values {
+		storiesDone = append(storiesDone, StoryId(selectedStoryId))
+	}
+	return storiesDone
 }

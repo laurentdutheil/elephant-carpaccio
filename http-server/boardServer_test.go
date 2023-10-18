@@ -117,10 +117,10 @@ func TestBoardServer(t *testing.T) {
 		game.Register("A Team")
 
 		data := url.Values{}
-		data.Set("EC-001", "EC-001")
-		data.Set("EC-002", "EC-002")
-		data.Set("EC-003", "EC-003")
-		data.Set("EC-004", "EC-004")
+		data.Add("Done", "EC-001")
+		data.Add("Done", "EC-002")
+		data.Add("Done", "EC-003")
+		data.Add("Done", "EC-004")
 		request, _ := http.NewRequest(http.MethodPost, "/demo/A Team", strings.NewReader(data.Encode()))
 		request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 		response := httptest.NewRecorder()
