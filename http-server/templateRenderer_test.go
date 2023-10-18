@@ -11,7 +11,7 @@ import (
 func TestTemplateRender(t *testing.T) {
 	game := simulateGame()
 
-	scoreRenderer, _ := NewRenderer()
+	scoreRenderer := NewRenderer()
 
 	t.Run("it renders the scores of the teams", func(t *testing.T) {
 		buf := bytes.Buffer{}

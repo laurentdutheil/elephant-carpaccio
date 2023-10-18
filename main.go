@@ -8,8 +8,7 @@ import (
 )
 
 func main() {
-	renderer, _ := http_server.NewRenderer()
 	game := NewGame()
-	server := http_server.NewBoardServer(renderer, game)
+	server := http_server.NewBoardServer(http_server.NewRenderer(), game)
 	log.Fatal(http.ListenAndServe("localhost:3000", server))
 }

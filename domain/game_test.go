@@ -45,3 +45,21 @@ func TestLogIterationsScoreForAllTeam(t *testing.T) {
 	printedBoard := game.PrintBoard()
 	assert.Equal(t, "A Team: [3 5 8]\nThe fantastic four: [3 5 8]\n", printedBoard)
 }
+
+func TestFindNoTeamWhenNoRegistration(t *testing.T) {
+	game := NewGame()
+
+	team := game.FindTeamByName("A Team")
+
+	assert.Nil(t, team)
+}
+
+func TestFindTeamWhenItIsRegistered(t *testing.T) {
+	game := NewGame()
+	game.Register("A Team")
+
+	team := game.FindTeamByName("A Team")
+
+	assert.NotNil(t, team)
+	assert.Equal(t, "A Team", team.name)
+}

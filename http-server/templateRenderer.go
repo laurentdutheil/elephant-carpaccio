@@ -24,13 +24,9 @@ type TemplateRenderer struct {
 	template *template.Template
 }
 
-func NewRenderer() (*TemplateRenderer, error) {
-	t, err := template.ParseFS(templates, "templates/*.gohtml")
-	if err != nil {
-		return nil, err
-	}
-
-	return &TemplateRenderer{template: t}, nil
+func NewRenderer() *TemplateRenderer {
+	t, _ := template.ParseFS(templates, "templates/*.gohtml")
+	return &TemplateRenderer{template: t}
 }
 
 func (r TemplateRenderer) RenderBoard(w io.Writer, game *Game) error {
