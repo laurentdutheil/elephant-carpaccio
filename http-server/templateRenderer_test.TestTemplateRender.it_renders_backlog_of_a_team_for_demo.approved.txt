@@ -1,38 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Elephant Carpaccio</title>
-    <meta charset="UTF-8"/>
-    <meta name="description" content="Learn and have fun playing Elephant Carpaccio!" lang="en"/>
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    
-    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-
-    
-    <link rel="stylesheet" href="/static/css/normalize.css">
-    <link rel="stylesheet" href="/static/css/skeleton.css">
-    <link rel="stylesheet" href="/static/css/custom.css">
-
-    
-    <link rel="icon" href="/static/img/elephant-carpaccio.svg">
-</head>
-<body>
-<nav role="navigation">
-    <div class="container">
-        <h1>
-            <img class="title-img" src="/static/img/elephant-carpaccio.svg" alt="elephant carpaccio image">
-            Elephant Carpaccio
-        </h1>
-        <a href="/">home</a>
-        &nbsp;&nbsp;&nbsp;
-        <a href="/register">teams registration</a>
-        &nbsp;&nbsp;&nbsp;
-        <a href="/demo">demo scoring</a>
-    </div>
-</nav>
-<main>
+<<top template>>
 <div class="container">
     <form method="post">
         <div class="row">
@@ -142,15 +108,4 @@
         </div>
     </form>
 </div>
-</main>
-<div class="container">
-    <footer class="twelve columns">
-        <a href="https://docs.google.com/document/d/1Ls6pTmhY_LV8LwFiboUXoFXenXZl0qVZWPZ8J4uoqpI/edit#heading=h.oyitr9asho0e" target="_blank">Elephant Carpaccio exercise handout</a>
-        &nbsp;&nbsp;&nbsp;
-        <a href="https://docs.google.com/document/u/1/d/1TCuuu-8Mm14oxsOnlk8DqfZAA1cvtYu9WGv67Yj_sSk/pub" target="_blank">Facilitation guide</a>
-        &nbsp;&nbsp;&nbsp;
-        Elephant icon by Kevin from <a href="https://thenounproject.com/browse/icons/term/elephant/" target="_blank" title="Elephant Icons">Noun Project</a> (CC BY 3.0)
-    </footer>
-</div>
-</body>
-</html>
+<<footer template>>

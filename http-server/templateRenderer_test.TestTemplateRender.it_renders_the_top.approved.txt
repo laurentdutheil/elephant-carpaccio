@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Elephant Carpaccio</title>
+    <meta charset="UTF-8"/>
+    <meta name="description" content="Learn and have fun playing Elephant Carpaccio!" lang="en"/>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+    
+    <link rel="stylesheet" href="/static/css/normalize.css">
+    <link rel="stylesheet" href="/static/css/skeleton.css">
+    <link rel="stylesheet" href="/static/css/custom.css">
+
+    
+    <link rel="icon" href="/static/img/elephant-carpaccio.svg">
+</head>
+<body>
+<nav role="navigation">
+    <div class="container">
+        <h1>
+            <img class="title-img" src="/static/img/elephant-carpaccio.svg" alt="elephant carpaccio image">
+            Elephant Carpaccio
+        </h1>
+        <a href="/">home</a>
+        &nbsp;&nbsp;&nbsp;
+        <a href="/register">teams registration</a>
+        &nbsp;&nbsp;&nbsp;
+        <a href="/demo">demo scoring</a>
+    </div>
+</nav>
+<<main and footer templates>>

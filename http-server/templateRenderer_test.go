@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"github.com/approvals/go-approval-tests"
 	"net"
+	"regexp"
 	"testing"
 
 	. "elephant_carpaccio/domain"
@@ -20,45 +21,97 @@ func TestTemplateRender(t *testing.T) {
 	}
 	scoreRenderer := NewRenderer(stub)
 
-	t.Run("it renders the scores of the teams", func(t *testing.T) {
+	t.Run("it renders the top", func(t *testing.T) {
 		buf := bytes.Buffer{}
+
+		mainScrubber, _ := regexp.Compile("(?s)<main>.*</html>")
+		ignoreMainAndFooter := approvals.Options().
+			WithRegexScrubber(mainScrubber, "<<main and footer templates>>")
 
 		if err := scoreRenderer.RenderBoard(&buf, game); err != nil {
 			t.Fatal(err)
 		}
 
-		approvals.VerifyString(t, buf.String())
+		approvals.VerifyString(t, buf.String(), ignoreMainAndFooter)
+	})
+
+	t.Run("it renders the footer", func(t *testing.T) {
+		buf := bytes.Buffer{}
+
+		mainScrubber, _ := regexp.Compile("(?s)<!DOCTYPE html>.*</main>")
+		ignoreMainAndFooter := approvals.Options().
+			WithRegexScrubber(mainScrubber, "<<top and main templates>>")
+
+		if err := scoreRenderer.RenderBoard(&buf, game); err != nil {
+			t.Fatal(err)
+		}
+
+		approvals.VerifyString(t, buf.String(), ignoreMainAndFooter)
+	})
+
+	t.Run("it renders the scores of the teams", func(t *testing.T) {
+		buf := bytes.Buffer{}
+
+		topScrubber, _ := regexp.Compile("(?s)<!DOCTYPE html>.*<main>")
+		footerScrubber, _ := regexp.Compile("(?s)</main>.*</html>")
+		ignoreTopAndFooter := approvals.Options().
+			WithRegexScrubber(topScrubber, "<<top template>>").
+			WithRegexScrubber(footerScrubber, "<<footer template>>")
+
+		if err := scoreRenderer.RenderBoard(&buf, game); err != nil {
+			t.Fatal(err)
+		}
+
+		approvals.VerifyString(t, buf.String(), ignoreTopAndFooter)
 	})
 
 	t.Run("it renders registration form for teams", func(t *testing.T) {
 		buf := bytes.Buffer{}
 
+		topScrubber, _ := regexp.Compile("(?s)<!DOCTYPE html>.*<main>")
+		footerScrubber, _ := regexp.Compile("(?s)</main>.*</html>")
+		ignoreTopAndFooter := approvals.Options().
+			WithRegexScrubber(topScrubber, "<<top template>>").
+			WithRegexScrubber(footerScrubber, "<<footer template>>")
+
 		if err := scoreRenderer.RenderRegistration(&buf, game); err != nil {
 			t.Fatal(err)
 		}
 
-		approvals.VerifyString(t, buf.String())
+		approvals.VerifyString(t, buf.String(), ignoreTopAndFooter)
 	})
 
 	t.Run("it renders list of teams for demo", func(t *testing.T) {
 		buf := bytes.Buffer{}
 
+		topScrubber, _ := regexp.Compile("(?s)<!DOCTYPE html>.*<main>")
+		footerScrubber, _ := regexp.Compile("(?s)</main>.*</html>")
+		ignoreTopAndFooter := approvals.Options().
+			WithRegexScrubber(topScrubber, "<<top template>>").
+			WithRegexScrubber(footerScrubber, "<<footer template>>")
+
 		if err := scoreRenderer.RenderDemoIndex(&buf, game); err != nil {
 			t.Fatal(err)
 		}
 
-		approvals.VerifyString(t, buf.String())
+		approvals.VerifyString(t, buf.String(), ignoreTopAndFooter)
 	})
 
 	t.Run("it renders backlog of a team for demo", func(t *testing.T) {
 		buf := bytes.Buffer{}
+
+		topScrubber, _ := regexp.Compile("(?s)<!DOCTYPE html>.*<main>")
+		footerScrubber, _ := regexp.Compile("(?s)</main>.*</html>")
+		ignoreTopAndFooter := approvals.Options().
+			WithRegexScrubber(topScrubber, "<<top template>>").
+			WithRegexScrubber(footerScrubber, "<<footer template>>")
 
 		team := game.Teams()[0]
 		if err := scoreRenderer.RenderDemoScoring(&buf, team); err != nil {
 			t.Fatal(err)
 		}
 
-		approvals.VerifyString(t, buf.String())
+		approvals.VerifyString(t, buf.String(), ignoreTopAndFooter)
 	})
 }
 
