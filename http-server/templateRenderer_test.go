@@ -3,6 +3,7 @@ package http_server
 import (
 	"bytes"
 	"github.com/approvals/go-approval-tests"
+	"net"
 	"testing"
 
 	. "elephant_carpaccio/domain"
@@ -11,7 +12,13 @@ import (
 func TestTemplateRender(t *testing.T) {
 	game := simulateGame()
 
-	scoreRenderer := NewRenderer()
+	goodAddr := &net.IPNet{
+		IP: net.ParseIP("128.168.0.44"),
+	}
+	stub := func() ([]net.Addr, error) {
+		return []net.Addr{goodAddr}, nil
+	}
+	scoreRenderer := NewRenderer(stub)
 
 	t.Run("it renders the scores of the teams", func(t *testing.T) {
 		buf := bytes.Buffer{}

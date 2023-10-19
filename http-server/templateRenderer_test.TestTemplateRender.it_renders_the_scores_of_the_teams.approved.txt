@@ -101,6 +101,9 @@
             <canvas id="iterationScores"></canvas>
         </div>
     </div>
+    <div class="row">
+        <canvas id="qr"></canvas>
+    </div>
 </div>
 
 <script src="/static/lib/chart.js"></script>
@@ -111,14 +114,14 @@
     chart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['IT0','IT1', 'IT2', 'IT3', 'IT4', 'IT5', 'IT6'],
+            labels: ['IT0', 'IT1', 'IT2', 'IT3', 'IT4', 'IT5', 'IT6'],
             datasets: [
                 {
                     label: 'ideal',
-                    data: [0,3,9,14,17,18,19],
+                    data: [0, 3, 9, 14, 17, 18, 19],
                     borderWidth: 1,
                     tension: 0.5,
-                    borderDash: [10,5]
+                    borderDash: [10, 5]
                 },
                 
                 {
@@ -138,10 +141,20 @@
             ],
         },
         options: {
-            aspectRatio:1 
+            aspectRatio: 1
         }
     });
 
+</script>
+
+<script src="/static/lib/qrious.min.js"></script>
+<script>
+(function () {
+    new QRious({
+        element: document.getElementById('qr'),
+        value: 'http:\/\/128.168.0.44:3000/demo'
+    });
+})();
 </script>
 </main>
 <div class="container">

@@ -1,4 +1,4 @@
-{{- /*gotype: elephant_carpaccio/domain.Game*/ -}}
+{{- /*gotype: elephant_carpaccio/http-server.GameBoard*/ -}}
 {{template "top" .}}
 <div class="container">
     <div class="row">
@@ -68,6 +68,9 @@
             <canvas id="iterationScores"></canvas>
         </div>
     </div>
+    <div class="row">
+        <canvas id="qr"></canvas>
+    </div>
 </div>
 
 <script src="/static/lib/chart.js"></script>
@@ -78,16 +81,16 @@
     chart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['IT0','IT1', 'IT2', 'IT3', 'IT4', 'IT5', 'IT6'],
+            labels: ['IT0', 'IT1', 'IT2', 'IT3', 'IT4', 'IT5', 'IT6'],
             datasets: [
                 {
                     label: 'ideal',
-                    data: [0,3,9,14,17,18,19],
+                    data: [0, 3, 9, 14, 17, 18, 19],
                     borderWidth: 1,
                     tension: 0.5,
-                    borderDash: [10,5]
+                    borderDash: [10, 5]
                 },
-                {{range .Teams}}
+                {{range .Game.Teams}}
                 {
                     label: '{{.Name}}',
                     data: [0{{range .IterationScores}},{{.}}{{end}}],
@@ -98,9 +101,19 @@
             ],
         },
         options: {
-            aspectRatio:1 
+            aspectRatio: 1
         }
     });
 
+</script>
+
+<script src="/static/lib/qrious.min.js"></script>
+<script>
+(function () {
+    new QRious({
+        element: document.getElementById('qr'),
+        value: '{{.BaseURL}}/demo'
+    });
+})();
 </script>
 {{template "footer" .}}
