@@ -22,8 +22,30 @@ func main() {
 	server := httpserver.NewBoardServer(game, net.InterfaceAddrs)
 
 	if environment == "DEV" {
+		simulateGameForDev(game)
 		log.Fatal(http.ListenAndServe("localhost:3000", server))
 	} else {
 		log.Fatal(http.ListenAndServe(":3000", server))
 	}
+}
+
+func simulateGameForDev(game *Game) {
+	game.Register("A Team")
+	game.Register("The fantastic four")
+
+	team1 := game.Teams()[0]
+	team2 := game.Teams()[1]
+
+	team1.Done("EC-001", "EC-002", "EC-003")
+	team2.Done("EC-001")
+	game.LogIteration()
+
+	team1.Done("EC-004", "EC-005")
+	team2.Done("EC-002", "EC-003")
+	game.LogIteration()
+
+	team1.Done("EC-006", "EC-007", "EC-008")
+	team2.Done("EC-004", "EC-005", "EC-006", "EC-007")
+	game.LogIteration()
+
 }
