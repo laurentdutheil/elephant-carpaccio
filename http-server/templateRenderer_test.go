@@ -1,4 +1,4 @@
-package http_server
+package http_server_test
 
 import (
 	"bytes"
@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	. "elephant_carpaccio/domain"
+	. "elephant_carpaccio/http-server"
 )
 
 func TestTemplateRender(t *testing.T) {
@@ -32,14 +33,14 @@ func TestTemplateRender(t *testing.T) {
 		buf := bytes.Buffer{}
 
 		mainScrubber, _ := regexp.Compile("(?s)<!DOCTYPE html>.*</main>")
-		ignoreMainAndFooter := approvals.Options().
+		ignoreTopAndMain := approvals.Options().
 			WithRegexScrubber(mainScrubber, "<<top and main templates>>")
 
 		if err := templateRenderer.RenderBoard(&buf, game, net.ParseIP("128.168.0.44")); err != nil {
 			t.Fatal(err)
 		}
 
-		approvals.VerifyString(t, buf.String(), ignoreMainAndFooter)
+		approvals.VerifyString(t, buf.String(), ignoreTopAndMain)
 	})
 
 	t.Run("it renders the scores of the teams", func(t *testing.T) {

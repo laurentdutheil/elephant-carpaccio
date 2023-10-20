@@ -1,7 +1,6 @@
-package http_server
+package http_server_test
 
 import (
-	"elephant_carpaccio/http-server/network"
 	"github.com/stretchr/testify/assert"
 	"net"
 	"net/http"
@@ -11,6 +10,8 @@ import (
 	"testing"
 
 	. "elephant_carpaccio/domain"
+	. "elephant_carpaccio/http-server"
+	"elephant_carpaccio/http-server/network"
 )
 
 func TestBoardServer(t *testing.T) {
@@ -67,9 +68,7 @@ func TestBoardServer(t *testing.T) {
 		server.ServeHTTP(response, request)
 
 		assert.Equal(t, "A Team", game.Teams()[0].Name())
-		// test the redirection to the register page
-		assert.Equal(t, "/register", response.Result().Header.Get("Location"))
-		assert.Equal(t, http.StatusFound, response.Code)
+		assertRedirection(t, response, "/register")
 	})
 
 	t.Run("handle demo index page", func(t *testing.T) {
@@ -103,26 +102,29 @@ func TestBoardServer(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
 		game.Register("A Team")
+		team := game.Teams()[0]
 
 		data := url.Values{}
 		data.Add("Done", "EC-001")
 		data.Add("Done", "EC-002")
 		data.Add("Done", "EC-003")
 		data.Add("Done", "EC-004")
-		request, _ := http.NewRequest(http.MethodPost, "/demo/A Team", strings.NewReader(data.Encode()))
+		request, _ := http.NewRequest(http.MethodPost, "/demo/"+team.Name(), strings.NewReader(data.Encode()))
 		request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 		response := httptest.NewRecorder()
 
 		server.ServeHTTP(response, request)
 
-		assert.Equal(t, "A Team: [4]\n", game.PrintBoard())
-		team := game.Teams()[0]
-		assertStoriesDone(t, team, []StoryId{"EC-001", "EC-002", "EC-003", "EC-004"})
-		// test the redirection to the register page
-		assert.Equal(t, "/demo", response.Result().Header.Get("Location"))
-		assert.Equal(t, http.StatusFound, response.Code)
+		assert.Len(t, team.IterationScores(), 1)
+		assertStoriesDone(t, team.Backlog(), []StoryId{"EC-001", "EC-002", "EC-003", "EC-004"})
+		assertRedirection(t, response, "/demo")
 	})
 
+}
+
+func assertRedirection(t *testing.T, response *httptest.ResponseRecorder, expectedUrl string) {
+	assert.Equal(t, expectedUrl, response.Result().Header.Get("Location"))
+	assert.Equal(t, http.StatusFound, response.Code)
 }
 
 func createLocalIpSeekerStub(expectedLocalIp string) network.InterfaceAddrs {
@@ -133,9 +135,9 @@ func createLocalIpSeekerStub(expectedLocalIp string) network.InterfaceAddrs {
 	}
 }
 
-func assertStoriesDone(t *testing.T, team *Team, storyIds []StoryId) {
+func assertStoriesDone(t *testing.T, backlog Backlog, storyIds []StoryId) {
 	var storiesDone []UserStory
-	for _, story := range team.Backlog() {
+	for _, story := range backlog {
 		if story.Done {
 			storiesDone = append(storiesDone, story)
 		}

@@ -1,6 +1,8 @@
-package network
+package network_test
 
 import (
+	. "elephant_carpaccio/http-server/network"
+
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"net"
