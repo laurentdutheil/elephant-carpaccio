@@ -10,6 +10,6 @@ import (
 
 func main() {
 	game := NewGame()
-	server := httpserver.NewBoardServer(httpserver.NewRenderer(net.InterfaceAddrs), game)
+	server := httpserver.NewBoardServer(game, net.InterfaceAddrs)
 	log.Fatal(http.ListenAndServe(":3000", server))
 }

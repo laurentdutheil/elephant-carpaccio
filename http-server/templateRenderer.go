@@ -1,11 +1,11 @@
 package http_server
 
 import (
-	"elephant_carpaccio/http-server/network"
 	"embed"
 	"fmt"
 	"html/template"
 	"io"
+	"net"
 
 	. "elephant_carpaccio/domain"
 )
@@ -15,16 +15,8 @@ var (
 	templates embed.FS
 )
 
-type Renderer interface {
-	RenderBoard(w io.Writer, game *Game) error
-	RenderRegistration(w io.Writer, game *Game) error
-	RenderDemoIndex(w io.Writer, game *Game) error
-	RenderDemoScoring(w io.Writer, team *Team) error
-}
-
 type TemplateRenderer struct {
-	template       *template.Template
-	interfaceAddrs network.InterfaceAddrs
+	template *template.Template
 }
 
 type GameBoard struct {
@@ -32,13 +24,12 @@ type GameBoard struct {
 	BaseURL string
 }
 
-func NewRenderer(interfaceAddr network.InterfaceAddrs) *TemplateRenderer {
+func NewTemplateRenderer() *TemplateRenderer {
 	t, _ := template.ParseFS(templates, "templates/*.gohtml")
-	return &TemplateRenderer{template: t, interfaceAddrs: interfaceAddr}
+	return &TemplateRenderer{template: t}
 }
 
-func (r TemplateRenderer) RenderBoard(w io.Writer, game *Game) error {
-	localIp, _ := network.GetLocalIp(r.interfaceAddrs)
+func (r TemplateRenderer) RenderBoard(w io.Writer, game *Game, localIp net.IP) error {
 	gameBoard := GameBoard{
 		Game:    game,
 		BaseURL: fmt.Sprintf("http://%v:3000", localIp.String()),

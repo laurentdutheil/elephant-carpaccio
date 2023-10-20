@@ -1,9 +1,9 @@
 package http_server
 
 import (
+	"elephant_carpaccio/http-server/network"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"io"
+	"net"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -14,26 +14,24 @@ import (
 )
 
 func TestBoardServer(t *testing.T) {
+	localIpSeekerStub := createLocalIpSeekerStub("128.168.0.44")
 
 	t.Run("handle board page", func(t *testing.T) {
-		mockRenderer := &MockRenderer{}
 		game := NewGame()
-		server := NewBoardServer(mockRenderer, game)
+		server := NewBoardServer(game, localIpSeekerStub)
 
 		request, _ := http.NewRequest(http.MethodGet, "/", nil)
 		response := httptest.NewRecorder()
 
-		mockRenderer.On("RenderBoard", response, game).Return(nil)
-
 		server.ServeHTTP(response, request)
 
 		assert.Equal(t, http.StatusOK, response.Code)
-		mockRenderer.AssertExpectations(t)
+		assert.Contains(t, response.Body.String(), "<canvas id=\"iterationScores\"></canvas>")
 	})
 
 	t.Run("handle static files", func(t *testing.T) {
 		game := NewGame()
-		server := NewBoardServer(nil, game)
+		server := NewBoardServer(game, localIpSeekerStub)
 
 		request, _ := http.NewRequest(http.MethodGet, "/static/css/", nil)
 		response := httptest.NewRecorder()
@@ -44,24 +42,21 @@ func TestBoardServer(t *testing.T) {
 	})
 
 	t.Run("handle registration page", func(t *testing.T) {
-		mockRenderer := &MockRenderer{}
 		game := NewGame()
-		server := NewBoardServer(mockRenderer, game)
+		server := NewBoardServer(game, localIpSeekerStub)
 
 		request, _ := http.NewRequest(http.MethodGet, "/register", nil)
 		response := httptest.NewRecorder()
 
-		mockRenderer.On("RenderRegistration", response, game).Return(nil)
-
 		server.ServeHTTP(response, request)
 
 		assert.Equal(t, http.StatusOK, response.Code)
-		mockRenderer.AssertExpectations(t)
+		assert.Contains(t, response.Body.String(), "<th>Registered Teams</th>")
 	})
 
 	t.Run("handle registration post", func(t *testing.T) {
 		game := NewGame()
-		server := NewBoardServer(nil, game)
+		server := NewBoardServer(game, localIpSeekerStub)
 
 		data := url.Values{}
 		data.Set("teamName", "A Team")
@@ -78,42 +73,35 @@ func TestBoardServer(t *testing.T) {
 	})
 
 	t.Run("handle demo index page", func(t *testing.T) {
-		mockRenderer := &MockRenderer{}
 		game := NewGame()
-		server := NewBoardServer(mockRenderer, game)
+		server := NewBoardServer(game, localIpSeekerStub)
 
 		request, _ := http.NewRequest(http.MethodGet, "/demo", nil)
 		response := httptest.NewRecorder()
 
-		mockRenderer.On("RenderDemoIndex", response, game).Return(nil)
-
 		server.ServeHTTP(response, request)
 
 		assert.Equal(t, http.StatusOK, response.Code)
-		mockRenderer.AssertExpectations(t)
+		assert.Contains(t, response.Body.String(), "<caption>Choose a Team for a demo</caption>")
 	})
 
 	t.Run("handle demo scoring page for a team", func(t *testing.T) {
-		mockRenderer := &MockRenderer{}
 		game := NewGame()
-		server := NewBoardServer(mockRenderer, game)
+		server := NewBoardServer(game, localIpSeekerStub)
 		game.Register("A Team")
 
 		request, _ := http.NewRequest(http.MethodGet, "/demo/A Team", nil)
 		response := httptest.NewRecorder()
 
-		team := game.Teams()[0]
-		mockRenderer.On("RenderDemoScoring", response, team).Return(nil)
-
 		server.ServeHTTP(response, request)
 
 		assert.Equal(t, http.StatusOK, response.Code)
-		mockRenderer.AssertExpectations(t)
+		assert.Contains(t, response.Body.String(), "<caption>Witch user stories are done?</caption>")
 	})
 
 	t.Run("handle demo scoring post", func(t *testing.T) {
 		game := NewGame()
-		server := NewBoardServer(nil, game)
+		server := NewBoardServer(game, localIpSeekerStub)
 		game.Register("A Team")
 
 		data := url.Values{}
@@ -137,6 +125,14 @@ func TestBoardServer(t *testing.T) {
 
 }
 
+func createLocalIpSeekerStub(expectedLocalIp string) network.InterfaceAddrs {
+	return func() ([]net.Addr, error) {
+		return []net.Addr{
+			&net.IPNet{IP: net.ParseIP(expectedLocalIp)},
+		}, nil
+	}
+}
+
 func assertStoriesDone(t *testing.T, team *Team, storyIds []StoryId) {
 	var storiesDone []UserStory
 	for _, story := range team.Backlog() {
@@ -147,28 +143,4 @@ func assertStoriesDone(t *testing.T, team *Team, storyIds []StoryId) {
 	for _, story := range storiesDone {
 		assert.Contains(t, storyIds, story.Id)
 	}
-}
-
-type MockRenderer struct {
-	mock.Mock
-}
-
-func (m *MockRenderer) RenderBoard(w io.Writer, game *Game) error {
-	args := m.Called(w, game)
-	return args.Error(0)
-}
-
-func (m *MockRenderer) RenderRegistration(w io.Writer, game *Game) error {
-	args := m.Called(w, game)
-	return args.Error(0)
-}
-
-func (m *MockRenderer) RenderDemoIndex(w io.Writer, game *Game) error {
-	args := m.Called(w, game)
-	return args.Error(0)
-}
-
-func (m *MockRenderer) RenderDemoScoring(w io.Writer, team *Team) error {
-	args := m.Called(w, team)
-	return args.Error(0)
 }

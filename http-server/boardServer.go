@@ -2,8 +2,10 @@ package http_server
 
 import (
 	. "elephant_carpaccio/domain"
+	"elephant_carpaccio/http-server/network"
 	"embed"
 	"io/fs"
+	"net"
 	"net/http"
 	"strings"
 )
@@ -15,13 +17,16 @@ var (
 )
 
 type BoardServer struct {
-	templateRenderer Renderer
 	http.Handler
-	game *Game
+	templateRenderer *TemplateRenderer
+	game             *Game
+	localIp          net.IP
 }
 
-func NewBoardServer(renderer Renderer, game *Game) *BoardServer {
-	s := &BoardServer{templateRenderer: renderer, game: game}
+func NewBoardServer(game *Game, interfaceAddrsFunc network.InterfaceAddrs) *BoardServer {
+	localIp, _ := network.GetLocalIp(interfaceAddrsFunc)
+
+	s := &BoardServer{templateRenderer: NewTemplateRenderer(), game: game, localIp: localIp}
 
 	router := http.NewServeMux()
 	router.HandleFunc("/", s.handleBoardPage)
@@ -36,7 +41,7 @@ func NewBoardServer(renderer Renderer, game *Game) *BoardServer {
 }
 
 func (s BoardServer) handleBoardPage(writer http.ResponseWriter, _ *http.Request) {
-	_ = s.templateRenderer.RenderBoard(writer, s.game)
+	_ = s.templateRenderer.RenderBoard(writer, s.game, nil)
 }
 
 func (s BoardServer) handleRegistration(writer http.ResponseWriter, request *http.Request) {

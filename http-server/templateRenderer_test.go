@@ -12,14 +12,7 @@ import (
 
 func TestTemplateRender(t *testing.T) {
 	game := simulateGame()
-
-	goodAddr := &net.IPNet{
-		IP: net.ParseIP("128.168.0.44"),
-	}
-	stub := func() ([]net.Addr, error) {
-		return []net.Addr{goodAddr}, nil
-	}
-	scoreRenderer := NewRenderer(stub)
+	templateRenderer := NewTemplateRenderer()
 
 	t.Run("it renders the top", func(t *testing.T) {
 		buf := bytes.Buffer{}
@@ -28,7 +21,7 @@ func TestTemplateRender(t *testing.T) {
 		ignoreMainAndFooter := approvals.Options().
 			WithRegexScrubber(mainScrubber, "<<main and footer templates>>")
 
-		if err := scoreRenderer.RenderBoard(&buf, game); err != nil {
+		if err := templateRenderer.RenderBoard(&buf, game, net.ParseIP("128.168.0.44")); err != nil {
 			t.Fatal(err)
 		}
 
@@ -42,7 +35,7 @@ func TestTemplateRender(t *testing.T) {
 		ignoreMainAndFooter := approvals.Options().
 			WithRegexScrubber(mainScrubber, "<<top and main templates>>")
 
-		if err := scoreRenderer.RenderBoard(&buf, game); err != nil {
+		if err := templateRenderer.RenderBoard(&buf, game, net.ParseIP("128.168.0.44")); err != nil {
 			t.Fatal(err)
 		}
 
@@ -58,7 +51,7 @@ func TestTemplateRender(t *testing.T) {
 			WithRegexScrubber(topScrubber, "<<top template>>").
 			WithRegexScrubber(footerScrubber, "<<footer template>>")
 
-		if err := scoreRenderer.RenderBoard(&buf, game); err != nil {
+		if err := templateRenderer.RenderBoard(&buf, game, net.ParseIP("128.168.0.44")); err != nil {
 			t.Fatal(err)
 		}
 
@@ -74,7 +67,7 @@ func TestTemplateRender(t *testing.T) {
 			WithRegexScrubber(topScrubber, "<<top template>>").
 			WithRegexScrubber(footerScrubber, "<<footer template>>")
 
-		if err := scoreRenderer.RenderRegistration(&buf, game); err != nil {
+		if err := templateRenderer.RenderRegistration(&buf, game); err != nil {
 			t.Fatal(err)
 		}
 
@@ -90,7 +83,7 @@ func TestTemplateRender(t *testing.T) {
 			WithRegexScrubber(topScrubber, "<<top template>>").
 			WithRegexScrubber(footerScrubber, "<<footer template>>")
 
-		if err := scoreRenderer.RenderDemoIndex(&buf, game); err != nil {
+		if err := templateRenderer.RenderDemoIndex(&buf, game); err != nil {
 			t.Fatal(err)
 		}
 
@@ -107,7 +100,7 @@ func TestTemplateRender(t *testing.T) {
 			WithRegexScrubber(footerScrubber, "<<footer template>>")
 
 		team := game.Teams()[0]
-		if err := scoreRenderer.RenderDemoScoring(&buf, team); err != nil {
+		if err := templateRenderer.RenderDemoScoring(&buf, team); err != nil {
 			t.Fatal(err)
 		}
 
