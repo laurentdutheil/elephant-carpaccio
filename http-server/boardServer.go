@@ -27,8 +27,9 @@ func NewBoardServer(game *Game, interfaceAddrsFunc network.InterfaceAddrs) *Boar
 	localIp, err := network.GetLocalIp(interfaceAddrsFunc)
 	if err != nil {
 		println(err.Error())
+	} else {
+		println("local IP: " + localIp.String())
 	}
-	println(localIp.String())
 
 	s := &BoardServer{templateRenderer: NewTemplateRenderer(), game: game, localIp: localIp}
 
