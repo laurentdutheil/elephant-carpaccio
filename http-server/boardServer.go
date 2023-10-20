@@ -24,7 +24,11 @@ type BoardServer struct {
 }
 
 func NewBoardServer(game *Game, interfaceAddrsFunc network.InterfaceAddrs) *BoardServer {
-	localIp, _ := network.GetLocalIp(interfaceAddrsFunc)
+	localIp, err := network.GetLocalIp(interfaceAddrsFunc)
+	if err != nil {
+		println(err.Error())
+	}
+	println(localIp.String())
 
 	s := &BoardServer{templateRenderer: NewTemplateRenderer(), game: game, localIp: localIp}
 
@@ -41,7 +45,7 @@ func NewBoardServer(game *Game, interfaceAddrsFunc network.InterfaceAddrs) *Boar
 }
 
 func (s BoardServer) handleBoardPage(writer http.ResponseWriter, _ *http.Request) {
-	_ = s.templateRenderer.RenderBoard(writer, s.game, nil)
+	_ = s.templateRenderer.RenderBoard(writer, s.game, s.localIp)
 }
 
 func (s BoardServer) handleRegistration(writer http.ResponseWriter, request *http.Request) {

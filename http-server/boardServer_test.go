@@ -28,6 +28,7 @@ func TestBoardServer(t *testing.T) {
 
 		assert.Equal(t, http.StatusOK, response.Code)
 		assert.Contains(t, response.Body.String(), "<canvas id=\"iterationScores\"></canvas>")
+		assert.Contains(t, response.Body.String(), "128.168.0.44:3000/demo")
 	})
 
 	t.Run("handle static files", func(t *testing.T) {
