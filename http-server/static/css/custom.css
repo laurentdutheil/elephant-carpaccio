@@ -9,3 +9,10 @@ caption {
 th,
 td {
     text-align: center;}
+footer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    background: white;
+    text-align: center;
+    width: 100%;}
