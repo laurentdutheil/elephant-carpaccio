@@ -2,7 +2,7 @@
 {{template "top" .}}
 <div class="container">
     <div class="row">
-        <table class="four columns">
+        <table class="one-quarter column">
             <caption>Discount</caption>
             <thead>
             <tr>
@@ -33,7 +33,7 @@
             </tr>
             </tbody>
         </table>
-        <table class="two columns">
+        <table class="one-quarter column">
             <caption>Tax</caption>
             <thead>
             <tr>
@@ -64,7 +64,7 @@
             </tr>
             </tbody>
         </table>
-        <div class="six columns">
+        <div class="one-half column">
             <canvas id="iterationScores"></canvas>
         </div>
     </div>
@@ -109,11 +109,11 @@
 
 <script src="/static/lib/qrious.min.js"></script>
 <script>
-(function () {
-    new QRious({
-        element: document.getElementById('qr'),
-        value: '{{.BaseURL}}/demo'
-    });
-})();
+    (function () {
+        new QRious({
+            element: document.getElementById('qr'),
+            value: '{{.BaseURL}}/demo'
+        });
+    })();
 </script>
 {{template "footer" .}}

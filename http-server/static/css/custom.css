@@ -2,3 +2,10 @@
     height: 1em;}
 main {
     margin: 1em 0;}
+caption {
+    font-weight: bold;
+    font-size: x-large;
+    padding-bottom: 1rem;}
+th,
+td {
+    text-align: center;}

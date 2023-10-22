@@ -2,19 +2,19 @@
 {{template "top" .}}
 <div class="container">
     <div class="row">
-        <table class="u-full-width">
+        <table class="six columns">
             <caption>Choose a Team for a demo</caption>
             <thead>
             <tr class="u-full-width">
-                <th class="ten columns u-pull-left">Teams</th>
-                <th class="two columns u-pull-right">Iteration</th>
+                <th>Teams</th>
+                <th>Iteration</th>
             </tr>
             </thead>
             <tbody>
             {{range .Teams}}
                 <tr class="u-full-width">
-                    <td class="ten columns u-pull-left"><a href="/demo/{{.Name}}">{{.Name}}</a></td>
-                    <td class="two columns u-pull-right">{{len .IterationScores}}</td>
+                    <td><a href="/demo/{{.Name}}">{{.Name}}</a></td>
+                    <td>{{len .IterationScores}}</td>
                 </tr> 
             {{end}}
             </tbody>
