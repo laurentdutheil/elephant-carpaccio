@@ -1,9 +1,15 @@
 package domain
 
+type Score int
+
+func (s Score) Add(score Score) Score {
+	return s + score
+}
+
 type Team struct {
 	name            string
 	backlog         Backlog
-	iterationScores []int
+	iterationScores []Score
 	scoreSubject    ScoreSubject
 }
 
@@ -25,7 +31,7 @@ func (t *Team) Done(userStoryIds ...StoryId) {
 	}
 }
 
-func (t *Team) Score() int {
+func (t *Team) Score() Score {
 	return t.backlog.Score()
 }
 
@@ -36,6 +42,6 @@ func (t *Team) CompleteIteration() {
 	}
 }
 
-func (t *Team) IterationScores() []int {
+func (t *Team) IterationScores() []Score {
 	return t.iterationScores
 }

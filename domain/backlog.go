@@ -20,11 +20,11 @@ func (b Backlog) Done(id StoryId) {
 	}
 }
 
-func (b Backlog) Score() int {
-	score := 0
+func (b Backlog) Score() Score {
+	score := Score(0)
 	for _, story := range b {
 		if story.Done {
-			score += story.valuePoint
+			score = score.Add(Score(story.valuePoint))
 		}
 	}
 	return score

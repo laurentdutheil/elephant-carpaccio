@@ -63,7 +63,7 @@ func TestAllTheTeamBacklogAreNotDoneAtBeginning(t *testing.T) {
 func TestTeamScoresZeroAtBeginning(t *testing.T) {
 	team := NewTeam("A Team", nil)
 
-	assert.Equal(t, 0, team.Score())
+	assert.Equal(t, Score(0), team.Score())
 }
 
 func TestTeamScoresWhenAStoryIsDone(t *testing.T) {
@@ -71,7 +71,7 @@ func TestTeamScoresWhenAStoryIsDone(t *testing.T) {
 
 	team.Done("EC-001")
 
-	assert.Equal(t, 1, team.Score())
+	assert.Equal(t, Score(1), team.Score())
 }
 
 func TestTeamScoresWhenSeveralStoriesAreDone(t *testing.T) {
@@ -79,7 +79,7 @@ func TestTeamScoresWhenSeveralStoriesAreDone(t *testing.T) {
 
 	team.Done("EC-001", "EC-002", "EC-003")
 
-	assert.Equal(t, 3, team.Score())
+	assert.Equal(t, Score(3), team.Score())
 }
 
 func TestTeamDoesNotScoreWhenStoryDoesNotExist(t *testing.T) {
@@ -87,7 +87,7 @@ func TestTeamDoesNotScoreWhenStoryDoesNotExist(t *testing.T) {
 
 	team.Done("Wrong-Id")
 
-	assert.Equal(t, 0, team.Score())
+	assert.Equal(t, Score(0), team.Score())
 }
 
 func TestCompleteFirstIteration(t *testing.T) {
@@ -97,7 +97,7 @@ func TestCompleteFirstIteration(t *testing.T) {
 
 	scores := team.IterationScores()
 
-	assert.Equal(t, []int{1}, scores)
+	assert.Equal(t, []Score{1}, scores)
 }
 
 func TestCompleteSeveralIterations(t *testing.T) {
@@ -111,7 +111,7 @@ func TestCompleteSeveralIterations(t *testing.T) {
 
 	scores := team.IterationScores()
 
-	assert.Equal(t, []int{1, 3, 6}, scores)
+	assert.Equal(t, []Score{1, 3, 6}, scores)
 }
 
 func TestCompleteIterationNotifyScoresListeners(t *testing.T) {
@@ -123,7 +123,7 @@ func TestCompleteIterationNotifyScoresListeners(t *testing.T) {
 
 	team.CompleteIteration()
 
-	mockScoreSubject.AssertCalled(t, "NotifyAll", "A Team", 1)
+	mockScoreSubject.AssertCalled(t, "NotifyAll", "A Team", Score(1))
 }
 
 func TestCompleteIterationDontNotifyIfThereIsNoScoreSubject(t *testing.T) {
@@ -142,6 +142,6 @@ type MockScoreSubject struct {
 	mock.Mock
 }
 
-func (m *MockScoreSubject) NotifyAll(teamName string, newIterationScore int) {
+func (m *MockScoreSubject) NotifyAll(teamName string, newIterationScore Score) {
 	m.Called(teamName, newIterationScore)
 }
