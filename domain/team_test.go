@@ -142,6 +142,14 @@ type MockScoreSubject struct {
 	mock.Mock
 }
 
+func (m *MockScoreSubject) AddScoreObserver(observer ScoreObserver) {
+	m.Called(observer)
+}
+
+func (m *MockScoreSubject) RemoveScoreObserver(id string) {
+	m.Called(id)
+}
+
 func (m *MockScoreSubject) NotifyAll(teamName string, newIterationScore Score) {
 	m.Called(teamName, newIterationScore)
 }
