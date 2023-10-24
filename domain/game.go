@@ -10,7 +10,7 @@ func NewGame() *Game {
 
 func (g *Game) Register(teamName string) {
 	if teamName != "" {
-		g.teams = append(g.teams, NewTeam(teamName))
+		g.teams = append(g.teams, NewTeam(teamName, nil))
 	}
 }
 

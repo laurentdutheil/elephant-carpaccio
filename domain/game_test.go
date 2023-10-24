@@ -11,7 +11,7 @@ func TestRegisterTeam(t *testing.T) {
 
 	teams := game.Teams()
 
-	assert.Contains(t, teams, NewTeam("A Team"))
+	assert.Contains(t, teams, NewTeam("A Team", nil))
 }
 
 func TestDontRegisterTeamIfNameIsBlank(t *testing.T) {
@@ -20,7 +20,7 @@ func TestDontRegisterTeamIfNameIsBlank(t *testing.T) {
 
 	teams := game.Teams()
 
-	assert.NotContains(t, teams, NewTeam(""))
+	assert.NotContains(t, teams, NewTeam("", nil))
 	assert.Len(t, teams, 0)
 }
 

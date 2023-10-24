@@ -2,11 +2,12 @@ package domain
 
 import (
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"testing"
 )
 
 func TestTeamHaveAName(t *testing.T) {
-	team := NewTeam("A Team")
+	team := NewTeam("A Team", nil)
 
 	teamName := team.Name()
 
@@ -39,7 +40,7 @@ func TestTeamHaveADefaultBacklogAtBeginning(t *testing.T) {
 		{id: "EC-018", description: "Do not have to re-launch the application for each test", valuePoint: 1},
 	}
 
-	team := NewTeam("A Team")
+	team := NewTeam("A Team", nil)
 	backlog := team.Backlog()
 
 	for _, test := range tests {
@@ -50,7 +51,7 @@ func TestTeamHaveADefaultBacklogAtBeginning(t *testing.T) {
 }
 
 func TestAllTheTeamBacklogAreNotDoneAtBeginning(t *testing.T) {
-	team := NewTeam("A Team")
+	team := NewTeam("A Team", nil)
 
 	backlog := team.Backlog()
 
@@ -60,13 +61,13 @@ func TestAllTheTeamBacklogAreNotDoneAtBeginning(t *testing.T) {
 }
 
 func TestTeamScoresZeroAtBeginning(t *testing.T) {
-	team := NewTeam("A Team")
+	team := NewTeam("A Team", nil)
 
 	assert.Equal(t, 0, team.Score())
 }
 
 func TestTeamScoresWhenAStoryIsDone(t *testing.T) {
-	team := NewTeam("A Team")
+	team := NewTeam("A Team", nil)
 
 	team.Done("EC-001")
 
@@ -74,7 +75,7 @@ func TestTeamScoresWhenAStoryIsDone(t *testing.T) {
 }
 
 func TestTeamScoresWhenSeveralStoriesAreDone(t *testing.T) {
-	team := NewTeam("A Team")
+	team := NewTeam("A Team", nil)
 
 	team.Done("EC-001", "EC-002", "EC-003")
 
@@ -82,7 +83,7 @@ func TestTeamScoresWhenSeveralStoriesAreDone(t *testing.T) {
 }
 
 func TestTeamDoesNotScoreWhenStoryDoesNotExist(t *testing.T) {
-	team := NewTeam("A Team")
+	team := NewTeam("A Team", nil)
 
 	team.Done("Wrong-Id")
 
@@ -90,7 +91,7 @@ func TestTeamDoesNotScoreWhenStoryDoesNotExist(t *testing.T) {
 }
 
 func TestCompleteFirstIteration(t *testing.T) {
-	team := NewTeam("A Team")
+	team := NewTeam("A Team", nil)
 	team.Done("EC-001")
 	team.CompleteIteration()
 
@@ -100,7 +101,7 @@ func TestCompleteFirstIteration(t *testing.T) {
 }
 
 func TestCompleteSeveralIterations(t *testing.T) {
-	team := NewTeam("A Team")
+	team := NewTeam("A Team", nil)
 	team.Done("EC-001")
 	team.CompleteIteration()
 	team.Done("EC-002", "EC-003")
@@ -111,4 +112,36 @@ func TestCompleteSeveralIterations(t *testing.T) {
 	scores := team.IterationScores()
 
 	assert.Equal(t, []int{1, 3, 6}, scores)
+}
+
+func TestCompleteIterationNotifyScoresListeners(t *testing.T) {
+	mockScoreSubject := MockScoreSubject{}
+	team := NewTeam("A Team", &mockScoreSubject)
+	team.Done("EC-001")
+
+	mockScoreSubject.On("NotifyAll", mock.Anything, mock.Anything)
+
+	team.CompleteIteration()
+
+	mockScoreSubject.AssertCalled(t, "NotifyAll", "A Team", 1)
+}
+
+func TestCompleteIterationDontNotifyIfThereIsNoScoreSubject(t *testing.T) {
+	notInjectedMockScoreSubject := MockScoreSubject{}
+	team := NewTeam("A Team", nil)
+	team.Done("EC-001")
+
+	notInjectedMockScoreSubject.On("NotifyAll", mock.Anything, mock.Anything)
+
+	team.CompleteIteration()
+
+	notInjectedMockScoreSubject.AssertNotCalled(t, "NotifyAll", "A Team", 1)
+}
+
+type MockScoreSubject struct {
+	mock.Mock
+}
+
+func (m *MockScoreSubject) NotifyAll(teamName string, newIterationScore int) {
+	m.Called(teamName, newIterationScore)
 }

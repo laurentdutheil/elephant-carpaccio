@@ -4,10 +4,11 @@ type Team struct {
 	name            string
 	backlog         Backlog
 	iterationScores []int
+	scoreSubject    ScoreSubject
 }
 
-func NewTeam(name string) *Team {
-	return &Team{name: name, backlog: defaultBacklog()}
+func NewTeam(name string, scoreSubject ScoreSubject) *Team {
+	return &Team{name: name, backlog: defaultBacklog(), scoreSubject: scoreSubject}
 }
 
 func (t *Team) Name() string {
@@ -30,6 +31,9 @@ func (t *Team) Score() int {
 
 func (t *Team) CompleteIteration() {
 	t.iterationScores = append(t.iterationScores, t.Score())
+	if t.scoreSubject != nil {
+		t.scoreSubject.NotifyAll(t.name, t.Score())
+	}
 }
 
 func (t *Team) IterationScores() []int {
