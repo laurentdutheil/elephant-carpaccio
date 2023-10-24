@@ -79,7 +79,7 @@ func (s BoardServer) handleDemoScoring(writer http.ResponseWriter, request *http
 		case http.MethodPost:
 			storiesDone := s.extractStoryIdsSelected(request)
 			selectedTeam.Done(storiesDone...)
-			selectedTeam.LogIterationScore()
+			selectedTeam.CompleteIteration()
 			http.Redirect(writer, request, "/demo", http.StatusFound)
 		}
 	}

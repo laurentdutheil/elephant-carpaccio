@@ -116,15 +116,15 @@ func simulateGame() *Game {
 
 	for _, team := range game.Teams() {
 		team.Done("EC-001", "EC-002", "EC-003")
+		team.CompleteIteration()
 	}
-	game.LogIteration()
 	for _, team := range game.Teams() {
 		team.Done("EC-004", "EC-005")
+		team.CompleteIteration()
 	}
-	game.LogIteration()
 	for _, team := range game.Teams() {
 		team.Done("EC-006", "EC-007", "EC-008")
+		team.CompleteIteration()
 	}
-	game.LogIteration()
 	return game
 }

@@ -28,7 +28,7 @@ func (t *Team) Score() int {
 	return t.backlog.Score()
 }
 
-func (t *Team) LogIterationScore() {
+func (t *Team) CompleteIteration() {
 	t.iterationScores = append(t.iterationScores, t.Score())
 }
 

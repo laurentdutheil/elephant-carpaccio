@@ -89,27 +89,24 @@ func TestTeamDoesNotScoreWhenStoryDoesNotExist(t *testing.T) {
 	assert.Equal(t, 0, team.Score())
 }
 
-func TestLogFirstIteration(t *testing.T) {
+func TestCompleteFirstIteration(t *testing.T) {
 	team := NewTeam("A Team")
 	team.Done("EC-001")
-	team.LogIterationScore()
+	team.CompleteIteration()
 
 	scores := team.IterationScores()
 
 	assert.Equal(t, []int{1}, scores)
 }
 
-func TestLogSeveralIterations(t *testing.T) {
+func TestCompleteSeveralIterations(t *testing.T) {
 	team := NewTeam("A Team")
 	team.Done("EC-001")
-	team.LogIterationScore()
-	team.Done("EC-002")
-	team.Done("EC-003")
-	team.LogIterationScore()
-	team.Done("EC-004")
-	team.Done("EC-005")
-	team.Done("EC-006")
-	team.LogIterationScore()
+	team.CompleteIteration()
+	team.Done("EC-002", "EC-003")
+	team.CompleteIteration()
+	team.Done("EC-004", "EC-005", "EC-006")
+	team.CompleteIteration()
 
 	scores := team.IterationScores()
 

@@ -34,18 +34,18 @@ func simulateGameForDev(game *Game) {
 	game.Register("The fantastic four")
 
 	team1 := game.Teams()[0]
-	team2 := game.Teams()[1]
-
 	team1.Done("EC-001", "EC-002", "EC-003")
-	team2.Done("EC-001")
-	game.LogIteration()
-
+	team1.CompleteIteration()
 	team1.Done("EC-004", "EC-005")
-	team2.Done("EC-002", "EC-003")
-	game.LogIteration()
-
+	team1.CompleteIteration()
 	team1.Done("EC-006", "EC-007", "EC-008")
-	team2.Done("EC-004", "EC-005", "EC-006", "EC-007")
-	game.LogIteration()
+	team1.CompleteIteration()
 
+	team2 := game.Teams()[1]
+	team2.Done("EC-001")
+	team2.CompleteIteration()
+	team2.Done("EC-002", "EC-003")
+	team2.CompleteIteration()
+	team2.Done("EC-004", "EC-005", "EC-006", "EC-007")
+	team2.CompleteIteration()
 }
