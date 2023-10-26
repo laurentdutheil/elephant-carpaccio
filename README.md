@@ -2,6 +2,8 @@
 
 This project proposes to gamify the Alistair Cockburn's workshop: the Elephant Carpaccio
 
+![home screenshot of Elephant Carpaccio Game](home-screenshot.png)
+
 ## Install
 
 Clone this repository.
@@ -18,11 +20,21 @@ Open your favorite browser to http://localhost:3000
 
 ## Usage
 
+### The board
+
+The board is at http://localhost:3000
+
+Each team can compare his curve to the ideal one.
+
+If you, as a facilitator, scan the QRCode on your smartphone, you'll be redirected to the Demo page.
+
 ### Register Teams
 
 Go to http://localhost:3000/register
 
 Enter the name of each team.
+
+![registration screenshot of Elephant Carpaccio Game](registration-screenshot.png)
 
 ### Demo Time
 
@@ -32,11 +44,7 @@ Choose a Team.
 Then check all the features that are done.
 Don't forget to validate.
 
-### The board
-
-The board is at http://localhost:3000
-
-Each team can compare his curve to the ideal one.
+![demo screenshot of Elephant Carpaccio Game](demo-screenshot.png)
 
 ## TODO
 
