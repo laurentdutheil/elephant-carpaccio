@@ -111,6 +111,23 @@
         }
     });
 
+    const es = new EventSource("/sse");
+    es.onerror = (err) => {
+        console.log("onerror", err)
+        es.close()
+    };
+
+    es.addEventListener("score", (event) => {
+        const parsedData = JSON.parse(event.data);
+        const {teamName, newScore} = parsedData;
+
+        chart.data.datasets
+            .find((dataset) => dataset.label === teamName)
+            .data.push(newScore)
+
+        chart.update()
+    });
+    
 </script>
 
 <script src="/static/lib/qrious.min.js"></script>

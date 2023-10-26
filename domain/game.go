@@ -44,3 +44,7 @@ func (g *Game) NotifyAll(teamName string, newIterationScore Score) {
 		observer.Update(teamName, newIterationScore)
 	}
 }
+
+func (g *Game) NbScoreObservers() int {
+	return len(g.scoreObservers)
+}

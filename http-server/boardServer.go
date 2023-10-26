@@ -4,6 +4,7 @@ import (
 	. "elephant_carpaccio/domain"
 	"elephant_carpaccio/http-server/network"
 	"embed"
+	"fmt"
 	"io/fs"
 	"net"
 	"net/http"
@@ -31,7 +32,11 @@ func NewBoardServer(game *Game, interfaceAddrsFunc network.InterfaceAddrs) *Boar
 		println("local IP: " + localIp.String())
 	}
 
-	s := &BoardServer{templateRenderer: NewTemplateRenderer(), game: game, localIp: localIp}
+	s := &BoardServer{
+		templateRenderer: NewTemplateRenderer(),
+		game:             game,
+		localIp:          localIp,
+	}
 
 	router := http.NewServeMux()
 	router.HandleFunc("/", s.handleBoardPage)
@@ -39,6 +44,7 @@ func NewBoardServer(game *Game, interfaceAddrsFunc network.InterfaceAddrs) *Boar
 	router.HandleFunc("/register", s.handleRegistration)
 	router.HandleFunc("/demo", s.handleDemoIndex)
 	router.HandleFunc("/demo/", s.handleDemoScoring)
+	router.HandleFunc("/sse", s.handleSse)
 
 	s.Handler = router
 
@@ -81,6 +87,32 @@ func (s BoardServer) handleDemoScoring(writer http.ResponseWriter, request *http
 			selectedTeam.Done(storiesDone...)
 			selectedTeam.CompleteIteration()
 			http.Redirect(writer, request, "/demo", http.StatusFound)
+		}
+	}
+}
+func (s BoardServer) handleSse(writer http.ResponseWriter, request *http.Request) {
+	flusher, ok := writer.(http.Flusher)
+	if !ok {
+		http.Error(writer, "SSE not supported", http.StatusInternalServerError)
+		return
+	}
+
+	writer.Header().Set("Content-Type", "text/event-stream")
+	writer.Header().Set("Cache-Control", "no-cache")
+	writer.Header().Set("Connection", "keep-alive")
+
+	scoreObserver := NewSseScoreObserver()
+	s.game.AddScoreObserver(scoreObserver)
+
+	for {
+		select {
+		case <-request.Context().Done():
+			close(scoreObserver.scoreChannel)
+			s.game.RemoveScoreObserver(scoreObserver.Id())
+			return
+		case scoreEvent := <-scoreObserver.scoreChannel:
+			_, _ = fmt.Fprint(writer, formatSseEvent("score", scoreEvent))
+			flusher.Flush()
 		}
 	}
 }
