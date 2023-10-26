@@ -1,5 +1,6 @@
 <<top template>>
 <div class="container">
+    <h2 class="u-text-center">A Team</h2>
     <form method="post">
         <div class="row">
             <table class="u-full-width">
