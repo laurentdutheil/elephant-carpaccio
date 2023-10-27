@@ -4,7 +4,7 @@
         <form class="six columns" method="post">
             <div>
                 <label for="teamName">Team name</label>
-                <input class="u-full-width" id="teamName" name="teamName">
+                <input class="u-full-width" id="teamName" name="teamName" autofocus>
             </div>
             <input class="button u-full-width" type="submit" value="Register">
         </form>
@@ -18,17 +18,14 @@
             
                 <tr>
                     <td>A Team</td>
-                </tr> 
+                </tr>
             
                 <tr>
                     <td>The fantastic four</td>
-                </tr> 
+                </tr>
             
             </tbody>
         </table>
-    </div>
-    <div class="row">
-        <a class="button button-primary u-full-width" href="/">Start Game</a>
     </div>
 </div>
 <<footer template>>
