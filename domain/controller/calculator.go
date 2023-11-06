@@ -1,19 +1,18 @@
 package controller
 
 import (
-	"math"
 	"math/rand"
 )
 
 var AllStates = States{
-	{"UT", 0.0685},
-	{"NV", 0.08},
-	{"TX", 0.0625},
-	{"AL", 0.04},
-	{"CA", 0.0825},
+	{"UT", Percent(685)},
+	{"NV", Percent(800)},
+	{"TX", Percent(625)},
+	{"AL", Percent(400)},
+	{"CA", Percent(825)},
 }
 
-func Compute(numberOfItems float64, itemPrice Dollar, stateCode StateCode) Receipt {
+func Compute(numberOfItems Decimal, itemPrice Dollar, stateCode StateCode) Receipt {
 	taxRate := AllStates.TaxRateOf(stateCode)
 	orderValue := itemPrice.Multiply(numberOfItems)
 	discountValue := ComputeDiscountValue(orderValue)
@@ -21,7 +20,7 @@ func Compute(numberOfItems float64, itemPrice Dollar, stateCode StateCode) Recei
 	return Receipt{
 		OrderValue:                orderValue,
 		DiscountValue:             discountValue,
-		TaxValue:                  taxableValue.Multiply(taxRate),
+		TaxValue:                  taxRate.ApplyTo(taxableValue),
 		TotalPriceWithoutDiscount: orderValue.ApplyTaxe(taxRate),
 		TotalPrice:                taxableValue.ApplyTaxe(taxRate),
 	}
@@ -35,21 +34,21 @@ type Receipt struct {
 	TotalPrice                Dollar
 }
 
-func GenerateOrder(discountLevel DiscountLevel) (float64, Dollar) {
-	nbItems := math.Trunc(rand.Float64()*math.Pow10(4)) * math.Pow10(-2)
+func GenerateOrder(discountLevel DiscountLevel) (Decimal, Dollar) {
+	nbItems := Decimal(rand.Int63n(1000)) + 1
 	itemPrice := generateItemPrice(discountLevel, nbItems)
 	return nbItems, itemPrice
 }
 
-func generateItemPrice(discountLevel DiscountLevel, nbItems float64) Dollar {
+func generateItemPrice(discountLevel DiscountLevel, nbItems Decimal) Dollar {
 	minAmount, maxAmount := discountLevel.AmountRange()
 	orderValue := randAmount(minAmount, maxAmount)
 	itemPrice := NewDollar(orderValue).Divide(nbItems)
 	return itemPrice
 }
 
-func randAmount(minAmount Dollar, maxAmount Dollar) Amount {
+func randAmount(minAmount Dollar, maxAmount Dollar) Decimal {
 	rangeAmount := maxAmount.Minus(minAmount)
-	orderValue := Amount(rand.Int63n(int64(rangeAmount.amount))) + minAmount.amount
+	orderValue := Decimal(rand.Int63n(int64(rangeAmount.amount))) + minAmount.amount
 	return orderValue
 }
