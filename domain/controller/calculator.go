@@ -1,5 +1,10 @@
 package controller
 
+import (
+	"math"
+	"math/rand"
+)
+
 var AllStates = States{
 	{"UT", 0.0685},
 	{"NV", 0.08},
@@ -8,18 +13,10 @@ var AllStates = States{
 	{"CA", 0.0825},
 }
 
-var AllDiscounts = Discounts{
-	{NewDollar(100000), 0.03},
-	{NewDollar(500000), 0.05},
-	{NewDollar(700000), 0.07},
-	{NewDollar(1000000), 0.1},
-	{NewDollar(5000000), 0.15},
-}
-
 func Compute(numberOfItems float64, itemPrice Dollar, stateCode StateCode) Receipt {
 	taxRate := AllStates.TaxRateOf(stateCode)
 	orderValue := itemPrice.Multiply(numberOfItems)
-	discountValue := AllDiscounts.ComputeDiscountValue(orderValue)
+	discountValue := ComputeDiscountValue(orderValue)
 	taxableValue := orderValue.Minus(discountValue)
 	return Receipt{
 		OrderValue:                orderValue,
@@ -36,4 +33,23 @@ type Receipt struct {
 	TaxValue                  Dollar
 	TotalPriceWithoutDiscount Dollar
 	TotalPrice                Dollar
+}
+
+func GenerateOrder(discountLevel DiscountLevel) (float64, Dollar) {
+	nbItems := math.Trunc(rand.Float64()*math.Pow10(4)) * math.Pow10(-2)
+	itemPrice := generateItemPrice(discountLevel, nbItems)
+	return nbItems, itemPrice
+}
+
+func generateItemPrice(discountLevel DiscountLevel, nbItems float64) Dollar {
+	minAmount, maxAmount := discountLevel.AmountRange()
+	orderValue := randAmount(minAmount, maxAmount)
+	itemPrice := NewDollar(orderValue).Divide(nbItems)
+	return itemPrice
+}
+
+func randAmount(minAmount Dollar, maxAmount Dollar) Amount {
+	rangeAmount := maxAmount.Minus(minAmount)
+	orderValue := Amount(rand.Int63n(int64(rangeAmount.amount))) + minAmount.amount
+	return orderValue
 }
