@@ -2,24 +2,7 @@ package controller
 
 import (
 	"fmt"
-	"math"
 )
-
-type Decimal int64
-
-func (d Decimal) Multiply(other Decimal) Decimal {
-	return Decimal(math.Round(float64(d) * float64(other) * math.Pow10(-2)))
-}
-
-func (d Decimal) Divide(other Decimal) Decimal {
-	return Decimal(math.Round(float64(d) / float64(other) * math.Pow10(2)))
-}
-
-type Percent Decimal
-
-func (p Percent) ApplyTo(other Dollar) Dollar {
-	return other.Multiply(Decimal(p)).Divide(10000)
-}
 
 type Dollar struct {
 	amount Decimal
@@ -27,10 +10,6 @@ type Dollar struct {
 
 func NewDollar(amountInCents Decimal) Dollar {
 	return Dollar{amount: amountInCents}
-}
-
-func (d Dollar) ApplyTaxe(taxRate Percent) Dollar {
-	return d.Add(taxRate.ApplyTo(d))
 }
 
 func (d Dollar) Multiply(mul Decimal) Dollar {

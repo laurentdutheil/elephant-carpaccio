@@ -37,14 +37,14 @@ func (l DiscountLevel) AmountRange() (minAmount Dollar, maxAmount Dollar) {
 	return
 }
 
-func ComputeDiscountValue(orderValue Dollar) Dollar {
-	var discountValue Dollar
+func ComputeDiscount(amount Dollar) Dollar {
+	var discount Dollar
 	for discountLevel := _numberOfDiscounts - 1; discountLevel >= NoDiscount; discountLevel-- {
 		d := discountLevel.Discount()
-		if orderValue.GreaterOrEqual(d.Amount) {
-			discountValue = d.Rate.ApplyTo(orderValue)
+		if amount.GreaterOrEqual(d.Amount) {
+			discount = d.Rate.ApplyTo(amount)
 			break
 		}
 	}
-	return discountValue
+	return discount
 }

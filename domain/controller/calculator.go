@@ -1,24 +1,16 @@
 package controller
 
-var AllStates = States{
-	{"UT", Percent(685)},
-	{"NV", Percent(800)},
-	{"TX", Percent(625)},
-	{"AL", Percent(400)},
-	{"CA", Percent(825)},
-}
-
 func Compute(numberOfItems Decimal, itemPrice Dollar, stateCode StateCode) Receipt {
-	taxRate := AllStates.TaxRateOf(stateCode)
+	state := stateCode.State()
 	orderValue := itemPrice.Multiply(numberOfItems)
-	discountValue := ComputeDiscountValue(orderValue)
+	discountValue := ComputeDiscount(orderValue)
 	taxableValue := orderValue.Minus(discountValue)
 	return Receipt{
 		OrderValue:                orderValue,
 		DiscountValue:             discountValue,
-		TaxValue:                  taxRate.ApplyTo(taxableValue),
-		TotalPriceWithoutDiscount: orderValue.ApplyTaxe(taxRate),
-		TotalPrice:                taxableValue.ApplyTaxe(taxRate),
+		TaxValue:                  state.ComputeTax(taxableValue),
+		TotalPriceWithoutDiscount: state.ApplyTax(orderValue),
+		TotalPrice:                state.ApplyTax(taxableValue),
 	}
 }
 

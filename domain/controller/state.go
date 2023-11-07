@@ -1,19 +1,34 @@
 package controller
 
-type StateCode string
-
 type State struct {
-	stateCode StateCode
+	stateCode string
 	taxRate   Percent
 }
 
-type States []State
+type StateCode int
 
-func (s States) TaxRateOf(stateCode StateCode) Percent {
-	for _, state := range s {
-		if state.stateCode == stateCode {
-			return state.taxRate
-		}
-	}
-	return Percent(0)
+const (
+	UT StateCode = iota
+	NV
+	TX
+	AL
+	CA
+)
+
+func (s StateCode) State() State {
+	return []State{
+		{"UT", Percent(685)},
+		{"NV", Percent(800)},
+		{"TX", Percent(625)},
+		{"AL", Percent(400)},
+		{"CA", Percent(825)},
+	}[s]
+}
+
+func (s State) ApplyTax(amount Dollar) Dollar {
+	return amount.Add(s.taxRate.ApplyTo(amount))
+}
+
+func (s State) ComputeTax(amount Dollar) Dollar {
+	return s.taxRate.ApplyTo(amount)
 }
