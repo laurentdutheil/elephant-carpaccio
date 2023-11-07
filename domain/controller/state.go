@@ -1,8 +1,8 @@
 package controller
 
 type State struct {
-	stateCode string
-	taxRate   Percent
+	label   string
+	taxRate Percent
 }
 
 type StateCode int

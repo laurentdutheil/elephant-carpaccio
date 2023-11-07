@@ -2,20 +2,30 @@ package controller_test
 
 import (
 	"github.com/stretchr/testify/assert"
+	"math/rand"
 	"testing"
 
 	. "elephant_carpaccio/domain/controller"
 )
 
 func TestGenerateOrder(t *testing.T) {
+	t.Run("should generate an order with stateCode", func(t *testing.T) {
+		randomizer := NewDecimalRandomizer(rand.Int63n)
+		orderGenerator := NewOrderGenerator(randomizer)
+
+		order := orderGenerator.GenerateOrder(NoDiscount, AL)
+
+		assert.Equal(t, AL.State(), order.State)
+	})
+
 	t.Run("should generate nbItems greater than Decimal(0)", func(t *testing.T) {
 		alwaysZeroRandFunc := func(_ int64) int64 { return 0 }
 		randomizer := NewDecimalRandomizer(alwaysZeroRandFunc)
 		orderGenerator := NewOrderGenerator(randomizer)
 
-		nbItems, _ := orderGenerator.GenerateOrder(NoDiscount)
+		order := orderGenerator.GenerateOrder(NoDiscount, UT)
 
-		assert.Greater(t, nbItems, Decimal(0))
+		assert.Greater(t, order.NumberOfItems, Decimal(0))
 	})
 
 	t.Run("should generate nbItems lower than Decimal(10000)", func(t *testing.T) {
@@ -23,9 +33,9 @@ func TestGenerateOrder(t *testing.T) {
 		randomizer := NewDecimalRandomizer(alwaysMaxRandFunc)
 		orderGenerator := NewOrderGenerator(randomizer)
 
-		nbItems, _ := orderGenerator.GenerateOrder(NoDiscount)
+		order := orderGenerator.GenerateOrder(NoDiscount, UT)
 
-		assert.Less(t, nbItems, Decimal(10000))
+		assert.Less(t, order.NumberOfItems, Decimal(10000))
 	})
 
 	t.Run("should generate discount order greater or equal to minimal Discount amount", func(t *testing.T) {
@@ -45,9 +55,10 @@ func TestGenerateOrder(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.description, func(t *testing.T) {
-				nbItems, itemPrice := orderGenerator.GenerateOrder(test.discountLevel)
+				order := orderGenerator.GenerateOrder(test.discountLevel, UT)
 
-				actualOrderValue := itemPrice.Multiply(nbItems)
+				receipt := order.Compute()
+				actualOrderValue := receipt.OrderValue
 
 				minAmount, _ := test.discountLevel.AmountRange()
 				assert.True(t, actualOrderValue.GreaterOrEqual(minAmount), "%v should be greater or equal than %v", actualOrderValue, minAmount)
@@ -72,9 +83,10 @@ func TestGenerateOrder(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.description, func(t *testing.T) {
-				nbItems, itemPrice := orderGenerator.GenerateOrder(test.discountLevel)
+				order := orderGenerator.GenerateOrder(test.discountLevel, UT)
 
-				actualOrderValue := itemPrice.Multiply(nbItems)
+				receipt := order.Compute()
+				actualOrderValue := receipt.OrderValue
 
 				_, maxAmount := test.discountLevel.AmountRange()
 				assert.True(t, actualOrderValue.Lower(maxAmount), "%v should be lower than %v", actualOrderValue, maxAmount)

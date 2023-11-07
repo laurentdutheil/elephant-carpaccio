@@ -8,10 +8,10 @@ func NewOrderGenerator(randomizer DecimalRandom) *OrderGenerator {
 	return &OrderGenerator{randomizer: randomizer}
 }
 
-func (og OrderGenerator) GenerateOrder(discountLevel DiscountLevel) (Decimal, Dollar) {
+func (og OrderGenerator) GenerateOrder(discountLevel DiscountLevel, stateCode StateCode) Order {
 	nbItems := og.randomizer.randDecimal(1, 10000)
 	itemPrice := og.generateItemPrice(discountLevel, nbItems)
-	return nbItems, itemPrice
+	return NewOrder(nbItems, itemPrice, stateCode)
 }
 
 func (og OrderGenerator) generateItemPrice(discountLevel DiscountLevel, nbItems Decimal) Dollar {
