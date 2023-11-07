@@ -1,9 +1,5 @@
 package controller
 
-import (
-	"math/rand"
-)
-
 var AllStates = States{
 	{"UT", Percent(685)},
 	{"NV", Percent(800)},
@@ -32,23 +28,4 @@ type Receipt struct {
 	TaxValue                  Dollar
 	TotalPriceWithoutDiscount Dollar
 	TotalPrice                Dollar
-}
-
-func GenerateOrder(discountLevel DiscountLevel) (Decimal, Dollar) {
-	nbItems := Decimal(rand.Int63n(1000)) + 1
-	itemPrice := generateItemPrice(discountLevel, nbItems)
-	return nbItems, itemPrice
-}
-
-func generateItemPrice(discountLevel DiscountLevel, nbItems Decimal) Dollar {
-	minAmount, maxAmount := discountLevel.AmountRange()
-	orderValue := randAmount(minAmount, maxAmount)
-	itemPrice := NewDollar(orderValue).Divide(nbItems)
-	return itemPrice
-}
-
-func randAmount(minAmount Dollar, maxAmount Dollar) Decimal {
-	rangeAmount := maxAmount.Minus(minAmount)
-	orderValue := Decimal(rand.Int63n(int64(rangeAmount.amount))) + minAmount.amount
-	return orderValue
 }

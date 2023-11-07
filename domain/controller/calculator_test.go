@@ -73,33 +73,3 @@ func TestCalculator(t *testing.T) {
 		assert.Equal(t, NewDollar(1305200), result.TotalPriceWithoutDiscount)
 	})
 }
-
-func TestGenerateOrder(t *testing.T) {
-
-	t.Run("should generate all discount order", func(t *testing.T) {
-		tests := []struct {
-			description   string
-			discountLevel DiscountLevel
-		}{
-			{"should generate a no discount order", NoDiscount},
-			{"should generate a 3% discount order", ThreePercentDiscount},
-			{"should generate a 5% discount order", FivePercentDiscount},
-			{"should generate a 7% discount order", SevenPercentDiscount},
-			{"should generate a 10% discount order", TenPercentDiscount},
-			{"should generate a 15% discount order", FifteenPercentDiscount},
-		}
-		for _, test := range tests {
-			t.Run(test.description, func(t *testing.T) {
-				nbItems, itemPrice := GenerateOrder(test.discountLevel)
-				result := itemPrice.Multiply(nbItems)
-				assertInDiscountLevelRange(t, result, test.discountLevel)
-			})
-		}
-	})
-}
-
-func assertInDiscountLevelRange(t *testing.T, result Dollar, discountLevel DiscountLevel) {
-	minAmount, maxAmount := discountLevel.AmountRange()
-	assert.True(t, result.GreaterOrEqual(minAmount), "%v should be greater or equal than %v", result, minAmount)
-	assert.True(t, result.Lower(maxAmount), "%v should be lower than %v", result, maxAmount)
-}
