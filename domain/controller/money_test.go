@@ -1,16 +1,16 @@
 package controller_test
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 
 	. "elephant_carpaccio/domain/controller"
 )
 
-func TestString(t *testing.T) {
-	dollar := NewDollar(103)
-	assert.Equal(t, "$1.03", fmt.Sprint(dollar))
+func TestDollar_String_should_add_dollar_at_the_beginning_of_decimal_String(t *testing.T) {
+	decimal := Decimal(123)
+	dollar := NewDollar(decimal)
+	assert.Equal(t, "$"+decimal.String(), dollar.String())
 }
 
 func TestDecimal(t *testing.T) {

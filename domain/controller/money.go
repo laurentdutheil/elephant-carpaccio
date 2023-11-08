@@ -39,7 +39,5 @@ func (d Dollar) Minus(other Dollar) Dollar {
 }
 
 func (d Dollar) String() string {
-	dollars := d.amount / 100
-	cents := d.amount % 100
-	return fmt.Sprintf("$%d.%02d", dollars, cents)
+	return fmt.Sprintf("$%v", d.amount)
 }

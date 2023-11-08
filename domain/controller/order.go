@@ -12,21 +12,21 @@ func NewOrder(numberOfItems Decimal, itemPrice Dollar, stateCode StateCode) Orde
 
 func (o Order) Compute() Receipt {
 	orderValue := o.ItemPrice.Multiply(o.NumberOfItems)
-	discountValue := ComputeDiscount(orderValue)
-	taxableValue := orderValue.Minus(discountValue)
+	discount := ComputeDiscount(orderValue)
+	taxableValue := orderValue.Minus(discount)
 	return Receipt{
-		OrderValue:                orderValue,
-		DiscountValue:             discountValue,
-		TaxValue:                  o.State.ComputeTax(taxableValue),
-		TotalPriceWithoutDiscount: o.State.ApplyTax(orderValue),
-		TotalPrice:                o.State.ApplyTax(taxableValue),
+		OrderValue:      orderValue,
+		Discount:        discount,
+		Tax:             o.State.ComputeTax(taxableValue),
+		TaxedOrderValue: o.State.ApplyTax(orderValue),
+		TotalPrice:      o.State.ApplyTax(taxableValue),
 	}
 }
 
 type Receipt struct {
-	OrderValue                Dollar
-	DiscountValue             Dollar
-	TaxValue                  Dollar
-	TotalPriceWithoutDiscount Dollar
-	TotalPrice                Dollar
+	OrderValue      Dollar
+	Discount        Dollar
+	Tax             Dollar
+	TaxedOrderValue Dollar
+	TotalPrice      Dollar
 }

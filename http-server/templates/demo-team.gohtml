@@ -1,7 +1,42 @@
-{{- /*gotype: elephant_carpaccio/domain.Team*/ -}}
+{{- /*gotype: elephant_carpaccio/http-server.DemoScoringModel*/ -}}
 {{template "top" .}}
 <div class="container">
-    <h2 class="u-text-center">{{.Name}}</h2>
+    <h2 class="u-text-center">{{.Team.Name}}</h2>
+    <table class="u-full-width">
+        <thead>
+        <tr>
+            <th>Nb of items</th>
+            <th>Item Price</th>
+            <th>State</th>
+        </tr>
+        <tr>
+            <th>{{.Order.NumberOfItems}}</th>
+            <th>{{.Order.ItemPrice.String}}</th>
+            <th>{{.Order.State.Label}}</th>
+        </tr>
+        <tbody>
+        <tr>
+            <td class="u-text-right" colspan="2">Order Value</td>
+            <td class="u-text-right">{{.Receipt.OrderValue.String}}</td>
+        </tr>
+        <tr>
+            <td class="u-text-right" colspan="2">Discount</td>
+            <td class="u-text-right">{{.Receipt.Discount.String}}</td>
+        </tr>
+        <tr>
+            <td class="u-text-right" colspan="2">Tax ({{.Order.State.TaxRate.String}})</td>
+            <td class="u-text-right">{{.Receipt.Tax.String}}</td>
+        </tr>
+        <tr>
+            <td class="u-text-right" colspan="2">Taxed Order Value</td>
+            <td class="u-text-right">{{.Receipt.TaxedOrderValue.String}}</td>
+        </tr>
+        <tr>
+            <td class="u-text-right" colspan="2"><strong>Total Price</strong></td>
+            <td class="u-text-right"><strong>{{.Receipt.TotalPrice.String}}</strong></td>
+        </tr>
+        </tbody>
+    </table>
     <form method="post">
         <div class="row">
             <table class="u-full-width">
@@ -13,10 +48,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                {{range .Backlog}}
+                {{range .Team.Backlog}}
                     <tr>
                         <td>{{.Description}}</td>
-                        <td><label><input type="checkbox" value="{{.Id}}" id="{{.Id}}" name="Done" {{if .Done}}checked{{end}}></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="{{.Id}}" id="{{.Id}}" name="Done"
+                                       {{if .Done}}checked{{end}}>
+                            </label>
+                        </td>
                     </tr>
                 {{end}}
                 </tbody>

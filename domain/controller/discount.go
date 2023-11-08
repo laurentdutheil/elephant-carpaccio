@@ -21,13 +21,13 @@ const (
 
 func (l DiscountLevel) Discount() Discount {
 	return []Discount{
-		{NewDollar(0), 0},
-		{NewDollar(100000), 300},
-		{NewDollar(500000), 500},
-		{NewDollar(700000), 700},
-		{NewDollar(1000000), 1000},
-		{NewDollar(5000000), 1500},
-		{NewDollar(math.MaxInt64), 0.0},
+		{NewDollar(0), NewPercent(0)},
+		{NewDollar(100000), NewPercent(300)},
+		{NewDollar(500000), NewPercent(500)},
+		{NewDollar(700000), NewPercent(700)},
+		{NewDollar(1000000), NewPercent(1000)},
+		{NewDollar(5000000), NewPercent(1500)},
+		{NewDollar(math.MaxInt64), NewPercent(0)},
 	}[l]
 }
 
