@@ -1,7 +1,5 @@
 package controller
 
-import "math"
-
 type Discount struct {
 	Amount Dollar
 	Rate   Percent
@@ -16,10 +14,14 @@ const (
 	SevenPercentDiscount
 	TenPercentDiscount
 	FifteenPercentDiscount
-	_numberOfDiscounts
+
+	NumberOfDiscounts
 )
 
 func (l DiscountLevel) Discount() Discount {
+	if l > NumberOfDiscounts {
+		return Discount{}
+	}
 	return []Discount{
 		{NewDollar(0), NewPercent(0)},
 		{NewDollar(100000), NewPercent(300)},
@@ -27,7 +29,7 @@ func (l DiscountLevel) Discount() Discount {
 		{NewDollar(700000), NewPercent(700)},
 		{NewDollar(1000000), NewPercent(1000)},
 		{NewDollar(5000000), NewPercent(1500)},
-		{NewDollar(math.MaxInt64), NewPercent(0)},
+		{NewDollar(100000000), NewPercent(0)},
 	}[l]
 }
 
@@ -37,14 +39,12 @@ func (l DiscountLevel) AmountRange() (minAmount Dollar, maxAmount Dollar) {
 	return
 }
 
-func ComputeDiscount(amount Dollar) Dollar {
-	var discount Dollar
-	for discountLevel := _numberOfDiscounts - 1; discountLevel >= NoDiscount; discountLevel-- {
+func ComputeDiscount(amount Dollar) (Dollar, Discount) {
+	for discountLevel := NumberOfDiscounts - 1; discountLevel >= NoDiscount; discountLevel-- {
 		d := discountLevel.Discount()
 		if amount.GreaterOrEqual(d.Amount) {
-			discount = d.Rate.ApplyTo(amount)
-			break
+			return d.Rate.ApplyTo(amount), d
 		}
 	}
-	return discount
+	return NewDollar(0), NoDiscount.Discount()
 }

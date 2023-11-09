@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"math/rand"
 	"net"
 
 	. "elephant_carpaccio/domain"
+	"elephant_carpaccio/domain/controller"
 )
 
 var (
@@ -45,6 +47,24 @@ func (r TemplateRenderer) RenderDemoIndex(w io.Writer, game *Game) error {
 	return r.template.ExecuteTemplate(w, "demo-index.gohtml", game)
 }
 
+type DemoScoringModel struct {
+	Team    *Team
+	Order   controller.Order
+	Receipt controller.Receipt
+}
+
 func (r TemplateRenderer) RenderDemoScoring(w io.Writer, team *Team) error {
-	return r.template.ExecuteTemplate(w, "demo-team.gohtml", team)
+	randomizer := controller.NewDecimalRandomizer(rand.Int63n)
+	orderGenerator := controller.NewOrderGenerator(randomizer)
+	stateCode := orderGenerator.PickStateCode()
+	discountLevel := orderGenerator.PickDiscountLevel()
+	order := orderGenerator.GenerateOrder(discountLevel, stateCode)
+	receipt := order.Compute()
+
+	scoringModel := DemoScoringModel{
+		Team:    team,
+		Order:   order,
+		Receipt: receipt,
+	}
+	return r.template.ExecuteTemplate(w, "demo-team.gohtml", scoringModel)
 }

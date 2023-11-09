@@ -14,12 +14,13 @@ func TestDecimal_String(t *testing.T) {
 		decimal  Decimal
 		expected string
 	}{
-		{"should put the separator for two decimals number", Decimal(123), "1.23"},
+		{"should put the decimal separator for two decimals number", Decimal(123), "1.23"},
 		{"should add a zero if decimals have one digit", Decimal(103), "1.03"},
+		{"should put the thousand separator", Decimal(165400023), "1,654,000.23"},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			assert.Equal(t, test.decimal.String(), fmt.Sprint(test.decimal))
+			assert.Equal(t, test.expected, fmt.Sprint(test.decimal))
 		})
 	}
 }

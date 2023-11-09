@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"math"
+	"strconv"
 )
 
 type Decimal int64
@@ -17,8 +18,18 @@ func (d Decimal) Divide(other Decimal) Decimal {
 
 func (d Decimal) String() string {
 	units := d / 100
+	formattedUnits := addThousandsSeparators(units)
 	decimals := d % 100
-	return fmt.Sprintf("%d.%02d", units, decimals)
+	return fmt.Sprintf("%v.%02d", formattedUnits, decimals)
+}
+
+func addThousandsSeparators(units Decimal) string {
+	formattedUnits := strconv.FormatInt(int64(units), 10)
+	for i := len(formattedUnits); i > 3; {
+		i -= 3
+		formattedUnits = formattedUnits[:i] + "," + formattedUnits[i:]
+	}
+	return formattedUnits
 }
 
 type Percent struct {

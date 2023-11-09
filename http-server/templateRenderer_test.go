@@ -96,9 +96,13 @@ func TestTemplateRender(t *testing.T) {
 
 		topScrubber, _ := regexp.Compile("(?s)<!DOCTYPE html>.*<main>")
 		footerScrubber, _ := regexp.Compile("(?s)</main>.*</html>")
+		stateScrubber, _ := regexp.Compile("<th>(UT|NV|TX|AL|CA)</th>")
+		decimalScrubber, _ := regexp.Compile("(\\d+,)*\\d+\\.\\d{2}")
 		ignoreTopAndFooter := approvals.Options().
 			WithRegexScrubber(topScrubber, "<<top template>>").
-			WithRegexScrubber(footerScrubber, "<<footer template>>")
+			WithRegexScrubber(footerScrubber, "<<footer template>>").
+			WithRegexScrubber(stateScrubber, "<th><<random state>></th>").
+			WithRegexScrubber(decimalScrubber, "<<random decimal>>")
 
 		team := game.Teams()[0]
 		if err := templateRenderer.RenderDemoScoring(&buf, team); err != nil {

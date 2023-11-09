@@ -1,6 +1,41 @@
 <<top template>>
 <div class="container">
     <h2 class="u-text-center">A Team</h2>
+    <table class="u-full-width">
+        <thead>
+        <tr>
+            <th>Nb of items</th>
+            <th>Item Price</th>
+            <th>State</th>
+        </tr>
+        <tr>
+            <th><<random decimal>></th>
+            <th>$<<random decimal>></th>
+            <th><<random state>></th>
+        </tr>
+        <tbody>
+        <tr>
+            <td class="u-text-right" colspan="2">Order Value</td>
+            <td class="u-text-right">$<<random decimal>></td>
+        </tr>
+        <tr>
+            <td class="u-text-right" colspan="2">Discount (<<random decimal>>%)</td>
+            <td class="u-text-right">$<<random decimal>></td>
+        </tr>
+        <tr>
+            <td class="u-text-right" colspan="2">Tax (<<random decimal>>%)</td>
+            <td class="u-text-right">$<<random decimal>></td>
+        </tr>
+        <tr>
+            <td class="u-text-right" colspan="2">Taxed Order Value</td>
+            <td class="u-text-right">$<<random decimal>></td>
+        </tr>
+        <tr>
+            <td class="u-text-right" colspan="2"><strong>Total Price</strong></td>
+            <td class="u-text-right"><strong>$<<random decimal>></strong></td>
+        </tr>
+        </tbody>
+    </table>
     <form method="post">
         <div class="row">
             <table class="u-full-width">
@@ -15,92 +50,182 @@
                 
                     <tr>
                         <td>Hello World</td>
-                        <td><label><input type="checkbox" value="EC-001" id="EC-001" name="Done" checked></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-001" id="EC-001" name="Done"
+                                       checked>
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>Can fill parameters</td>
-                        <td><label><input type="checkbox" value="EC-002" id="EC-002" name="Done" checked></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-002" id="EC-002" name="Done"
+                                       checked>
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>Compute order value without tax</td>
-                        <td><label><input type="checkbox" value="EC-003" id="EC-003" name="Done" checked></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-003" id="EC-003" name="Done"
+                                       checked>
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>Can handle float for &#39;number of items&#39; AND &#39;price by item&#39;</td>
-                        <td><label><input type="checkbox" value="EC-004" id="EC-004" name="Done" checked></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-004" id="EC-004" name="Done"
+                                       checked>
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>Tax for UT</td>
-                        <td><label><input type="checkbox" value="EC-005" id="EC-005" name="Done" checked></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-005" id="EC-005" name="Done"
+                                       checked>
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>Tax for NV</td>
-                        <td><label><input type="checkbox" value="EC-006" id="EC-006" name="Done" checked></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-006" id="EC-006" name="Done"
+                                       checked>
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>Tax for TX</td>
-                        <td><label><input type="checkbox" value="EC-007" id="EC-007" name="Done" checked></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-007" id="EC-007" name="Done"
+                                       checked>
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>Tax for AL</td>
-                        <td><label><input type="checkbox" value="EC-008" id="EC-008" name="Done" checked></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-008" id="EC-008" name="Done"
+                                       checked>
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>Tax for CA</td>
-                        <td><label><input type="checkbox" value="EC-009" id="EC-009" name="Done" ></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-009" id="EC-009" name="Done"
+                                       >
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>15% Discount</td>
-                        <td><label><input type="checkbox" value="EC-010" id="EC-010" name="Done" ></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-010" id="EC-010" name="Done"
+                                       >
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>10% Discount</td>
-                        <td><label><input type="checkbox" value="EC-011" id="EC-011" name="Done" ></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-011" id="EC-011" name="Done"
+                                       >
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>7% Discount</td>
-                        <td><label><input type="checkbox" value="EC-012" id="EC-012" name="Done" ></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-012" id="EC-012" name="Done"
+                                       >
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>5% Discount</td>
-                        <td><label><input type="checkbox" value="EC-013" id="EC-013" name="Done" ></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-013" id="EC-013" name="Done"
+                                       >
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>3% Discount</td>
-                        <td><label><input type="checkbox" value="EC-014" id="EC-014" name="Done" ></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-014" id="EC-014" name="Done"
+                                       >
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>Can handle rounding for result (two digits after the decimal point)</td>
-                        <td><label><input type="checkbox" value="EC-015" id="EC-015" name="Done" ></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-015" id="EC-015" name="Done"
+                                       >
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>Prompts are clear. Display currency</td>
-                        <td><label><input type="checkbox" value="EC-016" id="EC-016" name="Done" ></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-016" id="EC-016" name="Done"
+                                       >
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>Display details (order value, tax, discount</td>
-                        <td><label><input type="checkbox" value="EC-017" id="EC-017" name="Done" ></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-017" id="EC-017" name="Done"
+                                       >
+                            </label>
+                        </td>
                     </tr>
                 
                     <tr>
                         <td>Do not have to re-launch the application for each test</td>
-                        <td><label><input type="checkbox" value="EC-018" id="EC-018" name="Done" ></label></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" value="EC-018" id="EC-018" name="Done"
+                                       >
+                            </label>
+                        </td>
                     </tr>
                 
                 </tbody>

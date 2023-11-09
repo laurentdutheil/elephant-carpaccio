@@ -20,8 +20,8 @@
             <td class="u-text-right">{{.Receipt.OrderValue.String}}</td>
         </tr>
         <tr>
-            <td class="u-text-right" colspan="2">Discount</td>
-            <td class="u-text-right">{{.Receipt.Discount.String}}</td>
+            <td class="u-text-right" colspan="2">Discount ({{.Receipt.Discount.Rate.String}})</td>
+            <td class="u-text-right">{{.Receipt.DiscountValue.String}}</td>
         </tr>
         <tr>
             <td class="u-text-right" colspan="2">Tax ({{.Order.State.TaxRate.String}})</td>

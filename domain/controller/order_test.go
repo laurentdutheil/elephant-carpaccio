@@ -43,32 +43,32 @@ func TestCalculator(t *testing.T) {
 	t.Run("no discount for order value < $1,000", func(t *testing.T) {
 		order := NewOrder(Decimal(100), NewDollar(20000), UT)
 		result := order.Compute()
-		assert.Equal(t, NewDollar(0), result.Discount)
+		assert.Equal(t, NewDollar(0), result.DiscountValue)
 	})
 	t.Run("3% discount for order value >= $1,000", func(t *testing.T) {
 		order := NewOrder(Decimal(100), NewDollar(100000), UT)
 		result := order.Compute()
-		assert.Equal(t, NewDollar(3000), result.Discount)
+		assert.Equal(t, NewDollar(3000), result.DiscountValue)
 	})
 	t.Run("5% discount for order value >= $5,000", func(t *testing.T) {
 		order := NewOrder(Decimal(100), NewDollar(500000), UT)
 		result := order.Compute()
-		assert.Equal(t, NewDollar(25000), result.Discount)
+		assert.Equal(t, NewDollar(25000), result.DiscountValue)
 	})
 	t.Run("7% discount for order value >= $7,000", func(t *testing.T) {
 		order := NewOrder(Decimal(100), NewDollar(700000), UT)
 		result := order.Compute()
-		assert.Equal(t, NewDollar(49000), result.Discount)
+		assert.Equal(t, NewDollar(49000), result.DiscountValue)
 	})
 	t.Run("10% discount for order value >= $10,000", func(t *testing.T) {
 		order := NewOrder(Decimal(100), NewDollar(1000000), UT)
 		result := order.Compute()
-		assert.Equal(t, NewDollar(100000), result.Discount)
+		assert.Equal(t, NewDollar(100000), result.DiscountValue)
 	})
 	t.Run("15% discount for order value >= $50,000", func(t *testing.T) {
 		order := NewOrder(Decimal(100), NewDollar(5000000), UT)
 		result := order.Compute()
-		assert.Equal(t, NewDollar(750000), result.Discount)
+		assert.Equal(t, NewDollar(750000), result.DiscountValue)
 	})
 
 	t.Run("should compute total price", func(t *testing.T) {
