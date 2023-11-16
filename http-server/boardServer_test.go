@@ -2,6 +2,7 @@ package http_server_test
 
 import (
 	"context"
+	"elephant_carpaccio/domain/controller"
 	"github.com/stretchr/testify/assert"
 	"net"
 	"net/http"
@@ -98,6 +99,35 @@ func TestBoardServer(t *testing.T) {
 
 		assert.Equal(t, http.StatusOK, response.Code)
 		assert.Contains(t, response.Body.String(), "<caption>Witch user stories are done?</caption>")
+	})
+
+	t.Run("handle demo scoring page for a team with a order with fixed state", func(t *testing.T) {
+		game := NewGame()
+		server := NewBoardServer(game, localIpSeekerStub)
+		game.Register("A Team")
+
+		request, _ := http.NewRequest(http.MethodGet, "/demo/A Team?state=1", nil)
+		response := httptest.NewRecorder()
+
+		server.ServeHTTP(response, request)
+
+		assert.Equal(t, http.StatusOK, response.Code)
+		assert.Contains(t, response.Body.String(), "<th>NV</th>")
+		assert.Contains(t, response.Body.String(), controller.NV.State().TaxRate.String())
+	})
+
+	t.Run("handle demo scoring page for a team with a order with fixed discount", func(t *testing.T) {
+		game := NewGame()
+		server := NewBoardServer(game, localIpSeekerStub)
+		game.Register("A Team")
+
+		request, _ := http.NewRequest(http.MethodGet, "/demo/A Team?discount=3", nil)
+		response := httptest.NewRecorder()
+
+		server.ServeHTTP(response, request)
+
+		assert.Equal(t, http.StatusOK, response.Code)
+		assert.Contains(t, response.Body.String(), controller.SevenPercentDiscount.Discount().Rate.String())
 	})
 
 	t.Run("handle demo scoring post", func(t *testing.T) {

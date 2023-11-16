@@ -2,7 +2,6 @@ package controller_test
 
 import (
 	"github.com/stretchr/testify/assert"
-	"math/rand"
 	"testing"
 
 	. "elephant_carpaccio/domain/controller"
@@ -10,8 +9,7 @@ import (
 
 func TestGenerateOrder(t *testing.T) {
 	t.Run("should generate an order with stateCode", func(t *testing.T) {
-		randomizer := NewDecimalRandomizer(rand.Int63n)
-		orderGenerator := NewOrderGenerator(randomizer)
+		orderGenerator := NewOrderGenerator(nil)
 
 		order := orderGenerator.GenerateOrder(NoDiscount, AL)
 
@@ -93,19 +91,6 @@ func TestGenerateOrder(t *testing.T) {
 			})
 		}
 	})
-}
-
-func Test(t *testing.T) {
-	tests := []struct {
-		name string
-	}{
-		{"TODO: test cases"},
-	}
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-
-		})
-	}
 }
 
 func TestPickStateCode(t *testing.T) {

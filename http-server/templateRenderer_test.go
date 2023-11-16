@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	. "elephant_carpaccio/domain"
+	. "elephant_carpaccio/domain/controller"
 	. "elephant_carpaccio/http-server"
 )
 
@@ -91,21 +92,19 @@ func TestTemplateRender(t *testing.T) {
 		approvals.VerifyString(t, buf.String(), ignoreTopAndFooter)
 	})
 
-	t.Run("it renders backlog of a team for demo", func(t *testing.T) {
+	t.Run("it renders backlog of a team for demo scoring", func(t *testing.T) {
 		buf := bytes.Buffer{}
 
 		topScrubber, _ := regexp.Compile("(?s)<!DOCTYPE html>.*<main>")
 		footerScrubber, _ := regexp.Compile("(?s)</main>.*</html>")
-		stateScrubber, _ := regexp.Compile("<th>(UT|NV|TX|AL|CA)</th>")
-		decimalScrubber, _ := regexp.Compile("(\\d+,)*\\d+\\.\\d{2}")
 		ignoreTopAndFooter := approvals.Options().
 			WithRegexScrubber(topScrubber, "<<top template>>").
-			WithRegexScrubber(footerScrubber, "<<footer template>>").
-			WithRegexScrubber(stateScrubber, "<th><<random state>></th>").
-			WithRegexScrubber(decimalScrubber, "<<random decimal>>")
+			WithRegexScrubber(footerScrubber, "<<footer template>>")
 
 		team := game.Teams()[0]
-		if err := templateRenderer.RenderDemoScoring(&buf, team); err != nil {
+		randomOrder := NewOrder(Decimal(1200), NewDollar(Decimal(12300)), UT)
+
+		if err := templateRenderer.RenderDemoScoring(&buf, team, randomOrder); err != nil {
 			t.Fatal(err)
 		}
 

@@ -2,11 +2,13 @@ package http_server
 
 import (
 	. "elephant_carpaccio/domain"
+	"elephant_carpaccio/domain/controller"
 	"embed"
 	"fmt"
 	"io/fs"
 	"net"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -73,7 +75,16 @@ func (s BoardServer) handleDemoScoring(writer http.ResponseWriter, request *http
 	if selectedTeam != nil {
 		switch request.Method {
 		case http.MethodGet:
-			_ = s.templateRenderer.RenderDemoScoring(writer, selectedTeam)
+			orderGenerator := controller.NewOrderGenerator(nil)
+
+			stateInRequest := request.URL.Query().Get("state")
+			stateCode := requestStateOrRandom(stateInRequest, orderGenerator)
+
+			discountInRequest := request.URL.Query().Get("discount")
+			discountLevel := requestDiscountOrRandom(discountInRequest, orderGenerator)
+
+			randomOrder := orderGenerator.GenerateOrder(discountLevel, stateCode)
+			_ = s.templateRenderer.RenderDemoScoring(writer, selectedTeam, randomOrder)
 		case http.MethodPost:
 			storiesDone := s.extractStoryIdsSelected(request)
 			selectedTeam.Done(storiesDone...)
@@ -82,6 +93,29 @@ func (s BoardServer) handleDemoScoring(writer http.ResponseWriter, request *http
 		}
 	}
 }
+
+func requestStateOrRandom(stateInRequest string, orderGenerator *controller.OrderGenerator) controller.StateCode {
+	var stateCode controller.StateCode
+	if stateInRequest != "" {
+		atoi, _ := strconv.Atoi(stateInRequest)
+		stateCode = controller.StateCode(atoi)
+	} else {
+		stateCode = orderGenerator.PickStateCode()
+	}
+	return stateCode
+}
+
+func requestDiscountOrRandom(discountInRequest string, orderGenerator *controller.OrderGenerator) controller.DiscountLevel {
+	var stateCode controller.DiscountLevel
+	if discountInRequest != "" {
+		atoi, _ := strconv.Atoi(discountInRequest)
+		stateCode = controller.DiscountLevel(atoi)
+	} else {
+		stateCode = orderGenerator.PickDiscountLevel()
+	}
+	return stateCode
+}
+
 func (s BoardServer) handleSse(writer http.ResponseWriter, request *http.Request) {
 	flusher, ok := writer.(http.Flusher)
 	if !ok {

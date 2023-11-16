@@ -1,10 +1,15 @@
 package controller
 
+import "math/rand"
+
 type OrderGenerator struct {
 	generatorRandom GeneratorRandom
 }
 
 func NewOrderGenerator(generatorRandom GeneratorRandom) *OrderGenerator {
+	if generatorRandom == nil {
+		generatorRandom = NewDecimalRandomizer(rand.Int63n)
+	}
 	return &OrderGenerator{generatorRandom: generatorRandom}
 }
 

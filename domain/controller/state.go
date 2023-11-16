@@ -5,6 +5,14 @@ type State struct {
 	TaxRate Percent
 }
 
+func (s State) ApplyTax(amount Dollar) Dollar {
+	return amount.Add(s.TaxRate.ApplyTo(amount))
+}
+
+func (s State) ComputeTax(amount Dollar) Dollar {
+	return s.TaxRate.ApplyTo(amount)
+}
+
 type StateCode int
 
 const (
@@ -25,12 +33,4 @@ func (s StateCode) State() State {
 		{"AL", NewPercent(400)},
 		{"CA", NewPercent(825)},
 	}[s]
-}
-
-func (s State) ApplyTax(amount Dollar) Dollar {
-	return amount.Add(s.TaxRate.ApplyTo(amount))
-}
-
-func (s State) ComputeTax(amount Dollar) Dollar {
-	return s.TaxRate.ApplyTo(amount)
 }

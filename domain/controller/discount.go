@@ -30,6 +30,7 @@ func (l DiscountLevel) Discount() Discount {
 		{NewDollar(700000), NewPercent(700)},
 		{NewDollar(1000000), NewPercent(1000)},
 		{NewDollar(5000000), NewPercent(1500)},
+
 		{NewDollar(100000000), NewPercent(0)},
 	}[l]
 }

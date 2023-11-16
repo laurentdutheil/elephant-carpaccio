@@ -9,30 +9,30 @@
             <th>State</th>
         </tr>
         <tr>
-            <th><<random decimal>></th>
-            <th>$<<random decimal>></th>
-            <th><<random state>></th>
+            <th>12.00</th>
+            <th>$123.00</th>
+            <th>UT</th>
         </tr>
         <tbody>
         <tr>
             <td class="u-text-right" colspan="2">Order Value</td>
-            <td class="u-text-right">$<<random decimal>></td>
+            <td class="u-text-right">$1,476.00</td>
         </tr>
         <tr>
-            <td class="u-text-right" colspan="2">Discount (<<random decimal>>%)</td>
-            <td class="u-text-right">$<<random decimal>></td>
+            <td class="u-text-right" colspan="2">Discount (3.00%)</td>
+            <td class="u-text-right">$44.28</td>
         </tr>
         <tr>
-            <td class="u-text-right" colspan="2">Tax (<<random decimal>>%)</td>
-            <td class="u-text-right">$<<random decimal>></td>
+            <td class="u-text-right" colspan="2">Tax (6.85%)</td>
+            <td class="u-text-right">$98.07</td>
         </tr>
         <tr>
             <td class="u-text-right" colspan="2">Taxed Order Value</td>
-            <td class="u-text-right">$<<random decimal>></td>
+            <td class="u-text-right">$1,577.11</td>
         </tr>
         <tr>
             <td class="u-text-right" colspan="2"><strong>Total Price</strong></td>
-            <td class="u-text-right"><strong>$<<random decimal>></strong></td>
+            <td class="u-text-right"><strong>$1,529.79</strong></td>
         </tr>
         </tbody>
     </table>

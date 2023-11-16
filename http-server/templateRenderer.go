@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"math/rand"
 	"net"
 
 	. "elephant_carpaccio/domain"
@@ -53,12 +52,7 @@ type DemoScoringModel struct {
 	Receipt controller.Receipt
 }
 
-func (r TemplateRenderer) RenderDemoScoring(w io.Writer, team *Team) error {
-	randomizer := controller.NewDecimalRandomizer(rand.Int63n)
-	orderGenerator := controller.NewOrderGenerator(randomizer)
-	stateCode := orderGenerator.PickStateCode()
-	discountLevel := orderGenerator.PickDiscountLevel()
-	order := orderGenerator.GenerateOrder(discountLevel, stateCode)
+func (r TemplateRenderer) RenderDemoScoring(w io.Writer, team *Team, order controller.Order) error {
 	receipt := order.Compute()
 
 	scoringModel := DemoScoringModel{
