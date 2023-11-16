@@ -18,9 +18,6 @@ const (
 )
 
 func (s StateCode) State() State {
-	if s >= NumberOfStates {
-		return State{}
-	}
 	return []State{
 		{"UT", NewPercent(685)},
 		{"NV", NewPercent(800)},

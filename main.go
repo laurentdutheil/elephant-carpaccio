@@ -3,6 +3,7 @@ package main
 import (
 	. "elephant_carpaccio/domain"
 	httpserver "elephant_carpaccio/http-server"
+	"elephant_carpaccio/http-server/network"
 	"flag"
 	"log"
 	"net"
@@ -18,8 +19,15 @@ func main() {
 	flag.PrintDefaults()
 	println("env: " + environment)
 
+	localIp, err := network.GetLocalIp(net.InterfaceAddrs)
+	if err != nil {
+		println(err.Error())
+	} else {
+		println("local IP: " + localIp.String())
+	}
+
 	game := NewGame()
-	server := httpserver.NewBoardServer(game, net.InterfaceAddrs)
+	server := httpserver.NewBoardServer(game, localIp)
 
 	if environment == "DEV" {
 		simulateGameForDev(game)

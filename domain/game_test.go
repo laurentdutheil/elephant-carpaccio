@@ -66,6 +66,7 @@ func TestGameAsScoreSubject(t *testing.T) {
 		game.AddScoreObserver(mockScoreObserver)
 		game.NotifyAll("A Team", Score(3))
 
+		assert.Equal(t, 1, game.NbScoreObservers())
 		mockScoreObserver.AssertCalled(t, "Update", "A Team", Score(3))
 	})
 
@@ -79,6 +80,7 @@ func TestGameAsScoreSubject(t *testing.T) {
 		game.RemoveScoreObserver("ObserverId")
 		game.NotifyAll("A Team", Score(3))
 
+		assert.Equal(t, 0, game.NbScoreObservers())
 		mockScoreObserver.AssertNotCalled(t, "Update", mock.Anything, mock.Anything)
 	})
 }

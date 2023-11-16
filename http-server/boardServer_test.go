@@ -13,11 +13,10 @@ import (
 
 	. "elephant_carpaccio/domain"
 	. "elephant_carpaccio/http-server"
-	"elephant_carpaccio/http-server/network"
 )
 
 func TestBoardServer(t *testing.T) {
-	localIpSeekerStub := createLocalIpSeekerStub("128.168.0.44")
+	localIpSeekerStub := net.ParseIP("128.168.0.44")
 
 	t.Run("handle board page", func(t *testing.T) {
 		game := NewGame()
@@ -125,7 +124,7 @@ func TestBoardServer(t *testing.T) {
 }
 
 func TestSse(t *testing.T) {
-	localIpSeekerStub := createLocalIpSeekerStub("128.168.0.44")
+	localIpSeekerStub := net.ParseIP("128.168.0.44")
 
 	t.Run("return error 500 when SSE is not supported", func(t *testing.T) {
 		game := NewGame()
@@ -218,14 +217,6 @@ func TestSse(t *testing.T) {
 func assertRedirection(t *testing.T, response *httptest.ResponseRecorder, expectedUrl string) {
 	assert.Equal(t, expectedUrl, response.Result().Header.Get("Location"))
 	assert.Equal(t, http.StatusFound, response.Code)
-}
-
-func createLocalIpSeekerStub(expectedLocalIp string) network.InterfaceAddrs {
-	return func() ([]net.Addr, error) {
-		return []net.Addr{
-			&net.IPNet{IP: net.ParseIP(expectedLocalIp)},
-		}, nil
-	}
 }
 
 func assertStoriesDone(t *testing.T, backlog Backlog, storyIds []StoryId) {

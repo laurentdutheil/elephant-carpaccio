@@ -5,6 +5,10 @@ type Discount struct {
 	Rate   Percent
 }
 
+func (d Discount) applyTo(amount Dollar) Dollar {
+	return d.Rate.ApplyTo(amount)
+}
+
 type DiscountLevel int
 
 const (
@@ -19,9 +23,6 @@ const (
 )
 
 func (l DiscountLevel) Discount() Discount {
-	if l > NumberOfDiscounts {
-		return Discount{}
-	}
 	return []Discount{
 		{NewDollar(0), NewPercent(0)},
 		{NewDollar(100000), NewPercent(300)},
@@ -40,11 +41,16 @@ func (l DiscountLevel) AmountRange() (minAmount Dollar, maxAmount Dollar) {
 }
 
 func ComputeDiscount(amount Dollar) (Dollar, Discount) {
-	for discountLevel := NumberOfDiscounts - 1; discountLevel >= NoDiscount; discountLevel-- {
+	discount := findDiscount(amount)
+	return discount.applyTo(amount), discount
+}
+
+func findDiscount(amount Dollar) Discount {
+	for discountLevel := NumberOfDiscounts - 1; discountLevel > NoDiscount; discountLevel-- {
 		d := discountLevel.Discount()
 		if amount.GreaterOrEqual(d.Amount) {
-			return d.Rate.ApplyTo(amount), d
+			return d
 		}
 	}
-	return NewDollar(0), NoDiscount.Discount()
+	return NoDiscount.Discount()
 }

@@ -2,7 +2,6 @@ package http_server
 
 import (
 	. "elephant_carpaccio/domain"
-	"elephant_carpaccio/http-server/network"
 	"embed"
 	"fmt"
 	"io/fs"
@@ -24,14 +23,7 @@ type BoardServer struct {
 	localIp          net.IP
 }
 
-func NewBoardServer(game *Game, interfaceAddrsFunc network.InterfaceAddrs) *BoardServer {
-	localIp, err := network.GetLocalIp(interfaceAddrsFunc)
-	if err != nil {
-		println(err.Error())
-	} else {
-		println("local IP: " + localIp.String())
-	}
-
+func NewBoardServer(game *Game, localIp net.IP) *BoardServer {
 	s := &BoardServer{
 		templateRenderer: NewTemplateRenderer(),
 		game:             game,
