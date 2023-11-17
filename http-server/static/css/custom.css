@@ -16,3 +16,11 @@ footer {
     background: white;
     text-align: center;
     width: 100%;}
+.inline {
+    display: inline;
+    padding-right: 0.5em;}
+h1.small {
+    font-size: 1.8rem;}
+.compact{
+    padding: 0.1rem 0.5rem;
+}

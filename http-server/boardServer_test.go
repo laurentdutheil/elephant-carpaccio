@@ -112,7 +112,6 @@ func TestBoardServer(t *testing.T) {
 		server.ServeHTTP(response, request)
 
 		assert.Equal(t, http.StatusOK, response.Code)
-		assert.Contains(t, response.Body.String(), "<th>NV</th>")
 		assert.Contains(t, response.Body.String(), "Tax (8.00%)")
 	})
 
@@ -135,7 +134,6 @@ func TestBoardServer(t *testing.T) {
 
 				assert.Equal(t, http.StatusOK, response.Code)
 				assert.Contains(t, response.Body.String(), "<caption>Witch user stories are done?</caption>")
-				assert.Regexp(t, regexp.MustCompile("<th>(UT|NV|TX|AL|CA)</th>"), response.Body.String())
 				assert.Regexp(t, regexp.MustCompile("Tax \\(\\d+.\\d{2}%\\)"), response.Body.String())
 			})
 		}

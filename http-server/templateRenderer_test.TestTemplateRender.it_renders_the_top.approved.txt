@@ -21,7 +21,7 @@
 <body>
 <nav role="navigation">
     <div class="container">
-        <h1>
+        <h1 class="small">
             <img class="title-img" src="/static/img/elephant-carpaccio.svg" alt="elephant carpaccio image">
             Elephant Carpaccio
         </h1>

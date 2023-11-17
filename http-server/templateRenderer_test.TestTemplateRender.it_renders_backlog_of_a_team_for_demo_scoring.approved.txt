@@ -4,53 +4,81 @@
     <table class="u-full-width">
         <thead>
         <tr>
-            <th>Nb of items</th>
-            <th>Item Price</th>
-            <th>State</th>
+            <th class="compact">Nb of items</th>
+            <th class="compact">Item Price</th>
+            <th class="compact">State</th>
         </tr>
         <tr>
-            <th>12.00</th>
-            <th>$123.00</th>
-            <th>UT</th>
+            <th class="compact">12.00</th>
+            <th class="compact">$123.00</th>
+            <th class="compact">UT</th>
         </tr>
         <tbody>
         <tr>
-            <td class="u-text-right" colspan="2">Order Value</td>
-            <td class="u-text-right">$1,476.00</td>
+            <td class="u-text-right compact" colspan="2">Order Value</td>
+            <td class="u-text-right compact">$1,476.00</td>
         </tr>
         <tr>
-            <td class="u-text-right" colspan="2">Discount (3.00%)</td>
-            <td class="u-text-right">$44.28</td>
+            <td class="u-text-right compact" colspan="2">Discount (3.00%)</td>
+            <td class="u-text-right compact">$44.28</td>
         </tr>
         <tr>
-            <td class="u-text-right" colspan="2">Tax (6.85%)</td>
-            <td class="u-text-right">$98.07</td>
+            <td class="u-text-right compact" colspan="2">Tax (6.85%)</td>
+            <td class="u-text-right compact">$98.07</td>
         </tr>
         <tr>
-            <td class="u-text-right" colspan="2">Taxed Order Value</td>
-            <td class="u-text-right">$1,577.11</td>
+            <td class="u-text-right compact" colspan="2">Taxed Order Value</td>
+            <td class="u-text-right compact">$1,577.11</td>
         </tr>
         <tr>
-            <td class="u-text-right" colspan="2"><strong>Total Price</strong></td>
-            <td class="u-text-right"><strong>$1,529.79</strong></td>
+            <td class="u-text-right compact" colspan="2"><strong>Total Price</strong></td>
+            <td class="u-text-right compact"><strong>$1,529.79</strong></td>
         </tr>
         </tbody>
     </table>
+    <form method="get">
+        <div class="row">
+            <label class="inline"><input type="radio" name="state" value="" checked><span
+                        class="label-body">Random</span></label>
+            <label class="inline"><input type="radio" name="state" value="0"><span class="label-body">UT</span></label>
+            <label class="inline"><input type="radio" name="state" value="1"><span class="label-body">NV</span></label>
+            <label class="inline"><input type="radio" name="state" value="2"><span class="label-body">TX</span></label>
+            <label class="inline"><input type="radio" name="state" value="3"><span class="label-body">AL</span></label>
+            <label class="inline"><input type="radio" name="state" value="4"><span class="label-body">CA</span></label>
+        </div>
+        <div class="row">
+            <label class="inline"><input type="radio" name="discount" value="" checked><span
+                        class="label-body">Random</span></label>
+            <label class="inline"><input type="radio" name="discount" value="0"><span
+                        class="label-body">0%</span></label>
+            <label class="inline"><input type="radio" name="discount" value="1"><span
+                        class="label-body">3%</span></label>
+            <label class="inline"><input type="radio" name="discount" value="2"><span
+                        class="label-body">5%</span></label>
+            <label class="inline"><input type="radio" name="discount" value="3"><span
+                        class="label-body">7%</span></label>
+            <label class="inline"><input type="radio" name="discount" value="4"><span
+                        class="label-body">10%</span></label>
+            <label class="inline"><input type="radio" name="discount" value="5"><span
+                        class="label-body">15%</span></label>
+        </div>
+        <input class="button-primary u-full-width" type="submit" value="New Sample">
+    </form>
     <form method="post">
         <div class="row">
             <table class="u-full-width">
                 <caption>Witch user stories are done?</caption>
                 <thead>
                 <tr>
-                    <th>User Story</th>
-                    <th>Done?</th>
+                    <th class="compact">User Story</th>
+                    <th class="compact">Done?</th>
                 </tr>
                 </thead>
                 <tbody>
                 
                     <tr>
-                        <td>Hello World</td>
-                        <td>
+                        <td class="compact">Hello World</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-001" id="EC-001" name="Done"
                                        checked>
@@ -59,8 +87,8 @@
                     </tr>
                 
                     <tr>
-                        <td>Can fill parameters</td>
-                        <td>
+                        <td class="compact">Can fill parameters</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-002" id="EC-002" name="Done"
                                        checked>
@@ -69,8 +97,8 @@
                     </tr>
                 
                     <tr>
-                        <td>Compute order value without tax</td>
-                        <td>
+                        <td class="compact">Compute order value without tax</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-003" id="EC-003" name="Done"
                                        checked>
@@ -79,8 +107,8 @@
                     </tr>
                 
                     <tr>
-                        <td>Can handle float for &#39;number of items&#39; AND &#39;price by item&#39;</td>
-                        <td>
+                        <td class="compact">Can handle float for &#39;number of items&#39; AND &#39;price by item&#39;</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-004" id="EC-004" name="Done"
                                        checked>
@@ -89,8 +117,8 @@
                     </tr>
                 
                     <tr>
-                        <td>Tax for UT</td>
-                        <td>
+                        <td class="compact">Tax for UT</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-005" id="EC-005" name="Done"
                                        checked>
@@ -99,8 +127,8 @@
                     </tr>
                 
                     <tr>
-                        <td>Tax for NV</td>
-                        <td>
+                        <td class="compact">Tax for NV</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-006" id="EC-006" name="Done"
                                        checked>
@@ -109,8 +137,8 @@
                     </tr>
                 
                     <tr>
-                        <td>Tax for TX</td>
-                        <td>
+                        <td class="compact">Tax for TX</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-007" id="EC-007" name="Done"
                                        checked>
@@ -119,8 +147,8 @@
                     </tr>
                 
                     <tr>
-                        <td>Tax for AL</td>
-                        <td>
+                        <td class="compact">Tax for AL</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-008" id="EC-008" name="Done"
                                        checked>
@@ -129,8 +157,8 @@
                     </tr>
                 
                     <tr>
-                        <td>Tax for CA</td>
-                        <td>
+                        <td class="compact">Tax for CA</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-009" id="EC-009" name="Done"
                                        >
@@ -139,8 +167,8 @@
                     </tr>
                 
                     <tr>
-                        <td>15% Discount</td>
-                        <td>
+                        <td class="compact">15% Discount</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-010" id="EC-010" name="Done"
                                        >
@@ -149,8 +177,8 @@
                     </tr>
                 
                     <tr>
-                        <td>10% Discount</td>
-                        <td>
+                        <td class="compact">10% Discount</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-011" id="EC-011" name="Done"
                                        >
@@ -159,8 +187,8 @@
                     </tr>
                 
                     <tr>
-                        <td>7% Discount</td>
-                        <td>
+                        <td class="compact">7% Discount</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-012" id="EC-012" name="Done"
                                        >
@@ -169,8 +197,8 @@
                     </tr>
                 
                     <tr>
-                        <td>5% Discount</td>
-                        <td>
+                        <td class="compact">5% Discount</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-013" id="EC-013" name="Done"
                                        >
@@ -179,8 +207,8 @@
                     </tr>
                 
                     <tr>
-                        <td>3% Discount</td>
-                        <td>
+                        <td class="compact">3% Discount</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-014" id="EC-014" name="Done"
                                        >
@@ -189,8 +217,8 @@
                     </tr>
                 
                     <tr>
-                        <td>Can handle rounding for result (two digits after the decimal point)</td>
-                        <td>
+                        <td class="compact">Can handle rounding for result (two digits after the decimal point)</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-015" id="EC-015" name="Done"
                                        >
@@ -199,8 +227,8 @@
                     </tr>
                 
                     <tr>
-                        <td>Prompts are clear. Display currency</td>
-                        <td>
+                        <td class="compact">Prompts are clear. Display currency</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-016" id="EC-016" name="Done"
                                        >
@@ -209,8 +237,8 @@
                     </tr>
                 
                     <tr>
-                        <td>Display details (order value, tax, discount</td>
-                        <td>
+                        <td class="compact">Display details (order value, tax, discount</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-017" id="EC-017" name="Done"
                                        >
@@ -219,8 +247,8 @@
                     </tr>
                 
                     <tr>
-                        <td>Do not have to re-launch the application for each test</td>
-                        <td>
+                        <td class="compact">Do not have to re-launch the application for each test</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-018" id="EC-018" name="Done"
                                        >

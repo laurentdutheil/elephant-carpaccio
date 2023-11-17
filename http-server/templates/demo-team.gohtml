@@ -5,53 +5,81 @@
     <table class="u-full-width">
         <thead>
         <tr>
-            <th>Nb of items</th>
-            <th>Item Price</th>
-            <th>State</th>
+            <th class="compact">Nb of items</th>
+            <th class="compact">Item Price</th>
+            <th class="compact">State</th>
         </tr>
         <tr>
-            <th>{{.Order.NumberOfItems}}</th>
-            <th>{{.Order.ItemPrice.String}}</th>
-            <th>{{.Order.State.Label}}</th>
+            <th class="compact">{{.Order.NumberOfItems}}</th>
+            <th class="compact">{{.Order.ItemPrice.String}}</th>
+            <th class="compact">{{.Order.State.Label}}</th>
         </tr>
         <tbody>
         <tr>
-            <td class="u-text-right" colspan="2">Order Value</td>
-            <td class="u-text-right">{{.Receipt.OrderValue.String}}</td>
+            <td class="u-text-right compact" colspan="2">Order Value</td>
+            <td class="u-text-right compact">{{.Receipt.OrderValue.String}}</td>
         </tr>
         <tr>
-            <td class="u-text-right" colspan="2">Discount ({{.Receipt.Discount.Rate.String}})</td>
-            <td class="u-text-right">{{.Receipt.DiscountValue.String}}</td>
+            <td class="u-text-right compact" colspan="2">Discount ({{.Receipt.Discount.Rate.String}})</td>
+            <td class="u-text-right compact">{{.Receipt.DiscountValue.String}}</td>
         </tr>
         <tr>
-            <td class="u-text-right" colspan="2">Tax ({{.Order.State.TaxRate.String}})</td>
-            <td class="u-text-right">{{.Receipt.Tax.String}}</td>
+            <td class="u-text-right compact" colspan="2">Tax ({{.Order.State.TaxRate.String}})</td>
+            <td class="u-text-right compact">{{.Receipt.Tax.String}}</td>
         </tr>
         <tr>
-            <td class="u-text-right" colspan="2">Taxed Order Value</td>
-            <td class="u-text-right">{{.Receipt.TaxedOrderValue.String}}</td>
+            <td class="u-text-right compact" colspan="2">Taxed Order Value</td>
+            <td class="u-text-right compact">{{.Receipt.TaxedOrderValue.String}}</td>
         </tr>
         <tr>
-            <td class="u-text-right" colspan="2"><strong>Total Price</strong></td>
-            <td class="u-text-right"><strong>{{.Receipt.TotalPrice.String}}</strong></td>
+            <td class="u-text-right compact" colspan="2"><strong>Total Price</strong></td>
+            <td class="u-text-right compact"><strong>{{.Receipt.TotalPrice.String}}</strong></td>
         </tr>
         </tbody>
     </table>
+    <form method="get">
+        <div class="row">
+            <label class="inline"><input type="radio" name="state" value="" checked><span
+                        class="label-body">Random</span></label>
+            <label class="inline"><input type="radio" name="state" value="0"><span class="label-body">UT</span></label>
+            <label class="inline"><input type="radio" name="state" value="1"><span class="label-body">NV</span></label>
+            <label class="inline"><input type="radio" name="state" value="2"><span class="label-body">TX</span></label>
+            <label class="inline"><input type="radio" name="state" value="3"><span class="label-body">AL</span></label>
+            <label class="inline"><input type="radio" name="state" value="4"><span class="label-body">CA</span></label>
+        </div>
+        <div class="row">
+            <label class="inline"><input type="radio" name="discount" value="" checked><span
+                        class="label-body">Random</span></label>
+            <label class="inline"><input type="radio" name="discount" value="0"><span
+                        class="label-body">0%</span></label>
+            <label class="inline"><input type="radio" name="discount" value="1"><span
+                        class="label-body">3%</span></label>
+            <label class="inline"><input type="radio" name="discount" value="2"><span
+                        class="label-body">5%</span></label>
+            <label class="inline"><input type="radio" name="discount" value="3"><span
+                        class="label-body">7%</span></label>
+            <label class="inline"><input type="radio" name="discount" value="4"><span
+                        class="label-body">10%</span></label>
+            <label class="inline"><input type="radio" name="discount" value="5"><span
+                        class="label-body">15%</span></label>
+        </div>
+        <input class="button-primary u-full-width" type="submit" value="New Sample">
+    </form>
     <form method="post">
         <div class="row">
             <table class="u-full-width">
                 <caption>Witch user stories are done?</caption>
                 <thead>
                 <tr>
-                    <th>User Story</th>
-                    <th>Done?</th>
+                    <th class="compact">User Story</th>
+                    <th class="compact">Done?</th>
                 </tr>
                 </thead>
                 <tbody>
                 {{range .Team.Backlog}}
                     <tr>
-                        <td>{{.Description}}</td>
-                        <td>
+                        <td class="compact">{{.Description}}</td>
+                        <td class="compact">
                             <label>
                                 <input type="checkbox" value="{{.Id}}" id="{{.Id}}" name="Done"
                                        {{if .Done}}checked{{end}}>
