@@ -1,57 +1,66 @@
 package controller
 
 type Discount struct {
-	Amount Dollar
-	Rate   Percent
+	minAmount Dollar
+	maxAmount Dollar
+	Rate      Percent
 }
 
 func (d Discount) applyTo(amount Dollar) Dollar {
 	return d.Rate.ApplyTo(amount)
 }
 
-type DiscountLevel int
+func (d Discount) AmountRange() (minAmount Dollar, maxAmount Dollar) {
+	return d.minAmount, d.maxAmount
+}
+
+type discountLevel uint8
 
 const (
-	NoDiscount DiscountLevel = iota
-	ThreePercentDiscount
-	FivePercentDiscount
-	SevenPercentDiscount
-	TenPercentDiscount
-	FifteenPercentDiscount
+	No discountLevel = iota
+	ThreePercent
+	FivePercent
+	SevenPercent
+	TenPercent
+	FifteenPercent
 
-	NumberOfDiscounts
+	numberOfDiscounts
 )
 
-func (l DiscountLevel) Discount() Discount {
+func (l discountLevel) Discount() *Discount {
+	return &AllDiscounts()[l]
+}
+
+func AllDiscounts() []Discount {
 	return []Discount{
-		{NewDollar(0), NewPercent(0)},
-		{NewDollar(100000), NewPercent(300)},
-		{NewDollar(500000), NewPercent(500)},
-		{NewDollar(700000), NewPercent(700)},
-		{NewDollar(1000000), NewPercent(1000)},
-		{NewDollar(5000000), NewPercent(1500)},
-
-		{NewDollar(100000000), NewPercent(0)},
-	}[l]
+		{NewDollar(0), NewDollar(100000), NewPercent(0)},
+		{NewDollar(100000), NewDollar(500000), NewPercent(300)},
+		{NewDollar(500000), NewDollar(700000), NewPercent(500)},
+		{NewDollar(700000), NewDollar(1000000), NewPercent(700)},
+		{NewDollar(1000000), NewDollar(5000000), NewPercent(1000)},
+		{NewDollar(5000000), NewDollar(100000000), NewPercent(1500)},
+	}
 }
 
-func (l DiscountLevel) AmountRange() (minAmount Dollar, maxAmount Dollar) {
-	minAmount = l.Discount().Amount
-	maxAmount = (l + 1).Discount().Amount
-	return
+func DiscountOf(value int) *Discount {
+	if value < int(numberOfDiscounts) {
+		return discountLevel(value).Discount()
+	}
+	return nil
 }
 
-func ComputeDiscount(amount Dollar) (Dollar, Discount) {
+func ComputeDiscount(amount Dollar) (Dollar, *Discount) {
 	discount := findDiscount(amount)
 	return discount.applyTo(amount), discount
 }
 
-func findDiscount(amount Dollar) Discount {
-	for discountLevel := NumberOfDiscounts - 1; discountLevel > NoDiscount; discountLevel-- {
-		d := discountLevel.Discount()
-		if amount.GreaterOrEqual(d.Amount) {
-			return d
+func findDiscount(amount Dollar) *Discount {
+	allDiscounts := AllDiscounts()
+	for i := len(allDiscounts) - 1; i > 0; i-- {
+		d := allDiscounts[i]
+		if amount.GreaterOrEqual(d.minAmount) {
+			return &d
 		}
 	}
-	return NoDiscount.Discount()
+	return No.Discount()
 }

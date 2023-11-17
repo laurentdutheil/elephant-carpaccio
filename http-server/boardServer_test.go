@@ -2,7 +2,6 @@ package http_server_test
 
 import (
 	"context"
-	"elephant_carpaccio/domain/controller"
 	"github.com/stretchr/testify/assert"
 	"net"
 	"net/http"
@@ -114,7 +113,7 @@ func TestBoardServer(t *testing.T) {
 
 		assert.Equal(t, http.StatusOK, response.Code)
 		assert.Contains(t, response.Body.String(), "<th>NV</th>")
-		assert.Contains(t, response.Body.String(), controller.NV.State().TaxRate.String())
+		assert.Contains(t, response.Body.String(), "Tax (8.00%)")
 	})
 
 	t.Run("handle demo scoring page for a team with a order example with wrong state", func(t *testing.T) {
@@ -137,6 +136,7 @@ func TestBoardServer(t *testing.T) {
 				assert.Equal(t, http.StatusOK, response.Code)
 				assert.Contains(t, response.Body.String(), "<caption>Witch user stories are done?</caption>")
 				assert.Regexp(t, regexp.MustCompile("<th>(UT|NV|TX|AL|CA)</th>"), response.Body.String())
+				assert.Regexp(t, regexp.MustCompile("Tax \\(\\d+.\\d{2}%\\)"), response.Body.String())
 			})
 		}
 	})
@@ -152,7 +152,31 @@ func TestBoardServer(t *testing.T) {
 		server.ServeHTTP(response, request)
 
 		assert.Equal(t, http.StatusOK, response.Code)
-		assert.Contains(t, response.Body.String(), controller.SevenPercentDiscount.Discount().Rate.String())
+		assert.Contains(t, response.Body.String(), "Discount (7.00%)")
+	})
+
+	t.Run("handle demo scoring page for a team with a order example with wrong state", func(t *testing.T) {
+		game := NewGame()
+		server := NewBoardServer(game, localIpSeekerStub)
+		game.Register("A Team")
+		tests := []struct {
+			request string
+		}{
+			{"/demo/A Team?discount=abc"},
+			{"/demo/A Team?discount=123"},
+		}
+		for _, test := range tests {
+			t.Run(test.request, func(t *testing.T) {
+				request, _ := http.NewRequest(http.MethodGet, test.request, nil)
+				response := httptest.NewRecorder()
+
+				server.ServeHTTP(response, request)
+
+				assert.Equal(t, http.StatusOK, response.Code)
+				assert.Contains(t, response.Body.String(), "<caption>Witch user stories are done?</caption>")
+				assert.Regexp(t, regexp.MustCompile("Discount \\(\\d+.\\d{2}%\\)"), response.Body.String())
+			})
+		}
 	})
 
 	t.Run("handle demo scoring post", func(t *testing.T) {

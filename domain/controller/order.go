@@ -16,7 +16,7 @@ func (o Order) Compute() Receipt {
 	taxableValue := orderValue.Minus(discountValue)
 	return Receipt{
 		OrderValue:      orderValue,
-		Discount:        discount,
+		Discount:        *discount,
 		DiscountValue:   discountValue,
 		Tax:             o.State.ComputeTax(taxableValue),
 		TaxedOrderValue: o.State.ApplyTax(orderValue),

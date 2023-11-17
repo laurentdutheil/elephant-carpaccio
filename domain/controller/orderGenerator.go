@@ -13,29 +13,32 @@ func NewOrderGenerator(generatorRandom GeneratorRandom) *OrderGenerator {
 	return &OrderGenerator{generatorRandom: generatorRandom}
 }
 
-func (og OrderGenerator) GenerateOrder(discountLevel DiscountLevel, state *State) Order {
+func (og OrderGenerator) GenerateOrder(discount *Discount, state *State) Order {
 	if state == nil {
 		state = og.pickState()
 	}
+	if discount == nil {
+		discount = og.pickDiscount()
+	}
 	nbItems := og.generatorRandom.randDecimal(1, 10000)
-	itemPrice := og.generateItemPrice(discountLevel, nbItems)
+	itemPrice := og.generateItemPrice(discount, nbItems)
 	return NewOrder(nbItems, itemPrice, state)
 }
 
-func (og OrderGenerator) generateItemPrice(discountLevel DiscountLevel, nbItems Decimal) Dollar {
-	minPrice, maxPrice := discountLevel.AmountRange()
+func (og OrderGenerator) generateItemPrice(discount *Discount, nbItems Decimal) Dollar {
+	minPrice, maxPrice := discount.AmountRange()
 	minItemPrice := minPrice.Divide(nbItems)
 	maxItemPrice := maxPrice.Divide(nbItems)
 	itemAmount := og.generatorRandom.randDecimal(minItemPrice.amount, maxItemPrice.amount)
 	return NewDollar(itemAmount)
 }
 
-func (og OrderGenerator) PickDiscountLevel() DiscountLevel {
-	return DiscountLevel(og.generatorRandom.randInt(int(NumberOfDiscounts)))
+func (og OrderGenerator) pickDiscount() *Discount {
+	return DiscountOf(og.generatorRandom.randInt(int(numberOfDiscounts)))
 }
 
 func (og OrderGenerator) pickState() *State {
-	return StateOf(og.generatorRandom.randInt(int(NumberOfStates)))
+	return StateOf(og.generatorRandom.randInt(int(numberOfStates)))
 }
 
 type GeneratorRandom interface {
