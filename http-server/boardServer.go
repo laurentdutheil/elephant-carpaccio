@@ -78,12 +78,12 @@ func (s BoardServer) handleDemoScoring(writer http.ResponseWriter, request *http
 			orderGenerator := controller.NewOrderGenerator(nil)
 
 			stateInRequest := request.URL.Query().Get("state")
-			stateCode := requestStateOrRandom(stateInRequest, orderGenerator)
+			state := requestState(stateInRequest)
 
 			discountInRequest := request.URL.Query().Get("discount")
 			discountLevel := requestDiscountOrRandom(discountInRequest, orderGenerator)
 
-			randomOrder := orderGenerator.GenerateOrder(discountLevel, stateCode)
+			randomOrder := orderGenerator.GenerateOrder(discountLevel, state)
 			_ = s.templateRenderer.RenderDemoScoring(writer, selectedTeam, randomOrder)
 		case http.MethodPost:
 			storiesDone := s.extractStoryIdsSelected(request)
@@ -94,15 +94,15 @@ func (s BoardServer) handleDemoScoring(writer http.ResponseWriter, request *http
 	}
 }
 
-func requestStateOrRandom(stateInRequest string, orderGenerator *controller.OrderGenerator) controller.StateCode {
-	var stateCode controller.StateCode
+func requestState(stateInRequest string) *controller.State {
 	if stateInRequest != "" {
-		atoi, _ := strconv.Atoi(stateInRequest)
-		stateCode = controller.StateCode(atoi)
-	} else {
-		stateCode = orderGenerator.PickStateCode()
+		parsedStateCode, err := strconv.Atoi(stateInRequest)
+		if err != nil {
+			return nil
+		}
+		return controller.StateOf(parsedStateCode)
 	}
-	return stateCode
+	return nil
 }
 
 func requestDiscountOrRandom(discountInRequest string, orderGenerator *controller.OrderGenerator) controller.DiscountLevel {

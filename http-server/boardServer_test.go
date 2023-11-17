@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"regexp"
 	"strings"
 	"testing"
 	"time"
@@ -101,7 +102,7 @@ func TestBoardServer(t *testing.T) {
 		assert.Contains(t, response.Body.String(), "<caption>Witch user stories are done?</caption>")
 	})
 
-	t.Run("handle demo scoring page for a team with a order with fixed state", func(t *testing.T) {
+	t.Run("handle demo scoring page for a team with a order example with fixed state", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
 		game.Register("A Team")
@@ -114,6 +115,30 @@ func TestBoardServer(t *testing.T) {
 		assert.Equal(t, http.StatusOK, response.Code)
 		assert.Contains(t, response.Body.String(), "<th>NV</th>")
 		assert.Contains(t, response.Body.String(), controller.NV.State().TaxRate.String())
+	})
+
+	t.Run("handle demo scoring page for a team with a order example with wrong state", func(t *testing.T) {
+		game := NewGame()
+		server := NewBoardServer(game, localIpSeekerStub)
+		game.Register("A Team")
+		tests := []struct {
+			request string
+		}{
+			{"/demo/A Team?state=abc"},
+			{"/demo/A Team?state=123"},
+		}
+		for _, test := range tests {
+			t.Run(test.request, func(t *testing.T) {
+				request, _ := http.NewRequest(http.MethodGet, test.request, nil)
+				response := httptest.NewRecorder()
+
+				server.ServeHTTP(response, request)
+
+				assert.Equal(t, http.StatusOK, response.Code)
+				assert.Contains(t, response.Body.String(), "<caption>Witch user stories are done?</caption>")
+				assert.Regexp(t, regexp.MustCompile("<th>(UT|NV|TX|AL|CA)</th>"), response.Body.String())
+			})
+		}
 	})
 
 	t.Run("handle demo scoring page for a team with a order with fixed discount", func(t *testing.T) {

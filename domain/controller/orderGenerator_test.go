@@ -8,10 +8,10 @@ import (
 )
 
 func TestGenerateOrder(t *testing.T) {
-	t.Run("should generate an order with stateCode", func(t *testing.T) {
+	t.Run("should generate an order with with", func(t *testing.T) {
 		orderGenerator := NewOrderGenerator(nil)
 
-		order := orderGenerator.GenerateOrder(NoDiscount, AL)
+		order := orderGenerator.GenerateOrder(NoDiscount, AL.State())
 
 		assert.Equal(t, AL.State(), order.State)
 	})
@@ -21,7 +21,7 @@ func TestGenerateOrder(t *testing.T) {
 		randomizer := NewDecimalRandomizer(alwaysZeroRandFunc)
 		orderGenerator := NewOrderGenerator(randomizer)
 
-		order := orderGenerator.GenerateOrder(NoDiscount, UT)
+		order := orderGenerator.GenerateOrder(NoDiscount, UT.State())
 
 		assert.Greater(t, order.NumberOfItems, Decimal(0))
 	})
@@ -31,7 +31,7 @@ func TestGenerateOrder(t *testing.T) {
 		randomizer := NewDecimalRandomizer(alwaysMaxRandFunc)
 		orderGenerator := NewOrderGenerator(randomizer)
 
-		order := orderGenerator.GenerateOrder(NoDiscount, UT)
+		order := orderGenerator.GenerateOrder(NoDiscount, UT.State())
 
 		assert.Less(t, order.NumberOfItems, Decimal(10000))
 	})
@@ -53,7 +53,7 @@ func TestGenerateOrder(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.description, func(t *testing.T) {
-				order := orderGenerator.GenerateOrder(test.discountLevel, UT)
+				order := orderGenerator.GenerateOrder(test.discountLevel, UT.State())
 
 				receipt := order.Compute()
 				actualOrderValue := receipt.OrderValue
@@ -81,7 +81,7 @@ func TestGenerateOrder(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.description, func(t *testing.T) {
-				order := orderGenerator.GenerateOrder(test.discountLevel, UT)
+				order := orderGenerator.GenerateOrder(test.discountLevel, UT.State())
 
 				receipt := order.Compute()
 				actualOrderValue := receipt.OrderValue
@@ -91,23 +91,21 @@ func TestGenerateOrder(t *testing.T) {
 			})
 		}
 	})
-}
 
-func TestPickStateCode(t *testing.T) {
 	t.Run("should pick a state at random", func(t *testing.T) {
-		for stateCode := 0; stateCode < int(NumberOfStates); stateCode++ {
-			state := StateCode(stateCode).State()
+		for stateCode, state := range AllStates() {
 			t.Run(state.Label, func(t *testing.T) {
 				fixedIntRandom := func(_ int64) int64 { return int64(stateCode) }
 				randomizer := NewDecimalRandomizer(fixedIntRandom)
 				orderGenerator := NewOrderGenerator(randomizer)
 
-				pickStateCode := orderGenerator.PickStateCode()
+				order := orderGenerator.GenerateOrder(NoDiscount, nil)
 
-				assert.Equal(t, state, pickStateCode.State())
+				assert.Equal(t, &state, order.State)
 			})
 		}
 	})
+
 }
 
 func TestPickDiscountLevel(t *testing.T) {

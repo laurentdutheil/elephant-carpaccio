@@ -3,11 +3,11 @@ package controller
 type Order struct {
 	NumberOfItems Decimal
 	ItemPrice     Dollar
-	State         State
+	State         *State
 }
 
-func NewOrder(numberOfItems Decimal, itemPrice Dollar, stateCode StateCode) Order {
-	return Order{NumberOfItems: numberOfItems, ItemPrice: itemPrice, State: stateCode.State()}
+func NewOrder(numberOfItems Decimal, itemPrice Dollar, state *State) Order {
+	return Order{NumberOfItems: numberOfItems, ItemPrice: itemPrice, State: state}
 }
 
 func (o Order) Compute() Receipt {

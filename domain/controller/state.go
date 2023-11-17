@@ -13,24 +13,35 @@ func (s State) ComputeTax(amount Dollar) Dollar {
 	return s.TaxRate.ApplyTo(amount)
 }
 
-type StateCode int
+type stateCode uint8
 
 const (
-	UT StateCode = iota
+	UT stateCode = iota
 	NV
 	TX
 	AL
 	CA
 
-	NumberOfStates
+	numberOfStates
 )
 
-func (s StateCode) State() State {
+func (s stateCode) State() *State {
+	return &AllStates()[s]
+}
+
+func AllStates() []State {
 	return []State{
 		{"UT", NewPercent(685)},
 		{"NV", NewPercent(800)},
 		{"TX", NewPercent(625)},
 		{"AL", NewPercent(400)},
 		{"CA", NewPercent(825)},
-	}[s]
+	}
+}
+
+func StateOf(value int) *State {
+	if value < int(numberOfStates) {
+		return stateCode(value).State()
+	}
+	return nil
 }

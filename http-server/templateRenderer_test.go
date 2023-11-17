@@ -102,7 +102,7 @@ func TestTemplateRender(t *testing.T) {
 			WithRegexScrubber(footerScrubber, "<<footer template>>")
 
 		team := game.Teams()[0]
-		randomOrder := NewOrder(Decimal(1200), NewDollar(Decimal(12300)), UT)
+		randomOrder := NewOrder(Decimal(1200), NewDollar(Decimal(12300)), UT.State())
 
 		if err := templateRenderer.RenderDemoScoring(&buf, team, randomOrder); err != nil {
 			t.Fatal(err)
