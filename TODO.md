@@ -7,7 +7,7 @@ Purpose: help the facilitator to attribute points to the teams.
 - [x] display a qrcode to permit the facilitator to use their smartphone
 - [x] use sse to update the board from server for score
 - [x] propose some test data to the facilitator during demos
-- [ ] use sse to update the board from server for team registration
+- [x] use sse to update the board from server for team registration
 
 ## Second Version
 

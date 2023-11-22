@@ -115,41 +115,45 @@ func TestCompleteSeveralIterations(t *testing.T) {
 }
 
 func TestCompleteIterationNotifyScoresListeners(t *testing.T) {
-	mockScoreSubject := MockScoreSubject{}
+	mockScoreSubject := MockGameSubject{}
 	team := NewTeam("A Team", &mockScoreSubject)
 	team.Done("EC-001")
 
-	mockScoreSubject.On("NotifyAll", mock.Anything, mock.Anything)
+	mockScoreSubject.On("NotifyScore", mock.Anything, mock.Anything)
 
 	team.CompleteIteration()
 
-	mockScoreSubject.AssertCalled(t, "NotifyAll", "A Team", Score(1))
+	mockScoreSubject.AssertCalled(t, "NotifyScore", "A Team", Score(1))
 }
 
 func TestCompleteIterationDontNotifyIfThereIsNoScoreSubject(t *testing.T) {
-	notInjectedMockScoreSubject := MockScoreSubject{}
+	notInjectedMockScoreSubject := MockGameSubject{}
 	team := NewTeam("A Team", nil)
 	team.Done("EC-001")
 
-	notInjectedMockScoreSubject.On("NotifyAll", mock.Anything, mock.Anything)
+	notInjectedMockScoreSubject.On("NotifyScore", mock.Anything, mock.Anything)
 
 	team.CompleteIteration()
 
-	notInjectedMockScoreSubject.AssertNotCalled(t, "NotifyAll", "A Team", 1)
+	notInjectedMockScoreSubject.AssertNotCalled(t, "NotifyScore", "A Team", 1)
 }
 
-type MockScoreSubject struct {
+type MockGameSubject struct {
 	mock.Mock
 }
 
-func (m *MockScoreSubject) AddScoreObserver(observer ScoreObserver) {
+func (m *MockGameSubject) AddGameObserver(observer GameObserver) {
 	m.Called(observer)
 }
 
-func (m *MockScoreSubject) RemoveScoreObserver(id string) {
+func (m *MockGameSubject) RemoveGameObserver(id string) {
 	m.Called(id)
 }
 
-func (m *MockScoreSubject) NotifyAll(teamName string, newIterationScore Score) {
+func (m *MockGameSubject) NotifyScore(teamName string, newIterationScore Score) {
 	m.Called(teamName, newIterationScore)
+}
+
+func (m *MockGameSubject) NotifyRegistration(teamName string) {
+	m.Called(teamName)
 }

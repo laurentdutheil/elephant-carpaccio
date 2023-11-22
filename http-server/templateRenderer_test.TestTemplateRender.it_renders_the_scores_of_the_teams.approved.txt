@@ -107,7 +107,12 @@
             ],
         },
         options: {
-            aspectRatio: 1
+            aspectRatio: 1,
+            plugins: {
+                colors: {
+                    forceOverride: true
+                }
+            }
         }
     });
 
@@ -124,6 +129,17 @@
         chart.data.datasets
             .find((dataset) => dataset.label === teamName)
             .data.push(newScore)
+
+        chart.update()
+    });
+    
+    es.addEventListener("registration", (event) => {
+        const parsedData = JSON.parse(event.data);
+        const {teamName} = parsedData;
+        const newTeam = {label: teamName, data: [0], borderWidth: 1, tension: 0.5}
+
+        chart.data.datasets
+            .push(newTeam)
 
         chart.update()
     });

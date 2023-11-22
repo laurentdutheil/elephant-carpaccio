@@ -2,17 +2,18 @@ package domain
 
 type Game struct {
 	teams          []*Team
-	scoreObservers map[string]ScoreObserver
+	scoreObservers map[string]GameObserver
 }
 
 func NewGame() *Game {
-	observers := map[string]ScoreObserver{}
+	observers := map[string]GameObserver{}
 	return &Game{scoreObservers: observers}
 }
 
 func (g *Game) Register(teamName string) {
 	if teamName != "" {
 		g.teams = append(g.teams, NewTeam(teamName, g))
+		g.NotifyRegistration(teamName)
 	}
 }
 
@@ -31,20 +32,26 @@ func (g *Game) FindTeamByName(teamName string) *Team {
 	return selectedTeam
 }
 
-func (g *Game) AddScoreObserver(observer ScoreObserver) {
+func (g *Game) AddGameObserver(observer GameObserver) {
 	g.scoreObservers[observer.Id()] = observer
 }
 
-func (g *Game) RemoveScoreObserver(id string) {
+func (g *Game) RemoveGameObserver(id string) {
 	delete(g.scoreObservers, id)
 }
 
-func (g *Game) NotifyAll(teamName string, newIterationScore Score) {
+func (g *Game) NotifyScore(teamName string, newIterationScore Score) {
 	for _, observer := range g.scoreObservers {
-		observer.Update(teamName, newIterationScore)
+		observer.UpdateScore(teamName, newIterationScore)
 	}
 }
 
-func (g *Game) NbScoreObservers() int {
+func (g *Game) NotifyRegistration(teamName string) {
+	for _, observer := range g.scoreObservers {
+		observer.AddRegistration(teamName)
+	}
+}
+
+func (g *Game) NbGameObservers() int {
 	return len(g.scoreObservers)
 }

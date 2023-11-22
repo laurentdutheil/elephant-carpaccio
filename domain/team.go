@@ -10,10 +10,10 @@ type Team struct {
 	name            string
 	backlog         Backlog
 	iterationScores []Score
-	scoreSubject    ScoreSubject
+	scoreSubject    GameSubject
 }
 
-func NewTeam(name string, scoreSubject ScoreSubject) *Team {
+func NewTeam(name string, scoreSubject GameSubject) *Team {
 	return &Team{name: name, backlog: defaultBacklog(), scoreSubject: scoreSubject}
 }
 
@@ -38,7 +38,7 @@ func (t *Team) Score() Score {
 func (t *Team) CompleteIteration() {
 	t.iterationScores = append(t.iterationScores, t.Score())
 	if t.scoreSubject != nil {
-		t.scoreSubject.NotifyAll(t.name, t.Score())
+		t.scoreSubject.NotifyScore(t.name, t.Score())
 	}
 }
 

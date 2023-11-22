@@ -127,17 +127,20 @@ func (s BoardServer) handleSse(writer http.ResponseWriter, request *http.Request
 	writer.Header().Set("Cache-Control", "no-cache")
 	writer.Header().Set("Connection", "keep-alive")
 
-	scoreObserver := NewSseScoreObserver()
-	s.game.AddScoreObserver(scoreObserver)
+	gameObserver := NewSseGameObserver()
+	s.game.AddGameObserver(gameObserver)
 
 	for {
 		select {
 		case <-request.Context().Done():
-			close(scoreObserver.scoreChannel)
-			s.game.RemoveScoreObserver(scoreObserver.Id())
+			close(gameObserver.scoreChannel)
+			s.game.RemoveGameObserver(gameObserver.Id())
 			return
-		case scoreEvent := <-scoreObserver.scoreChannel:
+		case scoreEvent := <-gameObserver.scoreChannel:
 			_, _ = fmt.Fprint(writer, formatSseEvent("score", scoreEvent))
+			flusher.Flush()
+		case registrationEvent := <-gameObserver.registrationChannel:
+			_, _ = fmt.Fprint(writer, formatSseEvent("registration", registrationEvent))
 			flusher.Flush()
 		}
 	}

@@ -15,24 +15,34 @@ type ScoreEvent struct {
 	NewScore domain.Score `json:"newScore"`
 }
 
-type SseScoreObserver struct {
-	id           string
-	scoreChannel chan ScoreEvent
+type RegistrationEvent struct {
+	TeamName string `json:"teamName"`
 }
 
-func NewSseScoreObserver() *SseScoreObserver {
+type SseGameObserver struct {
+	id                  string
+	scoreChannel        chan ScoreEvent
+	registrationChannel chan RegistrationEvent
+}
+
+func NewSseGameObserver() *SseGameObserver {
 	id := strconv.FormatInt(time.Now().Unix(), 10)
 	scoreChannel := make(chan ScoreEvent)
-	o := &SseScoreObserver{id: id, scoreChannel: scoreChannel}
+	registrationChannel := make(chan RegistrationEvent)
+	o := &SseGameObserver{id: id, scoreChannel: scoreChannel, registrationChannel: registrationChannel}
 	return o
 }
 
-func (o SseScoreObserver) Id() string {
+func (o SseGameObserver) Id() string {
 	return o.id
 }
 
-func (o SseScoreObserver) Update(teamName string, newScore domain.Score) {
+func (o SseGameObserver) UpdateScore(teamName string, newScore domain.Score) {
 	o.scoreChannel <- ScoreEvent{teamName, newScore}
+}
+
+func (o SseGameObserver) AddRegistration(teamName string) {
+	o.registrationChannel <- RegistrationEvent{teamName}
 }
 
 func formatSseEvent(event string, data any) string {

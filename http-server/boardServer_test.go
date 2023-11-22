@@ -232,7 +232,7 @@ func TestSse(t *testing.T) {
 		assert.Equal(t, "keep-alive", response.Header().Get("Connection"))
 	})
 
-	t.Run("should add a ScoreObserver when connection is open", func(t *testing.T) {
+	t.Run("should add a GameObserver when connection is open", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
 
@@ -243,14 +243,14 @@ func TestSse(t *testing.T) {
 		response := httptest.NewRecorder()
 
 		time.AfterFunc(time.Millisecond, func() {
-			assert.Equal(t, 1, game.NbScoreObservers())
+			assert.Equal(t, 1, game.NbGameObservers())
 		})
 
 		server.ServeHTTP(response, request)
 
 	})
 
-	t.Run("should remove ScoreObserver when connection is closed", func(t *testing.T) {
+	t.Run("should remove GameObserver when connection is closed", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
 
@@ -263,7 +263,7 @@ func TestSse(t *testing.T) {
 
 		server.ServeHTTP(response, request)
 
-		assert.Equal(t, 0, game.NbScoreObservers())
+		assert.Equal(t, 0, game.NbGameObservers())
 	})
 
 	t.Run("should send score event when an iteration is completed", func(t *testing.T) {
@@ -288,6 +288,26 @@ func TestSse(t *testing.T) {
 		server.ServeHTTP(response, request)
 
 		assert.Equal(t, "event: score\ndata: {\"teamName\":\"A Team\",\"newScore\":2}\n\n", response.Body.String())
+	})
+
+	t.Run("should send registration event when an team is registered", func(t *testing.T) {
+		game := NewGame()
+
+		server := NewBoardServer(game, localIpSeekerStub)
+
+		request, _ := http.NewRequest(http.MethodGet, "/sse", nil)
+		cancellingCtx, cancel := context.WithCancel(request.Context())
+		time.AfterFunc(5*time.Millisecond, cancel)
+		request = request.WithContext(cancellingCtx)
+		response := httptest.NewRecorder()
+
+		time.AfterFunc(time.Millisecond, func() {
+			game.Register("A Team")
+		})
+
+		server.ServeHTTP(response, request)
+
+		assert.Equal(t, "event: registration\ndata: {\"teamName\":\"A Team\"}\n\n", response.Body.String())
 	})
 }
 

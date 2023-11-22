@@ -43,44 +43,80 @@ func TestFindTeamWhenItIsRegistered(t *testing.T) {
 	assert.Equal(t, "A Team", team.name)
 }
 
-type MockScoreObserver struct {
+type MockGameObserver struct {
 	mock.Mock
 }
 
-func (m *MockScoreObserver) Id() string {
+func (m *MockGameObserver) Id() string {
 	args := m.Called()
 	return args.String(0)
 }
 
-func (m *MockScoreObserver) Update(teamName string, newIterationScore Score) {
+func (m *MockGameObserver) UpdateScore(teamName string, newIterationScore Score) {
 	m.Called(teamName, newIterationScore)
 }
 
-func TestGameAsScoreSubject(t *testing.T) {
-	t.Run("should notify all observers", func(t *testing.T) {
-		mockScoreObserver := &MockScoreObserver{}
-		mockScoreObserver.On("Id").Return("ObserverId")
-		mockScoreObserver.On("Update", mock.Anything, mock.Anything)
+func (m *MockGameObserver) AddRegistration(teamName string) {
+	m.Called(teamName)
+}
+
+func TestGameAsGGameSubject(t *testing.T) {
+	t.Run("should notify new score to all observers", func(t *testing.T) {
+		mockScoreObserver := createMockedGameObserver()
 
 		game := NewGame()
-		game.AddScoreObserver(mockScoreObserver)
-		game.NotifyAll("A Team", Score(3))
+		game.Register("A Team")
+		game.AddGameObserver(mockScoreObserver)
+		team := game.FindTeamByName("A Team")
+		team.Done("EC-001", "EC-002", "EC-003")
+		team.CompleteIteration()
 
-		assert.Equal(t, 1, game.NbScoreObservers())
-		mockScoreObserver.AssertCalled(t, "Update", "A Team", Score(3))
+		assert.Equal(t, 1, game.NbGameObservers())
+		mockScoreObserver.AssertCalled(t, "UpdateScore", "A Team", Score(3))
 	})
 
-	t.Run("should not notify if no observer", func(t *testing.T) {
-		mockScoreObserver := &MockScoreObserver{}
-		mockScoreObserver.On("Id").Return("ObserverId")
-		mockScoreObserver.On("Update", mock.Anything, mock.Anything)
+	t.Run("should not notify score if no observer", func(t *testing.T) {
+		mockScoreObserver := createMockedGameObserver()
 
 		game := NewGame()
-		game.AddScoreObserver(mockScoreObserver)
-		game.RemoveScoreObserver("ObserverId")
-		game.NotifyAll("A Team", Score(3))
+		game.Register("A Team")
+		game.AddGameObserver(mockScoreObserver)
+		game.RemoveGameObserver("ObserverId")
+		team := game.FindTeamByName("A Team")
+		team.Done("EC-001", "EC-002", "EC-003")
+		team.CompleteIteration()
 
-		assert.Equal(t, 0, game.NbScoreObservers())
-		mockScoreObserver.AssertNotCalled(t, "Update", mock.Anything, mock.Anything)
+		assert.Equal(t, 0, game.NbGameObservers())
+		mockScoreObserver.AssertNotCalled(t, "UpdateScore", mock.Anything, mock.Anything)
 	})
+	t.Run("should notify new registration to all observers", func(t *testing.T) {
+		mockScoreObserver := createMockedGameObserver()
+
+		game := NewGame()
+		game.AddGameObserver(mockScoreObserver)
+		game.Register("A Team")
+
+		assert.Equal(t, 1, game.NbGameObservers())
+		mockScoreObserver.AssertCalled(t, "AddRegistration", "A Team")
+	})
+
+	t.Run("should not notify new registration if no observer", func(t *testing.T) {
+		mockScoreObserver := createMockedGameObserver()
+
+		game := NewGame()
+		game.AddGameObserver(mockScoreObserver)
+		game.RemoveGameObserver("ObserverId")
+		game.Register("A Team")
+
+		assert.Equal(t, 0, game.NbGameObservers())
+		mockScoreObserver.AssertNotCalled(t, "AddRegistration", mock.Anything)
+	})
+}
+
+func createMockedGameObserver() *MockGameObserver {
+	mockScoreObserver := &MockGameObserver{}
+	mockScoreObserver.On("Id").Return("ObserverId")
+	mockScoreObserver.On("UpdateScore", mock.Anything, mock.Anything)
+	mockScoreObserver.On("AddRegistration", mock.Anything)
+	return mockScoreObserver
 }
