@@ -11,10 +11,10 @@ type Team struct {
 	ip              string
 	backlog         Backlog
 	iterationScores []Score
-	scoreSubject    GameSubject
+	scoreSubject    GameNotifier
 }
 
-func NewTeam(name string, ip string, scoreSubject GameSubject) *Team {
+func NewTeam(name string, ip string, scoreSubject GameNotifier) *Team {
 	return &Team{name: name, ip: ip, backlog: defaultBacklog(), scoreSubject: scoreSubject}
 }
 

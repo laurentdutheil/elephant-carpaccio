@@ -1,9 +1,11 @@
-package domain
+package domain_test
 
 import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"testing"
+
+	. "elephant_carpaccio/domain"
 )
 
 func TestTeamHaveAName(t *testing.T) {
@@ -53,7 +55,7 @@ func TestTeamHaveADefaultBacklogAtBeginning(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.description, func(t *testing.T) {
-			assert.Contains(t, backlog, UserStory{Id: test.id, Description: test.description, valuePoint: test.valuePoint})
+			assert.Contains(t, backlog, UserStory{Id: test.id, Description: test.description, ValuePoint: test.valuePoint})
 		})
 	}
 }
