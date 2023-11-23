@@ -114,8 +114,8 @@ func TestTemplateRender(t *testing.T) {
 
 func simulateGame() *Game {
 	game := NewGame()
-	game.Register("A Team")
-	game.Register("The fantastic four")
+	game.Register("A Team", "")
+	game.Register("The fantastic four", "")
 
 	for _, team := range game.Teams() {
 		team.Done("EC-001", "EC-002", "EC-003")

@@ -8,20 +8,20 @@ import (
 
 func TestRegisterTeam(t *testing.T) {
 	game := NewGame()
-	game.Register("A Team")
+	game.Register("A Team", "128.168.0.44")
 
 	teams := game.Teams()
 
-	assert.Contains(t, teams, NewTeam("A Team", game))
+	assert.Contains(t, teams, NewTeam("A Team", "128.168.0.44", game))
 }
 
 func TestDontRegisterTeamIfNameIsBlank(t *testing.T) {
 	game := NewGame()
-	game.Register("")
+	game.Register("", "128.168.0.44")
 
 	teams := game.Teams()
 
-	assert.NotContains(t, teams, NewTeam("", game))
+	assert.NotContains(t, teams, NewTeam("", "128.168.0.44", game))
 	assert.Len(t, teams, 0)
 }
 
@@ -35,7 +35,7 @@ func TestFindNoTeamWhenNoRegistration(t *testing.T) {
 
 func TestFindTeamWhenItIsRegistered(t *testing.T) {
 	game := NewGame()
-	game.Register("A Team")
+	game.Register("A Team", "")
 
 	team := game.FindTeamByName("A Team")
 
@@ -65,7 +65,7 @@ func TestGameAsGGameSubject(t *testing.T) {
 		mockScoreObserver := createMockedGameObserver()
 
 		game := NewGame()
-		game.Register("A Team")
+		game.Register("A Team", "")
 		game.AddGameObserver(mockScoreObserver)
 		team := game.FindTeamByName("A Team")
 		team.Done("EC-001", "EC-002", "EC-003")
@@ -79,7 +79,7 @@ func TestGameAsGGameSubject(t *testing.T) {
 		mockScoreObserver := createMockedGameObserver()
 
 		game := NewGame()
-		game.Register("A Team")
+		game.Register("A Team", "")
 		game.AddGameObserver(mockScoreObserver)
 		game.RemoveGameObserver("ObserverId")
 		team := game.FindTeamByName("A Team")
@@ -94,7 +94,7 @@ func TestGameAsGGameSubject(t *testing.T) {
 
 		game := NewGame()
 		game.AddGameObserver(mockScoreObserver)
-		game.Register("A Team")
+		game.Register("A Team", "")
 
 		assert.Equal(t, 1, game.NbGameObservers())
 		mockScoreObserver.AssertCalled(t, "AddRegistration", "A Team")
@@ -106,7 +106,7 @@ func TestGameAsGGameSubject(t *testing.T) {
 		game := NewGame()
 		game.AddGameObserver(mockScoreObserver)
 		game.RemoveGameObserver("ObserverId")
-		game.Register("A Team")
+		game.Register("A Team", "")
 
 		assert.Equal(t, 0, game.NbGameObservers())
 		mockScoreObserver.AssertNotCalled(t, "AddRegistration", mock.Anything)

@@ -8,17 +8,26 @@ func (s Score) Add(score Score) Score {
 
 type Team struct {
 	name            string
+	ip              string
 	backlog         Backlog
 	iterationScores []Score
 	scoreSubject    GameSubject
 }
 
-func NewTeam(name string, scoreSubject GameSubject) *Team {
-	return &Team{name: name, backlog: defaultBacklog(), scoreSubject: scoreSubject}
+func NewTeam(name string, ip string, scoreSubject GameSubject) *Team {
+	return &Team{name: name, ip: ip, backlog: defaultBacklog(), scoreSubject: scoreSubject}
 }
 
 func (t *Team) Name() string {
 	return t.name
+}
+
+func (t *Team) IP() string {
+	return t.ip
+}
+
+func (t *Team) SetIp(ip string) {
+	t.ip = ip
 }
 
 func (t *Team) Backlog() Backlog {

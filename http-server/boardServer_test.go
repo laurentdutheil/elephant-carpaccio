@@ -90,7 +90,7 @@ func TestBoardServer(t *testing.T) {
 	t.Run("handle demo scoring page for a team", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
-		game.Register("A Team")
+		game.Register("A Team", "")
 
 		request, _ := http.NewRequest(http.MethodGet, "/demo/A Team", nil)
 		response := httptest.NewRecorder()
@@ -104,7 +104,7 @@ func TestBoardServer(t *testing.T) {
 	t.Run("handle demo scoring page for a team with a order example with fixed state", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
-		game.Register("A Team")
+		game.Register("A Team", "")
 
 		request, _ := http.NewRequest(http.MethodGet, "/demo/A Team?state=1", nil)
 		response := httptest.NewRecorder()
@@ -118,7 +118,7 @@ func TestBoardServer(t *testing.T) {
 	t.Run("handle demo scoring page for a team with a order example with wrong state", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
-		game.Register("A Team")
+		game.Register("A Team", "")
 		tests := []struct {
 			request string
 		}{
@@ -142,7 +142,7 @@ func TestBoardServer(t *testing.T) {
 	t.Run("handle demo scoring page for a team with a order with fixed discount", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
-		game.Register("A Team")
+		game.Register("A Team", "")
 
 		request, _ := http.NewRequest(http.MethodGet, "/demo/A Team?discount=3", nil)
 		response := httptest.NewRecorder()
@@ -156,7 +156,7 @@ func TestBoardServer(t *testing.T) {
 	t.Run("handle demo scoring page for a team with a order example with wrong state", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
-		game.Register("A Team")
+		game.Register("A Team", "")
 		tests := []struct {
 			request string
 		}{
@@ -180,7 +180,7 @@ func TestBoardServer(t *testing.T) {
 	t.Run("handle demo scoring post", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
-		game.Register("A Team")
+		game.Register("A Team", "")
 		team := game.Teams()[0]
 
 		data := url.Values{}
@@ -268,7 +268,7 @@ func TestSse(t *testing.T) {
 
 	t.Run("should send score event when an iteration is completed", func(t *testing.T) {
 		game := NewGame()
-		game.Register("A Team")
+		game.Register("A Team", "")
 		team := game.Teams()[0]
 		team.Done("EC-001", "EC-002")
 
@@ -302,7 +302,7 @@ func TestSse(t *testing.T) {
 		response := httptest.NewRecorder()
 
 		time.AfterFunc(time.Millisecond, func() {
-			game.Register("A Team")
+			game.Register("A Team", "")
 		})
 
 		server.ServeHTTP(response, request)

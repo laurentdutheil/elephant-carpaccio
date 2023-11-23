@@ -10,9 +10,9 @@ func NewGame() *Game {
 	return &Game{scoreObservers: observers}
 }
 
-func (g *Game) Register(teamName string) {
+func (g *Game) Register(teamName string, ip string) {
 	if teamName != "" {
-		g.teams = append(g.teams, NewTeam(teamName, g))
+		g.teams = append(g.teams, NewTeam(teamName, ip, g))
 		g.NotifyRegistration(teamName)
 	}
 }

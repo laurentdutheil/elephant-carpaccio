@@ -40,6 +40,8 @@ func NewBoardServer(game *Game, localIp net.IP) *BoardServer {
 	router.HandleFunc("/demo/", s.handleDemoScoring)
 	router.HandleFunc("/sse", s.handleSse)
 
+	HandleApi(router, game)
+
 	s.Handler = router
 
 	return s
@@ -54,7 +56,7 @@ func (s BoardServer) handleRegistration(writer http.ResponseWriter, request *htt
 	case http.MethodGet:
 		_ = s.templateRenderer.RenderRegistration(writer, s.game)
 	case http.MethodPost:
-		s.game.Register(request.FormValue("teamName"))
+		s.game.Register(request.FormValue("teamName"), "")
 		http.Redirect(writer, request, request.URL.String(), http.StatusFound)
 	}
 }
@@ -116,6 +118,16 @@ func requestDiscount(discountInRequest string) *controller.Discount {
 	return nil
 }
 
+func (s BoardServer) extractStoryIdsSelected(request *http.Request) []StoryId {
+	_ = request.ParseForm()
+	var storiesDone []StoryId
+	values := request.Form["Done"]
+	for _, selectedStoryId := range values {
+		storiesDone = append(storiesDone, StoryId(selectedStoryId))
+	}
+	return storiesDone
+}
+
 func (s BoardServer) handleSse(writer http.ResponseWriter, request *http.Request) {
 	flusher, ok := writer.(http.Flusher)
 	if !ok {
@@ -144,14 +156,4 @@ func (s BoardServer) handleSse(writer http.ResponseWriter, request *http.Request
 			flusher.Flush()
 		}
 	}
-}
-
-func (s BoardServer) extractStoryIdsSelected(request *http.Request) []StoryId {
-	_ = request.ParseForm()
-	var storiesDone []StoryId
-	values := request.Form["Done"]
-	for _, selectedStoryId := range values {
-		storiesDone = append(storiesDone, StoryId(selectedStoryId))
-	}
-	return storiesDone
 }
