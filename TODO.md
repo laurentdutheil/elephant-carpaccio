@@ -8,6 +8,7 @@ Purpose: help the facilitator to attribute points to the teams.
 - [x] use sse to update the board from server for score
 - [x] propose some test data to the facilitator during demos
 - [x] use sse to update the board from server for team registration
+- [ ] add notion of risk mitigation, cost of delay and business value to the score
 
 ## Second Version
 
