@@ -3,7 +3,7 @@ package domain
 type UserStory struct {
 	Id          StoryId
 	Description string
-	ValuePoint  int
+	ValuePoint  Score
 	Done        bool
 }
 
@@ -24,7 +24,7 @@ func (b Backlog) Score() Score {
 	score := Score(0)
 	for _, story := range b {
 		if story.Done {
-			score = score.Add(Score(story.ValuePoint))
+			score = score.Add(story.ValuePoint)
 		}
 	}
 	return score

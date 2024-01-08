@@ -28,7 +28,7 @@ func TestTeamHaveADefaultBacklogAtBeginning(t *testing.T) {
 	tests := []struct {
 		id          StoryId
 		description string
-		valuePoint  int
+		valuePoint  Score
 	}{
 		{id: "EC-001", description: "Hello World", valuePoint: 1},
 		{id: "EC-002", description: "Can fill parameters", valuePoint: 1},
