@@ -9,7 +9,7 @@ type Team struct {
 }
 
 func NewTeam(name string, ip string, scoreSubject GameNotifier) *Team {
-	return &Team{name: name, ip: ip, backlog: defaultBacklog(), scoreSubject: scoreSubject}
+	return &Team{name: name, ip: ip, backlog: DefaultBacklog(), scoreSubject: scoreSubject}
 }
 
 func (t *Team) Name() string {
@@ -29,19 +29,14 @@ func (t *Team) Backlog() Backlog {
 }
 
 func (t *Team) Done(userStoryIds ...StoryId) {
-	for _, id := range userStoryIds {
-		t.backlog.Done(id)
-	}
-}
-
-func (t *Team) Score() Score {
-	return t.backlog.Score()
+	t.backlog.Done(userStoryIds...)
 }
 
 func (t *Team) CompleteIteration() {
-	t.iterationScores = append(t.iterationScores, t.Score())
+	currentScore := t.backlog.Score()
+	t.iterationScores = append(t.iterationScores, currentScore)
 	if t.scoreSubject != nil {
-		t.scoreSubject.NotifyScore(t.name, t.Score())
+		t.scoreSubject.NotifyScore(t.name, currentScore)
 	}
 }
 
