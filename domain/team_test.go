@@ -30,24 +30,24 @@ func TestTeamHaveADefaultBacklogAtBeginning(t *testing.T) {
 		description string
 		valuePoint  Score
 	}{
-		{id: "EC-001", description: "Hello World", valuePoint: 1},
-		{id: "EC-002", description: "Can fill parameters", valuePoint: 1},
-		{id: "EC-003", description: "Compute order value without tax", valuePoint: 1},
-		{id: "EC-004", description: "Can handle float for 'number of items' AND 'price by item'", valuePoint: 1},
-		{id: "EC-005", description: "Tax for UT", valuePoint: 1},
-		{id: "EC-006", description: "Tax for NV", valuePoint: 1},
-		{id: "EC-007", description: "Tax for TX", valuePoint: 1},
-		{id: "EC-008", description: "Tax for AL", valuePoint: 1},
-		{id: "EC-009", description: "Tax for CA", valuePoint: 1},
-		{id: "EC-010", description: "15% Discount", valuePoint: 1},
-		{id: "EC-011", description: "10% Discount", valuePoint: 1},
-		{id: "EC-012", description: "7% Discount", valuePoint: 1},
-		{id: "EC-013", description: "5% Discount", valuePoint: 1},
-		{id: "EC-014", description: "3% Discount", valuePoint: 1},
-		{id: "EC-015", description: "Can handle rounding for result (two digits after the decimal point)", valuePoint: 1},
-		{id: "EC-016", description: "Prompts are clear. Display currency", valuePoint: 1},
-		{id: "EC-017", description: "Display details (order value, tax, discount", valuePoint: 1},
-		{id: "EC-018", description: "Do not have to re-launch the application for each test", valuePoint: 1},
+		{id: "EC-001", description: "Hello World", valuePoint: Score{Point: 1}},
+		{id: "EC-002", description: "Can fill parameters", valuePoint: Score{Point: 1}},
+		{id: "EC-003", description: "Compute order value without tax", valuePoint: Score{Point: 1}},
+		{id: "EC-004", description: "Can handle float for 'number of items' AND 'price by item'", valuePoint: Score{Point: 1}},
+		{id: "EC-005", description: "Tax for UT", valuePoint: Score{Point: 1}},
+		{id: "EC-006", description: "Tax for NV", valuePoint: Score{Point: 1}},
+		{id: "EC-007", description: "Tax for TX", valuePoint: Score{Point: 1}},
+		{id: "EC-008", description: "Tax for AL", valuePoint: Score{Point: 1}},
+		{id: "EC-009", description: "Tax for CA", valuePoint: Score{Point: 1}},
+		{id: "EC-010", description: "15% Discount", valuePoint: Score{Point: 1}},
+		{id: "EC-011", description: "10% Discount", valuePoint: Score{Point: 1}},
+		{id: "EC-012", description: "7% Discount", valuePoint: Score{Point: 1}},
+		{id: "EC-013", description: "5% Discount", valuePoint: Score{Point: 1}},
+		{id: "EC-014", description: "3% Discount", valuePoint: Score{Point: 1}},
+		{id: "EC-015", description: "Can handle rounding for result (two digits after the decimal point)", valuePoint: Score{Point: 1}},
+		{id: "EC-016", description: "Prompts are clear. Display currency", valuePoint: Score{Point: 1}},
+		{id: "EC-017", description: "Display details (order value, tax, discount", valuePoint: Score{Point: 1}},
+		{id: "EC-018", description: "Do not have to re-launch the application for each test", valuePoint: Score{Point: 1}},
 	}
 
 	team := NewTeam("A Team", "", nil)
@@ -73,7 +73,7 @@ func TestAllTheTeamBacklogAreNotDoneAtBeginning(t *testing.T) {
 func TestTeamScoresZeroAtBeginning(t *testing.T) {
 	team := NewTeam("A Team", "", nil)
 
-	assert.Equal(t, Score(0), team.Score())
+	assert.Equal(t, Score{Point: 0}, team.Score())
 }
 
 func TestTeamScoresWhenAStoryIsDone(t *testing.T) {
@@ -81,7 +81,7 @@ func TestTeamScoresWhenAStoryIsDone(t *testing.T) {
 
 	team.Done("EC-001")
 
-	assert.Equal(t, Score(1), team.Score())
+	assert.Equal(t, Score{Point: 1}, team.Score())
 }
 
 func TestTeamScoresWhenSeveralStoriesAreDone(t *testing.T) {
@@ -89,7 +89,7 @@ func TestTeamScoresWhenSeveralStoriesAreDone(t *testing.T) {
 
 	team.Done("EC-001", "EC-002", "EC-003")
 
-	assert.Equal(t, Score(3), team.Score())
+	assert.Equal(t, Score{Point: 3}, team.Score())
 }
 
 func TestTeamDoesNotScoreWhenStoryDoesNotExist(t *testing.T) {
@@ -97,7 +97,7 @@ func TestTeamDoesNotScoreWhenStoryDoesNotExist(t *testing.T) {
 
 	team.Done("Wrong-Id")
 
-	assert.Equal(t, Score(0), team.Score())
+	assert.Equal(t, Score{Point: 0}, team.Score())
 }
 
 func TestCompleteFirstIteration(t *testing.T) {
@@ -107,7 +107,7 @@ func TestCompleteFirstIteration(t *testing.T) {
 
 	scores := team.IterationScores()
 
-	assert.Equal(t, []Score{1}, scores)
+	assert.Equal(t, []Score{{1}}, scores)
 }
 
 func TestCompleteSeveralIterations(t *testing.T) {
@@ -121,7 +121,7 @@ func TestCompleteSeveralIterations(t *testing.T) {
 
 	scores := team.IterationScores()
 
-	assert.Equal(t, []Score{1, 3, 6}, scores)
+	assert.Equal(t, []Score{{1}, {3}, {6}}, scores)
 }
 
 func TestCompleteIterationNotifyScoresListeners(t *testing.T) {
@@ -133,7 +133,7 @@ func TestCompleteIterationNotifyScoresListeners(t *testing.T) {
 
 	team.CompleteIteration()
 
-	mockScoreSubject.AssertCalled(t, "NotifyScore", "A Team", Score(1))
+	mockScoreSubject.AssertCalled(t, "NotifyScore", "A Team", Score{Point: 1})
 }
 
 func TestCompleteIterationDontNotifyIfThereIsNoScoreSubject(t *testing.T) {
@@ -145,7 +145,7 @@ func TestCompleteIterationDontNotifyIfThereIsNoScoreSubject(t *testing.T) {
 
 	team.CompleteIteration()
 
-	notInjectedMockScoreSubject.AssertNotCalled(t, "NotifyScore", "A Team", 1)
+	notInjectedMockScoreSubject.AssertNotCalled(t, "NotifyScore", "A Team", Score{Point: 1})
 }
 
 type MockGameSubject struct {

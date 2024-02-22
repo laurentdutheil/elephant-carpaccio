@@ -128,7 +128,7 @@
 
         chart.data.datasets
             .find((dataset) => dataset.label === teamName)
-            .data.push(newScore)
+            .data.push(newScore.Point)
 
         chart.update()
     });

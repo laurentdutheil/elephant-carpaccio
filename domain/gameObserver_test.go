@@ -15,10 +15,10 @@ func TestGameSubject(t *testing.T) {
 		gameSubject := NewGameSubject()
 		gameSubject.AddGameObserver(mockScoreObserver)
 
-		gameSubject.NotifyScore("A Team", Score(3))
+		gameSubject.NotifyScore("A Team", Score{Point: 3})
 
 		assert.Equal(t, 1, gameSubject.NbGameObservers())
-		mockScoreObserver.AssertCalled(t, "UpdateScore", "A Team", Score(3))
+		mockScoreObserver.AssertCalled(t, "UpdateScore", "A Team", Score{Point: 3})
 	})
 
 	t.Run("should not notify score if no observer", func(t *testing.T) {
@@ -28,7 +28,7 @@ func TestGameSubject(t *testing.T) {
 		gameSubject.AddGameObserver(mockScoreObserver)
 		gameSubject.RemoveGameObserver("ObserverId")
 
-		gameSubject.NotifyScore("A Team", Score(3))
+		gameSubject.NotifyScore("A Team", Score{Point: 3})
 
 		assert.Equal(t, 0, gameSubject.NbGameObservers())
 		mockScoreObserver.AssertNotCalled(t, "UpdateScore", mock.Anything, mock.Anything)

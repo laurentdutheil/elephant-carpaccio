@@ -93,7 +93,7 @@
                 {{range .Game.Teams}}
                 {
                     label: '{{.Name}}',
-                    data: [0{{range .IterationScores}},{{.}}{{end}}],
+                    data: [0{{range .IterationScores}},{{.Point}}{{end}}],
                     borderWidth: 1,
                     tension: 0.5
                 },
@@ -122,7 +122,7 @@
 
         chart.data.datasets
             .find((dataset) => dataset.label === teamName)
-            .data.push(newScore)
+            .data.push(newScore.Point)
 
         chart.update()
     });

@@ -1,11 +1,5 @@
 package domain
 
-type Score int
-
-func (s Score) Add(score Score) Score {
-	return s + score
-}
-
 type Team struct {
 	name            string
 	ip              string

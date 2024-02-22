@@ -287,7 +287,7 @@ func TestSse(t *testing.T) {
 
 		server.ServeHTTP(response, request)
 
-		assert.Equal(t, "event: score\ndata: {\"teamName\":\"A Team\",\"newScore\":2}\n\n", response.Body.String())
+		assert.Equal(t, "event: score\ndata: {\"teamName\":\"A Team\",\"newScore\":{\"Point\":2}}\n\n", response.Body.String())
 	})
 
 	t.Run("should send registration event when an team is registered", func(t *testing.T) {
