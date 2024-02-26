@@ -1,14 +1,5 @@
 package domain
 
-type UserStory struct {
-	Id          StoryId
-	Description string
-	Score       Score
-	Done        bool
-}
-
-type StoryId string
-
 type Backlog []UserStory
 
 func (b Backlog) Done(userStoryIds ...StoryId) {
@@ -29,13 +20,11 @@ func contains(s []StoryId, e StoryId) bool {
 }
 
 func (b Backlog) Score() Score {
-	score := Score{0}
+	backlogScore := Score{0}
 	for _, story := range b {
-		if story.Done {
-			score = score.Add(story.Score)
-		}
+		backlogScore = story.AddScoreTo(backlogScore)
 	}
-	return score
+	return backlogScore
 }
 
 func DefaultBacklog() Backlog {
