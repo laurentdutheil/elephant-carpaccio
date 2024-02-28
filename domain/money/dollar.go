@@ -1,4 +1,4 @@
-package controller
+package money
 
 import (
 	"fmt"
@@ -10,6 +10,10 @@ type Dollar struct {
 
 func NewDollar(amountInCents Decimal) Dollar {
 	return Dollar{amount: amountInCents}
+}
+
+func (d Dollar) AmountInCents() Decimal {
+	return d.amount
 }
 
 func (d Dollar) Multiply(mul Decimal) Dollar {

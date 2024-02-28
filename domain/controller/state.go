@@ -1,15 +1,17 @@
 package controller
 
+import "elephant_carpaccio/domain/money"
+
 type State struct {
 	Label   string
-	TaxRate Percent
+	TaxRate money.Percent
 }
 
-func (s State) ApplyTax(amount Dollar) Dollar {
+func (s State) ApplyTax(amount money.Dollar) money.Dollar {
 	return amount.Add(s.TaxRate.ApplyTo(amount))
 }
 
-func (s State) ComputeTax(amount Dollar) Dollar {
+func (s State) ComputeTax(amount money.Dollar) money.Dollar {
 	return s.TaxRate.ApplyTo(amount)
 }
 
@@ -31,11 +33,11 @@ func (s stateCode) State() *State {
 
 func AllStates() []State {
 	return []State{
-		{"UT", NewPercent(685)},
-		{"NV", NewPercent(800)},
-		{"TX", NewPercent(625)},
-		{"AL", NewPercent(400)},
-		{"CA", NewPercent(825)},
+		{"UT", money.NewPercent(685)},
+		{"NV", money.NewPercent(800)},
+		{"TX", money.NewPercent(625)},
+		{"AL", money.NewPercent(400)},
+		{"CA", money.NewPercent(825)},
 	}
 }
 

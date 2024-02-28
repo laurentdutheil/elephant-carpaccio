@@ -1,12 +1,14 @@
 package controller
 
+import "elephant_carpaccio/domain/money"
+
 type Order struct {
-	NumberOfItems Decimal
-	ItemPrice     Dollar
+	NumberOfItems money.Decimal
+	ItemPrice     money.Dollar
 	State         *State
 }
 
-func NewOrder(numberOfItems Decimal, itemPrice Dollar, state *State) Order {
+func NewOrder(numberOfItems money.Decimal, itemPrice money.Dollar, state *State) Order {
 	return Order{NumberOfItems: numberOfItems, ItemPrice: itemPrice, State: state}
 }
 
@@ -25,10 +27,10 @@ func (o Order) Compute() Receipt {
 }
 
 type Receipt struct {
-	OrderValue      Dollar
+	OrderValue      money.Dollar
 	Discount        Discount
-	DiscountValue   Dollar
-	Tax             Dollar
-	TaxedOrderValue Dollar
-	TotalPrice      Dollar
+	DiscountValue   money.Dollar
+	Tax             money.Dollar
+	TaxedOrderValue money.Dollar
+	TotalPrice      money.Dollar
 }

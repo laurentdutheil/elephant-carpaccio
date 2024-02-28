@@ -1,17 +1,12 @@
-package controller_test
+package money_test
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 
-	. "elephant_carpaccio/domain/controller"
+	. "elephant_carpaccio/domain/money"
 )
-
-func TestDollar_String_should_add_dollar_at_the_beginning_of_decimal_String(t *testing.T) {
-	decimal := Decimal(123)
-	dollar := NewDollar(decimal)
-	assert.Equal(t, "$"+decimal.String(), dollar.String())
-}
 
 func TestDecimal(t *testing.T) {
 	t.Run("should Multiply Two Decimals", func(t *testing.T) {
@@ -38,4 +33,21 @@ func TestDecimal(t *testing.T) {
 
 		assert.Equal(t, Decimal(261), first.Divide(second))
 	})
+}
+
+func TestDecimal_String(t *testing.T) {
+	tests := []struct {
+		name     string
+		decimal  Decimal
+		expected string
+	}{
+		{"should put the decimal separator for two decimals number", Decimal(123), "1.23"},
+		{"should add a zero if decimals have one digit", Decimal(103), "1.03"},
+		{"should put the thousand separator", Decimal(165400023), "1,654,000.23"},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.expected, fmt.Sprint(test.decimal))
+		})
+	}
 }

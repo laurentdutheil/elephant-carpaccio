@@ -113,7 +113,7 @@ func requestDiscount(discountInRequest string) *controller.Discount {
 		if err != nil {
 			return nil
 		}
-		return controller.DiscountOf(atoi)
+		return controller.DiscountOf(controller.DiscountLevel(atoi))
 	}
 	return nil
 }

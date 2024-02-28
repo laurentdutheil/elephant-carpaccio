@@ -1,23 +1,25 @@
 package controller
 
+import "elephant_carpaccio/domain/money"
+
 type Discount struct {
-	minAmount Dollar
-	maxAmount Dollar
-	Rate      Percent
+	minAmount money.Dollar
+	maxAmount money.Dollar
+	Rate      money.Percent
 }
 
-func (d Discount) applyTo(amount Dollar) Dollar {
+func (d Discount) applyTo(amount money.Dollar) money.Dollar {
 	return d.Rate.ApplyTo(amount)
 }
 
-func (d Discount) AmountRange() (minAmount Dollar, maxAmount Dollar) {
+func (d Discount) AmountRange() (minAmount money.Dollar, maxAmount money.Dollar) {
 	return d.minAmount, d.maxAmount
 }
 
-type discountLevel uint8
+type DiscountLevel uint8
 
 const (
-	No discountLevel = iota
+	No DiscountLevel = iota
 	ThreePercent
 	FivePercent
 	SevenPercent
@@ -27,34 +29,34 @@ const (
 	numberOfDiscounts
 )
 
-func (l discountLevel) Discount() *Discount {
+func (l DiscountLevel) Discount() *Discount {
 	return &AllDiscounts()[l]
 }
 
 func AllDiscounts() []Discount {
 	return []Discount{
-		{NewDollar(0), NewDollar(100000), NewPercent(0)},
-		{NewDollar(100000), NewDollar(500000), NewPercent(300)},
-		{NewDollar(500000), NewDollar(700000), NewPercent(500)},
-		{NewDollar(700000), NewDollar(1000000), NewPercent(700)},
-		{NewDollar(1000000), NewDollar(5000000), NewPercent(1000)},
-		{NewDollar(5000000), NewDollar(100000000), NewPercent(1500)},
+		{money.NewDollar(0), money.NewDollar(100000), money.NewPercent(0)},
+		{money.NewDollar(100000), money.NewDollar(500000), money.NewPercent(300)},
+		{money.NewDollar(500000), money.NewDollar(700000), money.NewPercent(500)},
+		{money.NewDollar(700000), money.NewDollar(1000000), money.NewPercent(700)},
+		{money.NewDollar(1000000), money.NewDollar(5000000), money.NewPercent(1000)},
+		{money.NewDollar(5000000), money.NewDollar(100000000), money.NewPercent(1500)},
 	}
 }
 
-func DiscountOf(value int) *Discount {
-	if value < int(numberOfDiscounts) {
-		return discountLevel(value).Discount()
+func DiscountOf(level DiscountLevel) *Discount {
+	if level < numberOfDiscounts {
+		return level.Discount()
 	}
 	return nil
 }
 
-func ComputeDiscount(amount Dollar) (Dollar, *Discount) {
+func ComputeDiscount(amount money.Dollar) (money.Dollar, *Discount) {
 	discount := findDiscount(amount)
 	return discount.applyTo(amount), discount
 }
 
-func findDiscount(amount Dollar) *Discount {
+func findDiscount(amount money.Dollar) *Discount {
 	allDiscounts := AllDiscounts()
 	for i := len(allDiscounts) - 1; i > 0; i-- {
 		d := allDiscounts[i]

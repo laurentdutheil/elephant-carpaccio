@@ -1,6 +1,7 @@
 package controller_test
 
 import (
+	. "elephant_carpaccio/domain/money"
 	"github.com/stretchr/testify/assert"
 	"testing"
 

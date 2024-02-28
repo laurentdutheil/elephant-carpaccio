@@ -1,6 +1,9 @@
 package controller
 
-import "math/rand"
+import (
+	"elephant_carpaccio/domain/money"
+	"math/rand"
+)
 
 type OrderGenerator struct {
 	generatorRandom GeneratorRandom
@@ -25,25 +28,26 @@ func (og OrderGenerator) GenerateOrder(discount *Discount, state *State) Order {
 	return NewOrder(nbItems, itemPrice, state)
 }
 
-func (og OrderGenerator) generateItemPrice(discount *Discount, nbItems Decimal) Dollar {
+func (og OrderGenerator) generateItemPrice(discount *Discount, nbItems money.Decimal) money.Dollar {
 	minPrice, maxPrice := discount.AmountRange()
 	minItemPrice := minPrice.Divide(nbItems)
 	maxItemPrice := maxPrice.Divide(nbItems)
-	itemAmount := og.generatorRandom.randDecimal(minItemPrice.amount, maxItemPrice.amount)
-	return NewDollar(itemAmount)
+	itemAmount := og.generatorRandom.randDecimal(minItemPrice.AmountInCents(), maxItemPrice.AmountInCents())
+	return money.NewDollar(itemAmount)
 }
 
 func (og OrderGenerator) pickDiscount() *Discount {
-	return DiscountOf(og.generatorRandom.randInt(int(numberOfDiscounts)))
+	return DiscountOf(og.generatorRandom.randDiscountLevel())
 }
 
 func (og OrderGenerator) pickState() *State {
-	return StateOf(og.generatorRandom.randInt(int(numberOfStates)))
+	return og.generatorRandom.randState()
 }
 
 type GeneratorRandom interface {
-	randDecimal(minAmount Decimal, maxAmount Decimal) Decimal
-	randInt(max int) int
+	randDecimal(minAmount money.Decimal, maxAmount money.Decimal) money.Decimal
+	randDiscountLevel() DiscountLevel
+	randState() *State
 }
 
 type randInt63nFunc func(max int64) int64
@@ -56,12 +60,22 @@ func NewDecimalRandomizer(randFunc randInt63nFunc) *GeneratorRandomizer {
 	return &GeneratorRandomizer{randFunc: randFunc}
 }
 
-func (dr GeneratorRandomizer) randDecimal(minAmount Decimal, maxAmount Decimal) Decimal {
+func (dr GeneratorRandomizer) randDecimal(minAmount money.Decimal, maxAmount money.Decimal) money.Decimal {
 	rangeAmount := maxAmount - minAmount
-	orderValue := Decimal(dr.randFunc(int64(rangeAmount))) + minAmount
+	orderValue := money.Decimal(dr.randFunc(int64(rangeAmount))) + minAmount
 	return orderValue
 }
 
 func (dr GeneratorRandomizer) randInt(max int) int {
 	return int(dr.randFunc(int64(max)))
+}
+
+func (dr GeneratorRandomizer) randDiscountLevel() DiscountLevel {
+	randInt := dr.randInt(int(numberOfDiscounts))
+	return DiscountLevel(randInt)
+}
+
+func (dr GeneratorRandomizer) randState() *State {
+	randInt := dr.randInt(int(numberOfStates))
+	return StateOf(randInt)
 }
