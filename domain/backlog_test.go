@@ -7,31 +7,7 @@ import (
 	. "elephant_carpaccio/domain"
 )
 
-func TestBacklogScore_should_be_zero_if_no_story_done(t *testing.T) {
-	backlog := Backlog{
-		{Id: "id-1", Score: Score{Point: 1}, Done: false},
-		{Id: "id-2", Score: Score{Point: 1}, Done: false},
-	}
-
-	score := backlog.Score()
-
-	assert.Equal(t, Score{Point: 0}, score)
-}
-
-func TestBacklogScore_should_be_only_score_of_story_done(t *testing.T) {
-	backlog := Backlog{
-		{Id: "id-1", Score: Score{Point: 1}, Done: true},
-		{Id: "id-2", Score: Score{Point: 1}, Done: true},
-		{Id: "id-3", Score: Score{Point: 1}, Done: false},
-	}
-
-	score := backlog.Score()
-
-	assert.Equal(t, Score{Point: 2}, score)
-}
-
 func TestDefaultBacklogStoriesAreNotDoneAtBeginning(t *testing.T) {
-
 	backlog := DefaultBacklog()
 
 	for _, story := range backlog {
@@ -39,32 +15,24 @@ func TestDefaultBacklogStoriesAreNotDoneAtBeginning(t *testing.T) {
 	}
 }
 
-func TestDefaultBacklogScoresZeroAtBeginning(t *testing.T) {
-	backlog := DefaultBacklog()
+func TestDefaultBacklog_scores_points(t *testing.T) {
+	tests := []struct {
+		name           string
+		storiesDone    []StoryId
+		expectedPoints int
+	}{
+		{"score zero at beginning", []StoryId{}, 0},
+		{"score when a story is done", []StoryId{"EC-001"}, 1},
+		{"score when several stories are done", []StoryId{"EC-001", "EC-002", "EC-003"}, 3},
+		{"do not score when story does not exist", []StoryId{"Wrong-Id"}, 0},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			backlog := DefaultBacklog()
 
-	assert.Equal(t, Score{Point: 0}, backlog.Score())
-}
+			backlog.Done(test.storiesDone...)
 
-func TestDefaultBacklogScoresWhenAStoryIsDone(t *testing.T) {
-	backlog := DefaultBacklog()
-
-	backlog.Done("EC-001")
-
-	assert.Equal(t, Score{Point: 1}, backlog.Score())
-}
-
-func TestDefaultBacklogScoresWhenSeveralStoriesAreDone(t *testing.T) {
-	backlog := DefaultBacklog()
-
-	backlog.Done("EC-001", "EC-002", "EC-003")
-
-	assert.Equal(t, Score{Point: 3}, backlog.Score())
-}
-
-func TestDefaultBacklogDoesNotScoreWhenStoryDoesNotExist(t *testing.T) {
-	backlog := DefaultBacklog()
-
-	backlog.Done("Wrong-Id")
-
-	assert.Equal(t, Score{Point: 0}, backlog.Score())
+			assert.Equal(t, test.expectedPoints, backlog.Score().Point)
+		})
+	}
 }
