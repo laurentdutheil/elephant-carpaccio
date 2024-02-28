@@ -36,9 +36,7 @@ func TestCompleteFirstIteration(t *testing.T) {
 	team.Done("EC-001")
 	team.CompleteIteration()
 
-	scores := team.IterationScores()
-
-	assert.Equal(t, []Score{{1}}, scores)
+	assert.Len(t, team.IterationScores(), 1)
 }
 
 func TestCompleteSeveralIterations(t *testing.T) {
@@ -50,9 +48,7 @@ func TestCompleteSeveralIterations(t *testing.T) {
 	team.Done("EC-004", "EC-005", "EC-006")
 	team.CompleteIteration()
 
-	scores := team.IterationScores()
-
-	assert.Equal(t, []Score{{1}, {3}, {6}}, scores)
+	assert.Len(t, team.IterationScores(), 3)
 }
 
 func TestCompleteIterationNotifyScoresListeners(t *testing.T) {

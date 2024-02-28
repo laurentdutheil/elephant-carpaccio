@@ -1,9 +1,16 @@
 package domain
 
+import "elephant_carpaccio/domain/money"
+
 type StoryId string
 
 type Score struct {
-	Point int
+	Point         int
+	BusinessValue money.Dollar
+}
+
+func NewScore(point int, businessValue money.Dollar) Score {
+	return Score{Point: point, BusinessValue: businessValue}
 }
 
 type UserStory struct {
@@ -15,7 +22,7 @@ type UserStory struct {
 
 func (u UserStory) AddScoreTo(score Score) Score {
 	if u.Done {
-		return Score{u.Score.Point + score.Point}
+		return NewScore(u.Score.Point+score.Point, u.Score.BusinessValue.Add(score.BusinessValue))
 	}
-	return Score{score.Point}
+	return NewScore(score.Point, score.BusinessValue)
 }

@@ -270,7 +270,6 @@ func TestSse(t *testing.T) {
 		game := NewGame()
 		game.Register("A Team", "")
 		team := game.Teams()[0]
-		team.Done("EC-001", "EC-002")
 
 		server := NewBoardServer(game, localIpSeekerStub)
 
@@ -281,13 +280,13 @@ func TestSse(t *testing.T) {
 		response := httptest.NewRecorder()
 
 		time.AfterFunc(time.Millisecond, func() {
-			team.Done("EC-001", "EC-002")
+			team.Done("EC-005", "EC-006")
 			team.CompleteIteration()
 		})
 
 		server.ServeHTTP(response, request)
 
-		assert.Equal(t, "event: score\ndata: {\"teamName\":\"A Team\",\"newScore\":{\"Point\":2}}\n\n", response.Body.String())
+		assert.Equal(t, "event: score\ndata: {\"teamName\":\"A Team\",\"newScore\":{\"Point\":2,\"BusinessValue\":{}}}\n\n", response.Body.String())
 	})
 
 	t.Run("should send registration event when an team is registered", func(t *testing.T) {
