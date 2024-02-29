@@ -280,13 +280,13 @@ func TestSse(t *testing.T) {
 		response := httptest.NewRecorder()
 
 		time.AfterFunc(time.Millisecond, func() {
-			team.Done("EC-005", "EC-006")
+			team.Done("EC-004", "EC-005")
 			team.CompleteIteration()
 		})
 
 		server.ServeHTTP(response, request)
 
-		assert.Equal(t, "event: score\ndata: {\"teamName\":\"A Team\",\"newScore\":{\"Point\":2,\"BusinessValue\":{}}}\n\n", response.Body.String())
+		assert.Equal(t, "event: score\ndata: {\"teamName\":\"A Team\",\"newScore\":2,\"newBusinessValue\":7600.00}\n\n", response.Body.String())
 	})
 
 	t.Run("should send registration event when an team is registered", func(t *testing.T) {

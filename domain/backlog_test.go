@@ -45,8 +45,8 @@ func TestDefaultBacklog_adds_business_value(t *testing.T) {
 		expectedBusinessValue money.Dollar
 	}{
 		{"have no business value at beginning", []StoryId{}, money.NewDollar(money.Decimal(0))},
-		{"add business value when a story is done", []StoryId{"EC-005"}, money.NewDollar(money.Decimal(5000000))},
-		{"add business value when several stories are done", []StoryId{"EC-005", "EC-006", "EC-007"}, money.NewDollar(money.Decimal(8900000))},
+		{"add business value when a story is done", []StoryId{"EC-004"}, money.NewDollar(money.Decimal(500000))},
+		{"add business value when several stories are done", []StoryId{"EC-004", "EC-005", "EC-006"}, money.NewDollar(money.Decimal(890000))},
 		{"do add business value when story does not exist", []StoryId{"Wrong-Id"}, money.NewDollar(money.Decimal(0))},
 	}
 	for _, test := range tests {

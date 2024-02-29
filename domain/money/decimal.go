@@ -31,3 +31,9 @@ func addThousandsSeparators(units Decimal) string {
 	}
 	return formattedUnits
 }
+
+func (d Decimal) MarshalJSON() ([]byte, error) {
+	units := d / 100
+	decimals := d % 100
+	return []byte(fmt.Sprintf("%d.%02d", units, decimals)), nil
+}

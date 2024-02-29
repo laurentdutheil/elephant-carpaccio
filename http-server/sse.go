@@ -3,6 +3,7 @@ package http_server
 import (
 	"bytes"
 	"elephant_carpaccio/domain"
+	"elephant_carpaccio/domain/money"
 	"encoding/json"
 	"fmt"
 	"strconv"
@@ -11,8 +12,9 @@ import (
 )
 
 type ScoreEvent struct {
-	TeamName string       `json:"teamName"`
-	NewScore domain.Score `json:"newScore"`
+	TeamName         string        `json:"teamName"`
+	NewScore         int           `json:"newScore"`
+	NewBusinessValue money.Decimal `json:"newBusinessValue"`
 }
 
 type RegistrationEvent struct {
@@ -38,7 +40,7 @@ func (o SseGameObserver) Id() string {
 }
 
 func (o SseGameObserver) UpdateScore(teamName string, newScore domain.Score) {
-	o.scoreChannel <- ScoreEvent{teamName, newScore}
+	o.scoreChannel <- ScoreEvent{teamName, newScore.Point, newScore.BusinessValue.AmountInCents()}
 }
 
 func (o SseGameObserver) AddRegistration(teamName string) {

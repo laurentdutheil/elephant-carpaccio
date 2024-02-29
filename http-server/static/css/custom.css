@@ -3,9 +3,7 @@
 main {
     margin: 1em 0;}
 caption {
-    font-weight: bold;
-    font-size: x-large;
-    padding-bottom: 1rem;}
+    font-size: large;}
 th,
 td {
     text-align: center;}

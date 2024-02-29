@@ -51,3 +51,21 @@ func TestDecimal_String(t *testing.T) {
 		})
 	}
 }
+
+func TestDecimal_MarshalJSON(t *testing.T) {
+	tests := []struct {
+		name     string
+		decimal  Decimal
+		expected string
+	}{
+		{"should put the decimal separator for two decimals number", Decimal(123), "1.23"},
+		{"should add a zero if decimals have one digit", Decimal(103), "1.03"},
+		{"should not put the thousand separator", Decimal(165400023), "1654000.23"},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			json, _ := test.decimal.MarshalJSON()
+			assert.Equal(t, test.expected, fmt.Sprint(string(json)))
+		})
+	}
+}

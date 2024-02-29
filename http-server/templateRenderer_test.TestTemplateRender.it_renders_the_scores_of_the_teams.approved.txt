@@ -1,70 +1,73 @@
 <<top template>>
 <div class="container">
     <div class="row">
-        <table class="one-quarter column">
-            <caption>Discount</caption>
+        <table class="two column">
+            <caption>DISCOUNT</caption>
             <thead>
             <tr>
-                <th>Order Value</th>
-                <th>Discount Rate</th>
+                <th class="u-text-right">Order</th>
+                <th class="u-text-left">Rate</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td>$1.000</td>
-                <td>3.00%</td>
+                <td class="u-text-right">$1.000</td>
+                <td class="u-text-left">3.00%</td>
             </tr>
             <tr>
-                <td>$5.000</td>
-                <td>5.00%</td>
+                <td class="u-text-right">$5.000</td>
+                <td class="u-text-left">5.00%</td>
             </tr>
             <tr>
-                <td>$7.000</td>
-                <td>7.00%</td>
+                <td class="u-text-right">$7.000</td>
+                <td class="u-text-left">7.00%</td>
             </tr>
             <tr>
-                <td>$10.000</td>
-                <td>10.00%</td>
+                <td class="u-text-right">$10.000</td>
+                <td class="u-text-left">10.00%</td>
             </tr>
             <tr>
-                <td>$50.000</td>
-                <td>15.00%</td>
+                <td class="u-text-right">$50.000</td>
+                <td class="u-text-left">15.00%</td>
             </tr>
             </tbody>
         </table>
-        <table class="one-quarter column">
-            <caption>Tax</caption>
+        <table class="two column">
+            <caption>TAX</caption>
             <thead>
             <tr>
-                <th>State</th>
-                <th>Tax</th>
+                <th class="u-text-right">State</th>
+                <th class="u-text-left">Tax</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td>UT</td>
-                <td>6.85%</td>
+                <td class="u-text-right">UT</td>
+                <td class="u-text-left">6.85%</td>
             </tr>
             <tr>
-                <td>NV</td>
-                <td>8.00%</td>
+                <td class="u-text-right">NV</td>
+                <td class="u-text-left">8.00%</td>
             </tr>
             <tr>
-                <td>TX</td>
-                <td>6.25%</td>
+                <td class="u-text-right">TX</td>
+                <td class="u-text-left">6.25%</td>
             </tr>
             <tr>
-                <td>AL</td>
-                <td>4.00%</td>
+                <td class="u-text-right">AL</td>
+                <td class="u-text-left">4.00%</td>
             </tr>
             <tr>
-                <td>CA</td>
-                <td>8.25%</td>
+                <td class="u-text-right">CA</td>
+                <td class="u-text-left">8.25%</td>
             </tr>
             </tbody>
         </table>
-        <div class="one-half column">
+        <div class="four column">
             <canvas id="iterationScores"></canvas>
+        </div>
+        <div class="four column">
+            <canvas id="iterationBusinessValues"></canvas>
         </div>
     </div>
     <div class="row">
@@ -75,9 +78,9 @@
 <script src="/static/lib/chart.js"></script>
 <script>
 
-    const ctx = document.getElementById('iterationScores');
+    const scoreElement = document.getElementById('iterationScores');
 
-    chart = new Chart(ctx, {
+    scoreChart = new Chart(scoreElement, {
         type: 'line',
         data: {
             labels: ['IT0', 'IT1', 'IT2', 'IT3', 'IT4', 'IT5', 'IT6'],
@@ -109,6 +112,73 @@
         options: {
             aspectRatio: 1,
             plugins: {
+                title: {
+                    display: true,
+                    text: ["STORY POINTS", "1 story = 1 point"],
+                    font: {
+                        size: 14,
+                        weight: 'normal'
+                    }
+                },
+                colors: {
+                    forceOverride: true
+                }
+            }
+        }
+    });
+
+    const businessValueElement = document.getElementById('iterationBusinessValues');
+    const currencyFormat = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD', maximumFractionDigits: 0});
+
+    businessValueChart = new Chart(businessValueElement, {
+        type: 'line',
+        data: {
+            labels: ['IT0', 'IT1', 'IT2', 'IT3', 'IT4', 'IT5', 'IT6'],
+            datasets: [
+                {
+                    label: 'ideal',
+                    data: [0.00, 1000.00, 12000.00, 13000.00, 13400.00, 13400.00, 13400.00],
+                    borderWidth: 1,
+                    tension: 0.3,
+                    borderDash: [10, 5]
+                },
+                
+                {
+                    label: 'A Team',
+                    data: [0.00, 1000.00 , 8600.00 , 11000.00 ],
+                    borderWidth: 1,
+                    tension: 0.3
+                },
+                
+                {
+                    label: 'The fantastic four',
+                    data: [0.00, 1000.00 , 8600.00 , 11000.00 ],
+                    borderWidth: 1,
+                    tension: 0.3
+                },
+                
+            ],
+        },
+        options: {
+            aspectRatio: 1,
+            scales: {
+                y: {
+                    ticks: {
+                        callback: function (value, index, ticks) {
+                            return currencyFormat.format(value)
+                        }
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: "BUSINESS VALUE",
+                    font: {
+                        size: 14,
+                        weight: 'normal'
+                    }
+                },
                 colors: {
                     forceOverride: true
                 }
@@ -124,26 +194,33 @@
 
     es.addEventListener("score", (event) => {
         const parsedData = JSON.parse(event.data);
-        const {teamName, newScore} = parsedData;
+        const {teamName, newScore, newBusinessValue} = parsedData;
 
-        chart.data.datasets
+        scoreChart.data.datasets
             .find((dataset) => dataset.label === teamName)
-            .data.push(newScore.Point)
+            .data.push(newScore)
+        scoreChart.update()
 
-        chart.update()
+        businessValueChart.data.datasets
+            .find((dataset) => dataset.label === teamName)
+            .data.push(newBusinessValue)
+        businessValueChart.update()
+
     });
-    
+
     es.addEventListener("registration", (event) => {
         const parsedData = JSON.parse(event.data);
         const {teamName} = parsedData;
-        const newTeam = {label: teamName, data: [0], borderWidth: 1, tension: 0.5}
+        
+        scoreChart.data.datasets
+            .push({label: teamName, data: [0], borderWidth: 1, tension: 0.5})
+        scoreChart.update()
 
-        chart.data.datasets
-            .push(newTeam)
-
-        chart.update()
+        businessValueChart.data.datasets
+            .push({label: teamName, data: [0.00], borderWidth: 1, tension: 0.3})
+        businessValueChart.update()
     });
-    
+
 </script>
 
 <script src="/static/lib/qrious.min.js"></script>

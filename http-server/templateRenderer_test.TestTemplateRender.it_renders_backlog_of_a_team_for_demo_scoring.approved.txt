@@ -107,7 +107,7 @@
                     </tr>
                 
                     <tr>
-                        <td class="compact">Can handle float for &#39;number of items&#39; AND &#39;price by item&#39;</td>
+                        <td class="compact">Tax for UT</td>
                         <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-004" id="EC-004" name="Done"
@@ -117,7 +117,7 @@
                     </tr>
                 
                     <tr>
-                        <td class="compact">Tax for UT</td>
+                        <td class="compact">Tax for NV</td>
                         <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-005" id="EC-005" name="Done"
@@ -127,7 +127,7 @@
                     </tr>
                 
                     <tr>
-                        <td class="compact">Tax for NV</td>
+                        <td class="compact">Tax for TX</td>
                         <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-006" id="EC-006" name="Done"
@@ -137,7 +137,7 @@
                     </tr>
                 
                     <tr>
-                        <td class="compact">Tax for TX</td>
+                        <td class="compact">Tax for AL</td>
                         <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-007" id="EC-007" name="Done"
@@ -147,7 +147,7 @@
                     </tr>
                 
                     <tr>
-                        <td class="compact">Tax for AL</td>
+                        <td class="compact">Tax for CA</td>
                         <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-008" id="EC-008" name="Done"
@@ -157,7 +157,7 @@
                     </tr>
                 
                     <tr>
-                        <td class="compact">Tax for CA</td>
+                        <td class="compact">Can handle float for &#39;number of items&#39; AND &#39;price by item&#39;</td>
                         <td class="compact">
                             <label>
                                 <input type="checkbox" value="EC-009" id="EC-009" name="Done"
