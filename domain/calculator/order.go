@@ -1,4 +1,4 @@
-package controller
+package calculator
 
 import "elephant_carpaccio/domain/money"
 
@@ -14,11 +14,12 @@ func NewOrder(numberOfItems money.Decimal, itemPrice money.Dollar, state *State)
 
 func (o Order) Compute() Receipt {
 	orderValue := o.ItemPrice.Multiply(o.NumberOfItems)
-	discountValue, discount := ComputeDiscount(orderValue)
+	discount := FindDiscount(orderValue)
+	discountValue := discount.ComputeDiscount(orderValue)
 	taxableValue := orderValue.Minus(discountValue)
 	return Receipt{
 		OrderValue:      orderValue,
-		Discount:        *discount,
+		Discount:        discount,
 		DiscountValue:   discountValue,
 		Tax:             o.State.ComputeTax(taxableValue),
 		TaxedOrderValue: o.State.ApplyTax(orderValue),
@@ -28,7 +29,7 @@ func (o Order) Compute() Receipt {
 
 type Receipt struct {
 	OrderValue      money.Dollar
-	Discount        Discount
+	Discount        *Discount
 	DiscountValue   money.Dollar
 	Tax             money.Dollar
 	TaxedOrderValue money.Dollar

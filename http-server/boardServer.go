@@ -1,8 +1,6 @@
 package http_server
 
 import (
-	. "elephant_carpaccio/domain"
-	"elephant_carpaccio/domain/controller"
 	"embed"
 	"fmt"
 	"io/fs"
@@ -10,6 +8,9 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+
+	. "elephant_carpaccio/domain"
+	. "elephant_carpaccio/domain/calculator"
 )
 
 var (
@@ -77,7 +78,7 @@ func (s BoardServer) handleDemoScoring(writer http.ResponseWriter, request *http
 	if selectedTeam != nil {
 		switch request.Method {
 		case http.MethodGet:
-			orderGenerator := controller.NewOrderGenerator(nil)
+			orderGenerator := NewOrderGenerator(NewOrderRandomizer())
 
 			stateInRequest := request.URL.Query().Get("state")
 			state := requestState(stateInRequest)
@@ -96,24 +97,24 @@ func (s BoardServer) handleDemoScoring(writer http.ResponseWriter, request *http
 	}
 }
 
-func requestState(stateInRequest string) *controller.State {
+func requestState(stateInRequest string) *State {
 	if stateInRequest != "" {
 		parsedStateCode, err := strconv.Atoi(stateInRequest)
 		if err != nil {
 			return nil
 		}
-		return controller.StateOf(parsedStateCode)
+		return StateOf(parsedStateCode)
 	}
 	return nil
 }
 
-func requestDiscount(discountInRequest string) *controller.Discount {
+func requestDiscount(discountInRequest string) *Discount {
 	if discountInRequest != "" {
-		atoi, err := strconv.Atoi(discountInRequest)
+		parsedDiscountLevel, err := strconv.Atoi(discountInRequest)
 		if err != nil {
 			return nil
 		}
-		return controller.DiscountOf(controller.DiscountLevel(atoi))
+		return DiscountOf(parsedDiscountLevel)
 	}
 	return nil
 }

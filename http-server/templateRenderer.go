@@ -8,7 +8,7 @@ import (
 	"net"
 
 	. "elephant_carpaccio/domain"
-	"elephant_carpaccio/domain/controller"
+	. "elephant_carpaccio/domain/calculator"
 )
 
 var (
@@ -48,11 +48,11 @@ func (r TemplateRenderer) RenderDemoIndex(w io.Writer, game *Game) error {
 
 type DemoScoringModel struct {
 	Team    *Team
-	Order   controller.Order
-	Receipt controller.Receipt
+	Order   Order
+	Receipt Receipt
 }
 
-func (r TemplateRenderer) RenderDemoScoring(w io.Writer, team *Team, order controller.Order) error {
+func (r TemplateRenderer) RenderDemoScoring(w io.Writer, team *Team, order Order) error {
 	receipt := order.Compute()
 
 	scoringModel := DemoScoringModel{

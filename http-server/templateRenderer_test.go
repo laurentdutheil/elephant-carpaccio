@@ -2,14 +2,14 @@ package http_server_test
 
 import (
 	"bytes"
-	. "elephant_carpaccio/domain/money"
 	"github.com/approvals/go-approval-tests"
 	"net"
 	"regexp"
 	"testing"
 
 	. "elephant_carpaccio/domain"
-	. "elephant_carpaccio/domain/controller"
+	. "elephant_carpaccio/domain/calculator"
+	. "elephant_carpaccio/domain/money"
 	. "elephant_carpaccio/http-server"
 )
 

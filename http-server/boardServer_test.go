@@ -153,7 +153,7 @@ func TestBoardServer(t *testing.T) {
 		assert.Contains(t, response.Body.String(), "Discount (7.00%)")
 	})
 
-	t.Run("handle demo scoring page for a team with a order example with wrong state", func(t *testing.T) {
+	t.Run("handle demo scoring page for a team with a order example with wrong discount", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
 		game.Register("A Team", "")
