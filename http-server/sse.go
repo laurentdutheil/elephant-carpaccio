@@ -15,6 +15,7 @@ type ScoreEvent struct {
 	TeamName         string        `json:"teamName"`
 	NewScore         int           `json:"newScore"`
 	NewBusinessValue money.Decimal `json:"newBusinessValue"`
+	NewRisk          int           `json:"newRisk"`
 }
 
 type RegistrationEvent struct {
@@ -40,7 +41,12 @@ func (o SseGameObserver) Id() string {
 }
 
 func (o SseGameObserver) UpdateScore(teamName string, newScore domain.Score) {
-	o.scoreChannel <- ScoreEvent{teamName, newScore.Point, newScore.BusinessValue.AmountInCents()}
+	o.scoreChannel <- ScoreEvent{
+		teamName,
+		newScore.Point,
+		newScore.BusinessValue.AmountInCents(),
+		newScore.Risk,
+	}
 }
 
 func (o SseGameObserver) AddRegistration(teamName string) {

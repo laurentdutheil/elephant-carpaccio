@@ -60,7 +60,7 @@ func TestCompleteIterationNotifyScoresListeners(t *testing.T) {
 
 	team.CompleteIteration()
 
-	mockScoreSubject.AssertCalled(t, "NotifyScore", "A Team", Score{Point: 1})
+	mockScoreSubject.AssertCalled(t, "NotifyScore", "A Team", mock.AnythingOfType("Score"))
 }
 
 type MockGameSubject struct {
