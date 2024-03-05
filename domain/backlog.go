@@ -24,7 +24,7 @@ func contains(s []StoryId, e StoryId) bool {
 func (b Backlog) Score() Score {
 	backlogScore := NewScore(0, NewDollar(Decimal(0)), 0)
 	for _, story := range b {
-		backlogScore = story.AddScoreTo(backlogScore)
+		backlogScore = backlogScore.AddScoreOf(story)
 	}
 	return backlogScore
 }

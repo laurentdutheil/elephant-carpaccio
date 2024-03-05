@@ -21,9 +21,9 @@ type UserStory struct {
 	Done        bool
 }
 
-func (u UserStory) AddScoreTo(score Score) Score {
+func (s Score) AddScoreOf(u UserStory) Score {
 	if u.Done {
-		return NewScore(u.Score.Point+score.Point, u.Score.BusinessValue.Add(score.BusinessValue), score.Risk)
+		return NewScore(u.Score.Point+s.Point, u.Score.BusinessValue.Add(s.BusinessValue), s.Risk)
 	}
-	return NewScore(score.Point, score.BusinessValue, u.Score.Risk+score.Risk)
+	return NewScore(s.Point, s.BusinessValue, u.Score.Risk+s.Risk)
 }
