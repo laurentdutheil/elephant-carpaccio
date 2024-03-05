@@ -47,7 +47,7 @@ func TestDefaultBacklog_adds_business_value(t *testing.T) {
 		{"have no business value at beginning", []StoryId{}, NewDollar(Decimal(0))},
 		{"add business value when a story is done", []StoryId{"EC-004"}, NewDollar(Decimal(500000))},
 		{"add business value when several stories are done", []StoryId{"EC-004", "EC-005", "EC-006"}, NewDollar(Decimal(890000))},
-		{"do add business value when story does not exist", []StoryId{"Wrong-Id"}, NewDollar(Decimal(0))},
+		{"do not add business value when story does not exist", []StoryId{"Wrong-Id"}, NewDollar(Decimal(0))},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -67,9 +67,9 @@ func TestDefaultBacklog_mitigates_risk(t *testing.T) {
 		expectedRisk int
 	}{
 		{"have maximum risk at beginning", []StoryId{}, 100},
-		{"add business value when a story is done", []StoryId{"EC-001"}, 70},
-		{"add business value when several stories are done", []StoryId{"EC-001", "EC-002", "EC-003"}, 50},
-		{"do add business value when story does not exist", []StoryId{"Wrong-Id"}, 100},
+		{"remove risk when a story is done", []StoryId{"EC-001"}, 70},
+		{"remove risk when several stories are done", []StoryId{"EC-001", "EC-002", "EC-003"}, 50},
+		{"do not remove risk when story does not exist", []StoryId{"Wrong-Id"}, 100},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
