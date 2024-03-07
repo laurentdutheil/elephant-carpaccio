@@ -2,7 +2,6 @@ package http_server
 
 import (
 	"embed"
-	"fmt"
 	"io/fs"
 	"net"
 	"net/http"
@@ -39,8 +38,8 @@ func NewBoardServer(game *Game, localIp net.IP) *BoardServer {
 	router.HandleFunc("/register", s.handleRegistration)
 	router.HandleFunc("/demo", s.handleDemoIndex)
 	router.HandleFunc("/demo/", s.handleDemoScoring)
-	router.HandleFunc("/sse", s.handleSse)
 
+	HandleSSE(router, game)
 	HandleApi(router, game)
 
 	s.Handler = router
@@ -127,34 +126,4 @@ func (s BoardServer) extractStoryIdsSelected(request *http.Request) []StoryId {
 		storiesDone = append(storiesDone, StoryId(selectedStoryId))
 	}
 	return storiesDone
-}
-
-func (s BoardServer) handleSse(writer http.ResponseWriter, request *http.Request) {
-	flusher, ok := writer.(http.Flusher)
-	if !ok {
-		http.Error(writer, "SSE not supported", http.StatusInternalServerError)
-		return
-	}
-
-	writer.Header().Set("Content-Type", "text/event-stream")
-	writer.Header().Set("Cache-Control", "no-cache")
-	writer.Header().Set("Connection", "keep-alive")
-
-	gameObserver := NewSseGameObserver()
-	s.game.AddGameObserver(gameObserver)
-
-	for {
-		select {
-		case <-request.Context().Done():
-			close(gameObserver.scoreChannel)
-			s.game.RemoveGameObserver(gameObserver.Id())
-			return
-		case scoreEvent := <-gameObserver.scoreChannel:
-			_, _ = fmt.Fprint(writer, formatSseEvent("score", scoreEvent))
-			flusher.Flush()
-		case registrationEvent := <-gameObserver.registrationChannel:
-			_, _ = fmt.Fprint(writer, formatSseEvent("registration", registrationEvent))
-			flusher.Flush()
-		}
-	}
 }

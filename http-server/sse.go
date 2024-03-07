@@ -6,10 +6,15 @@ import (
 	"elephant_carpaccio/domain/money"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
 	"time"
 )
+
+func HandleSSE(router *http.ServeMux, game *domain.Game) {
+	router.Handle("/sse", handleSse(game))
+}
 
 type ScoreEvent struct {
 	TeamName         string        `json:"teamName"`
@@ -22,35 +27,36 @@ type RegistrationEvent struct {
 	TeamName string `json:"teamName"`
 }
 
-type SseGameObserver struct {
-	id                  string
-	scoreChannel        chan ScoreEvent
-	registrationChannel chan RegistrationEvent
-}
+func handleSse(game *domain.Game) http.Handler {
+	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		flusher, ok := writer.(http.Flusher)
+		if !ok {
+			http.Error(writer, "SSE not supported", http.StatusInternalServerError)
+			return
+		}
 
-func NewSseGameObserver() *SseGameObserver {
-	id := strconv.FormatInt(time.Now().Unix(), 10)
-	scoreChannel := make(chan ScoreEvent)
-	registrationChannel := make(chan RegistrationEvent)
-	o := &SseGameObserver{id: id, scoreChannel: scoreChannel, registrationChannel: registrationChannel}
-	return o
-}
+		writer.Header().Set("Content-Type", "text/event-stream")
+		writer.Header().Set("Cache-Control", "no-cache")
+		writer.Header().Set("Connection", "keep-alive")
 
-func (o SseGameObserver) Id() string {
-	return o.id
-}
+		gameObserver := newSseGameObserver()
+		game.AddGameObserver(gameObserver)
 
-func (o SseGameObserver) UpdateScore(teamName string, newScore domain.Score) {
-	o.scoreChannel <- ScoreEvent{
-		teamName,
-		newScore.Point,
-		newScore.BusinessValue.AmountInCents(),
-		newScore.Risk,
-	}
-}
-
-func (o SseGameObserver) AddRegistration(teamName string) {
-	o.registrationChannel <- RegistrationEvent{teamName}
+		for {
+			select {
+			case <-request.Context().Done():
+				close(gameObserver.scoreChannel)
+				game.RemoveGameObserver(gameObserver.Id())
+				return
+			case scoreEvent := <-gameObserver.scoreChannel:
+				_, _ = fmt.Fprint(writer, formatSseEvent("score", scoreEvent))
+				flusher.Flush()
+			case registrationEvent := <-gameObserver.registrationChannel:
+				_, _ = fmt.Fprint(writer, formatSseEvent("registration", registrationEvent))
+				flusher.Flush()
+			}
+		}
+	})
 }
 
 func formatSseEvent(event string, data any) string {
@@ -63,4 +69,35 @@ func formatSseEvent(event string, data any) string {
 	sb.WriteString(fmt.Sprintf("data: %v\n", buff.String()))
 
 	return sb.String()
+}
+
+type sseGameObserver struct {
+	id                  string
+	scoreChannel        chan ScoreEvent
+	registrationChannel chan RegistrationEvent
+}
+
+func newSseGameObserver() *sseGameObserver {
+	return &sseGameObserver{
+		id:                  strconv.FormatInt(time.Now().Unix(), 10),
+		scoreChannel:        make(chan ScoreEvent),
+		registrationChannel: make(chan RegistrationEvent),
+	}
+}
+
+func (o sseGameObserver) Id() string {
+	return o.id
+}
+
+func (o sseGameObserver) UpdateScore(teamName string, newScore domain.Score) {
+	o.scoreChannel <- ScoreEvent{
+		TeamName:         teamName,
+		NewScore:         newScore.Point,
+		NewBusinessValue: newScore.BusinessValue.AmountInCents(),
+		NewRisk:          newScore.Risk,
+	}
+}
+
+func (o sseGameObserver) AddRegistration(teamName string) {
+	o.registrationChannel <- RegistrationEvent{TeamName: teamName}
 }
