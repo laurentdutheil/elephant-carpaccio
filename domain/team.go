@@ -29,11 +29,11 @@ func (t *Team) Backlog() Backlog {
 }
 
 func (t *Team) Done(userStoryIds ...StoryId) {
-	t.backlog.Done(userStoryIds...)
+	t.backlog.Done(t.currentIteration(), userStoryIds...)
 }
 
 func (t *Team) CompleteIteration() {
-	currentScore := t.backlog.Score()
+	currentScore := t.backlog.Score(t.currentIteration())
 	t.iterationScores = append(t.iterationScores, currentScore)
 	if t.scoreSubject != nil {
 		t.scoreSubject.NotifyScore(t.name, currentScore)
@@ -42,4 +42,8 @@ func (t *Team) CompleteIteration() {
 
 func (t *Team) IterationScores() []Score {
 	return t.iterationScores
+}
+
+func (t *Team) currentIteration() uint8 {
+	return uint8(len(t.iterationScores) + 1)
 }

@@ -205,7 +205,7 @@ func assertRedirection(t *testing.T, response *httptest.ResponseRecorder, expect
 func assertStoriesDone(t *testing.T, backlog Backlog, storyIds []StoryId) {
 	var storiesDone []UserStory
 	for _, story := range backlog {
-		if story.Done {
+		if story.IsDone() {
 			storiesDone = append(storiesDone, story)
 		}
 	}

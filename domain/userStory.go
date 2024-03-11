@@ -4,26 +4,60 @@ import "elephant_carpaccio/domain/money"
 
 type StoryId string
 
-type Score struct {
-	Point         int
-	BusinessValue money.Dollar
-	Risk          int
-}
-
-func NewScore(point int, businessValue money.Dollar, risk int) Score {
-	return Score{Point: point, BusinessValue: businessValue, Risk: risk}
-}
-
 type UserStory struct {
-	Id          StoryId
-	Description string
-	Score       Score
-	Done        bool
+	Id                      StoryId
+	Description             string
+	pointEstimation         int
+	businessValueEstimation money.Dollar
+	riskEstimation          int
+	iterationEstimation     uint8
+	done                    bool
+	doneInIteration         uint8
 }
 
-func (s Score) AddScoreOf(u UserStory) Score {
-	if u.Done {
-		return NewScore(u.Score.Point+s.Point, u.Score.BusinessValue.Add(s.BusinessValue), s.Risk)
+func (u *UserStory) Done(currentIteration uint8) {
+	u.done = true
+	u.doneInIteration = currentIteration
+}
+
+func (u *UserStory) IsDone() bool {
+	return u.done
+}
+
+type UserStoryBuilder struct {
+	userStory *UserStory
+}
+
+func NewUserStoryBuilder(id StoryId) *UserStoryBuilder {
+	userStory := &UserStory{
+		Id:                      id,
+		pointEstimation:         1,
+		businessValueEstimation: money.NewDollar(money.Decimal(0)),
 	}
-	return NewScore(s.Point, s.BusinessValue, u.Score.Risk+s.Risk)
+	b := &UserStoryBuilder{userStory: userStory}
+	return b
+}
+
+func (b *UserStoryBuilder) Description(description string) *UserStoryBuilder {
+	b.userStory.Description = description
+	return b
+}
+
+func (b *UserStoryBuilder) BusinessValueEstimation(businessValueEstimation money.Dollar) *UserStoryBuilder {
+	b.userStory.businessValueEstimation = businessValueEstimation
+	return b
+}
+
+func (b *UserStoryBuilder) RiskEstimation(riskEstimation int) *UserStoryBuilder {
+	b.userStory.riskEstimation = riskEstimation
+	return b
+}
+
+func (b *UserStoryBuilder) IterationEstimation(iterationEstimation uint8) *UserStoryBuilder {
+	b.userStory.iterationEstimation = iterationEstimation
+	return b
+}
+
+func (b *UserStoryBuilder) Build() UserStory {
+	return *b.userStory
 }
