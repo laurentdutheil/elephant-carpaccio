@@ -71,19 +71,44 @@ func NewScore(point int, businessValue Dollar, risk int, costOfDelay Dollar) Sco
 }
 
 func (s Score) AddScoreOf(u UserStory, currentIteration uint8) Score {
+	return NewScore(
+		s.addPoint(u),
+		s.addBusinessValue(u),
+		s.addRisk(u),
+		s.addCostOfDelay(u, currentIteration),
+	)
+}
+
+func (s Score) addPoint(u UserStory) int {
 	if u.IsDone() {
 		s.Point += u.pointEstimation
+	}
+	return s.Point
+}
+
+func (s Score) addBusinessValue(u UserStory) Dollar {
+	if u.IsDone() {
 		s.BusinessValue = s.BusinessValue.Add(u.businessValueEstimation)
-		nbOfWaitedIteration := int(u.doneInIteration - u.iterationEstimation)
-		cost := u.businessValueEstimation.Multiply(Decimal(nbOfWaitedIteration * 100))
-		s.CostOfDelay = s.CostOfDelay.Add(cost)
-	} else {
+	}
+	return s.BusinessValue
+}
+
+func (s Score) addRisk(u UserStory) int {
+	if !u.IsDone() {
 		s.Risk += u.riskEstimation
+	}
+	return s.Risk
+}
+
+func (s Score) addCostOfDelay(u UserStory, currentIteration uint8) Dollar {
+	var nbOfWaitedIteration int
+	if u.IsDone() {
+		nbOfWaitedIteration = int(u.doneInIteration - u.iterationEstimation)
+	} else {
 		if currentIteration >= u.iterationEstimation {
-			nbOfWaitedIteration := int(currentIteration-u.iterationEstimation) + 1
-			cost := u.businessValueEstimation.Multiply(Decimal(nbOfWaitedIteration * 100))
-			s.CostOfDelay = s.CostOfDelay.Add(cost)
+			nbOfWaitedIteration = int(currentIteration-u.iterationEstimation) + 1
 		}
 	}
-	return NewScore(s.Point, s.BusinessValue, s.Risk, s.CostOfDelay)
+	cost := u.businessValueEstimation.Multiply(Decimal(nbOfWaitedIteration * 100))
+	return s.CostOfDelay.Add(cost)
 }

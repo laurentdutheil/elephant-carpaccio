@@ -69,6 +69,7 @@
         </div>
         <div class="four column">
             <canvas id="iterationBusinessValues"></canvas>
+            <canvas id="iterationCostOfDelay"></canvas>
         </div>
     </div>
     <div class="row">
@@ -236,6 +237,57 @@
         }
     });
 
+    const costOfDelayElement = document.getElementById('iterationCostOfDelay');
+
+    costOfDelayChart = new Chart(costOfDelayElement, {
+        type: 'line',
+        data: {
+            labels: ['IT0', 'IT1', 'IT2', 'IT3', 'IT4', 'IT5', 'IT6'],
+            datasets: [
+                
+                {
+                    label: 'A Team',
+                    data: [0.00, 0.00 , 3400.00 , 5400.00 ],
+                    borderWidth: 1,
+                    tension: 0.5
+                },
+                
+                {
+                    label: 'The fantastic four',
+                    data: [0.00, 0.00 , 3400.00 , 5400.00 ],
+                    borderWidth: 1,
+                    tension: 0.5
+                },
+                
+            ],
+        },
+        options: {
+            aspectRatio: 1.4,
+            scales: {
+                y: {
+                    ticks: {
+                        callback: function (value, index, ticks) {
+                            return currencyFormat.format(value)
+                        }
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: ["COST OF DELAY", "business value lost"],
+                    font: {
+                        size: 14,
+                        weight: 'normal'
+                    }
+                },
+                colors: {
+                    forceOverride: true
+                }
+            }
+        }
+    });
+    
     const es = new EventSource("/sse");
     es.onerror = (err) => {
         console.log("onerror", err)
@@ -244,7 +296,7 @@
 
     es.addEventListener("score", (event) => {
         const parsedData = JSON.parse(event.data);
-        const {teamName, newScore, newBusinessValue, newRisk} = parsedData;
+        const {teamName, newScore, newBusinessValue, newRisk, newCostOfDelay} = parsedData;
 
         scoreChart.data.datasets
             .find((dataset) => dataset.label === teamName)
@@ -260,6 +312,11 @@
             .find((dataset) => dataset.label === teamName)
             .data.push(newRisk)
         riskChart.update()
+
+        costOfDelayChart.data.datasets
+            .find((dataset) => dataset.label === teamName)
+            .data.push(newCostOfDelay)
+        costOfDelayChart.update()
 
     });
 
@@ -278,6 +335,10 @@
         riskChart.data.datasets
             .push({label: teamName, data: [100], borderWidth: 1, tension: 0.3})
         riskChart.update()
+
+        costOfDelayChart.data.datasets
+            .push({label: teamName, data: [0.00], borderWidth: 1, tension: 0.3})
+        costOfDelayChart.update()
     });
 
 </script>

@@ -16,8 +16,10 @@ type UserStory struct {
 }
 
 func (u *UserStory) Done(currentIteration uint8) {
-	u.done = true
-	u.doneInIteration = currentIteration
+	if !u.done {
+		u.done = true
+		u.doneInIteration = currentIteration
+	}
 }
 
 func (u *UserStory) IsDone() bool {

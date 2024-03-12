@@ -21,6 +21,7 @@ type ScoreEvent struct {
 	NewScore         int           `json:"newScore"`
 	NewBusinessValue money.Decimal `json:"newBusinessValue"`
 	NewRisk          int           `json:"newRisk"`
+	NewCostOfDelay   money.Decimal `json:"newCostOfDelay"`
 }
 
 type RegistrationEvent struct {
@@ -95,6 +96,7 @@ func (o sseGameObserver) UpdateScore(teamName string, newScore domain.Score) {
 		NewScore:         newScore.Point,
 		NewBusinessValue: newScore.BusinessValue.AmountInCents(),
 		NewRisk:          newScore.Risk,
+		NewCostOfDelay:   newScore.CostOfDelay.AmountInCents(),
 	}
 }
 
