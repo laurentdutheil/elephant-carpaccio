@@ -26,7 +26,7 @@ The board is at http://localhost:3000
 
 Each team can compare his curve to the ideal one.
 
-If you, as a facilitator, scan the QRCode on your smartphone, you'll be redirected to the Demo page.
+If you scan, as a facilitator, the QRCode with your smartphone, you'll be redirected to the Demo page. You have to be on the same network of your machine as the url start with the local IP of your machine.
 
 ### Register Teams
 
