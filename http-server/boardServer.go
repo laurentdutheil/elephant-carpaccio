@@ -77,15 +77,24 @@ func (s BoardServer) handleDemoScoring(writer http.ResponseWriter, request *http
 	if selectedTeam != nil {
 		switch request.Method {
 		case http.MethodGet:
-			orderGenerator := NewOrderGenerator(NewOrderRandomizer())
-
 			stateInRequest := request.URL.Query().Get("state")
 			state := requestState(stateInRequest)
 
 			discountInRequest := request.URL.Query().Get("discount")
 			discount := requestDiscount(discountInRequest)
 
-			randomOrder := orderGenerator.GenerateOrder(discount, state)
+			withoutDecimalsInRequest := request.URL.Query().Get("withoutDecimal")
+			withoutDecimals, err := strconv.ParseBool(withoutDecimalsInRequest)
+			if err != nil {
+				withoutDecimals = false
+			}
+
+			orderGenerator := NewOrderGenerator(NewOrderRandomizer()).
+				WithDiscount(discount).
+				WithState(state).
+				WithoutDecimals(withoutDecimals)
+
+			randomOrder := orderGenerator.GenerateOrder()
 			_ = s.templateRenderer.RenderDemoScoring(writer, selectedTeam, randomOrder)
 		case http.MethodPost:
 			storiesDone := s.extractStoryIdsSelected(request)

@@ -1,7 +1,6 @@
 package calculator_test
 
 import (
-	. "elephant_carpaccio/domain/money"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"regexp"
@@ -10,13 +9,16 @@ import (
 	"testing"
 
 	. "elephant_carpaccio/domain/calculator"
+	. "elephant_carpaccio/domain/money"
 )
 
 func TestGenerateOrder(t *testing.T) {
 	t.Run("should generate an order with fixed Discount and fixed State", func(t *testing.T) {
-		orderGenerator := NewOrderGenerator(NewOrderRandomizer())
+		orderGenerator := NewOrderGenerator(NewOrderRandomizer()).
+			WithDiscount(No.Discount()).
+			WithState(AL.State())
 
-		order := orderGenerator.GenerateOrder(No.Discount(), AL.State())
+		order := orderGenerator.GenerateOrder()
 		receipt := order.Compute()
 
 		assert.Equal(t, AL.State(), order.State)
@@ -25,18 +27,34 @@ func TestGenerateOrder(t *testing.T) {
 
 	t.Run("should generate a ramdom nbItems between Decimal(1) included and Decimal(10000) excluded", func(t *testing.T) {
 		spyOrderRandom := NewSpyOrderRandom(NewOrderRandomizer())
+		orderGenerator := NewOrderGenerator(spyOrderRandom).
+			WithDiscount(No.Discount()).
+			WithState(UT.State())
 
-		orderGenerator := NewOrderGenerator(spyOrderRandom)
-		order := orderGenerator.GenerateOrder(No.Discount(), UT.State())
+		order := orderGenerator.GenerateOrder()
 
 		assert.GreaterOrEqual(t, order.NumberOfItems, Decimal(1))
 		assert.Less(t, order.NumberOfItems, Decimal(10000))
 		spyOrderRandom.AssertCalled(t, "RandDecimal", Decimal(1), Decimal(10000))
 	})
 
+	t.Run("should generate a ramdom nbItems without decimals between Decimal(100) included and Decimal(10000) excluded", func(t *testing.T) {
+		spyOrderRandom := NewSpyOrderRandom(NewOrderRandomizer())
+		orderGenerator := NewOrderGenerator(spyOrderRandom).
+			WithDiscount(No.Discount()).
+			WithState(UT.State()).
+			WithoutDecimals(true)
+
+		order := orderGenerator.GenerateOrder()
+
+		assert.GreaterOrEqual(t, order.NumberOfItems, Decimal(100))
+		assert.Less(t, order.NumberOfItems, Decimal(10000))
+		assert.True(t, strings.HasSuffix(order.NumberOfItems.String(), ".00"), "the number of items should not have decimals")
+		spyOrderRandom.AssertCalled(t, "RandDecimalWithoutDecimals", Decimal(1), Decimal(10000))
+	})
+
 	t.Run("should generate a random discount order between minimal Discount amount and maximal Discount amount", func(t *testing.T) {
 		spyOrderRandom := NewSpyOrderRandom(NewOrderRandomizer())
-		orderGenerator := NewOrderGenerator(spyOrderRandom)
 		tests := []struct {
 			description string
 			discount    *Discount
@@ -50,8 +68,11 @@ func TestGenerateOrder(t *testing.T) {
 		}
 		for _, test := range tests {
 			t.Run(test.description, func(t *testing.T) {
-				order := orderGenerator.GenerateOrder(test.discount, UT.State())
+				orderGenerator := NewOrderGenerator(spyOrderRandom).
+					WithDiscount(test.discount).
+					WithState(UT.State())
 
+				order := orderGenerator.GenerateOrder()
 				receipt := order.Compute()
 				actualOrderValue := receipt.OrderValue
 
@@ -68,21 +89,26 @@ func TestGenerateOrder(t *testing.T) {
 
 	t.Run("should pick a state at random when argument is nil", func(t *testing.T) {
 		spyOrderRandom := NewSpyOrderRandom(NewOrderRandomizer())
-		orderGenerator := NewOrderGenerator(spyOrderRandom)
+		orderGenerator := NewOrderGenerator(spyOrderRandom).
+			WithDiscount(No.Discount())
 
-		order := orderGenerator.GenerateOrder(No.Discount(), nil)
+		order := orderGenerator.GenerateOrder()
+		receipt := order.Compute()
 
+		assert.Equal(t, No.Discount(), receipt.Discount)
 		assert.NotNil(t, order.State)
 		spyOrderRandom.AssertCalled(t, "RandState")
 	})
 
 	t.Run("should pick a discount level at random when argument is nil", func(t *testing.T) {
 		spyOrderRandom := NewSpyOrderRandom(NewOrderRandomizer())
-		orderGenerator := NewOrderGenerator(spyOrderRandom)
+		orderGenerator := NewOrderGenerator(spyOrderRandom).
+			WithState(AL.State())
 
-		order := orderGenerator.GenerateOrder(nil, AL.State())
+		order := orderGenerator.GenerateOrder()
 		receipt := order.Compute()
 
+		assert.Equal(t, AL.State(), order.State)
 		assert.NotNil(t, receipt.Discount)
 		spyOrderRandom.AssertCalled(t, "RandDiscountLevel")
 	})
@@ -101,6 +127,11 @@ func NewSpyOrderRandom(spied OrderRandom) *SpyOrderRandom {
 func (m *SpyOrderRandom) RandDecimal(min Decimal, max Decimal) Decimal {
 	m.Calls = append(m.Calls, *NewCall(&m.Mock, min, max))
 	return m.spied.RandDecimal(min, max)
+}
+
+func (m *SpyOrderRandom) RandDecimalWithoutDecimals(min Decimal, max Decimal) Decimal {
+	m.Calls = append(m.Calls, *NewCall(&m.Mock, min, max))
+	return m.spied.RandDecimalWithoutDecimals(min, max)
 }
 
 func (m *SpyOrderRandom) RandDollar(minAmount Dollar, maxAmount Dollar) Dollar {

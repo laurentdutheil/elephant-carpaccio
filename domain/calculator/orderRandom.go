@@ -1,13 +1,15 @@
 package calculator
 
 import (
-	"elephant_carpaccio/domain/money"
 	"math/rand"
+
+	. "elephant_carpaccio/domain/money"
 )
 
 type OrderRandom interface {
-	RandDecimal(min money.Decimal, max money.Decimal) money.Decimal
-	RandDollar(minAmount money.Dollar, maxAmount money.Dollar) money.Dollar
+	RandDecimal(min Decimal, max Decimal) Decimal
+	RandDecimalWithoutDecimals(min Decimal, max Decimal) Decimal
+	RandDollar(minAmount Dollar, maxAmount Dollar) Dollar
 	RandDiscountLevel() *Discount
 	RandState() *State
 }
@@ -22,16 +24,24 @@ func NewOrderRandomizer() *OrderRandomizer {
 	return &OrderRandomizer{}
 }
 
-func (dr OrderRandomizer) RandDecimal(min money.Decimal, max money.Decimal) money.Decimal {
+func (dr OrderRandomizer) RandDecimal(min Decimal, max Decimal) Decimal {
 	rangeDecimal := max - min
-	randomRange := money.Decimal(RandInt63n(int64(rangeDecimal)))
+	randomRange := Decimal(RandInt63n(int64(rangeDecimal)))
 	return min + randomRange
 }
 
-func (dr OrderRandomizer) RandDollar(minAmount money.Dollar, maxAmount money.Dollar) money.Dollar {
+func (dr OrderRandomizer) RandDecimalWithoutDecimals(min Decimal, max Decimal) Decimal {
+	rangeDecimal := max - min
+	randomRange := Decimal(RandInt63n(int64(rangeDecimal)))
+	randomRange = randomRange.Divide(Decimal(10000)).Multiply(Decimal(10000))
+	minWithoutDecimals := min.Divide(Decimal(10000)).Multiply(Decimal(10000))
+	return minWithoutDecimals + randomRange
+}
+
+func (dr OrderRandomizer) RandDollar(minAmount Dollar, maxAmount Dollar) Dollar {
 	rangeDollar := maxAmount.Minus(minAmount)
-	randomRange := money.Decimal(RandInt63n(int64(rangeDollar.AmountInCents())))
-	return minAmount.Add(money.NewDollar(randomRange))
+	randomRange := Decimal(RandInt63n(int64(rangeDollar.AmountInCents())))
+	return minAmount.Add(NewDollar(randomRange))
 }
 
 func (dr OrderRandomizer) RandDiscountLevel() *Discount {

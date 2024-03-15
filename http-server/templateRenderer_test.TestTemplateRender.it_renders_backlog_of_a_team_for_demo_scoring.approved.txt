@@ -9,9 +9,9 @@
             <th class="compact">State</th>
         </tr>
         <tr>
-            <th class="compact">12.00</th>
-            <th class="compact">$123.00</th>
-            <th class="compact">UT</th>
+            <th id="numberOfItems" class="compact">12.00</th>
+            <th id="itemPrice" class="compact">$123.00</th>
+            <th id="stateLabel" class="compact">UT</th>
         </tr>
         <tbody>
         <tr>
@@ -19,12 +19,12 @@
             <td class="u-text-right compact">$1,476.00</td>
         </tr>
         <tr>
-            <td class="u-text-right compact" colspan="2">Discount (3.00%)</td>
+            <td id="discount" class="u-text-right compact" colspan="2">Discount (3.00%)</td>
             <td class="u-text-right compact">$44.28</td>
         </tr>
         <tr>
             <td class="u-text-right compact" colspan="2">Tax (6.85%)</td>
-            <td class="u-text-right compact">$98.07</td>
+            <td id="tax" class="u-text-right compact">$98.07</td>
         </tr>
         <tr>
             <td class="u-text-right compact" colspan="2">Taxed Order Value</td>
@@ -37,6 +37,10 @@
         </tbody>
     </table>
     <form method="get">
+        <div class="row">
+            <label class="inline"><input type="checkbox" name="withoutDecimal" value=true><span
+                        class="label-body">Number of Items Without Decimal</span></label>
+        </div>
         <div class="row">
             <label class="inline"><input type="radio" name="state" value="" checked><span
                         class="label-body">Random</span></label>

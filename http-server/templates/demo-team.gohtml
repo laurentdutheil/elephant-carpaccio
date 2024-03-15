@@ -10,9 +10,9 @@
             <th class="compact">State</th>
         </tr>
         <tr>
-            <th class="compact">{{.Order.NumberOfItems}}</th>
-            <th class="compact">{{.Order.ItemPrice.String}}</th>
-            <th class="compact">{{.Order.State.Label}}</th>
+            <th id="numberOfItems" class="compact">{{.Order.NumberOfItems}}</th>
+            <th id="itemPrice" class="compact">{{.Order.ItemPrice.String}}</th>
+            <th id="stateLabel" class="compact">{{.Order.State.Label}}</th>
         </tr>
         <tbody>
         <tr>
@@ -20,12 +20,12 @@
             <td class="u-text-right compact">{{.Receipt.OrderValue.String}}</td>
         </tr>
         <tr>
-            <td class="u-text-right compact" colspan="2">Discount ({{.Receipt.Discount.Rate.String}})</td>
+            <td id="discount" class="u-text-right compact" colspan="2">Discount ({{.Receipt.Discount.Rate.String}})</td>
             <td class="u-text-right compact">{{.Receipt.DiscountValue.String}}</td>
         </tr>
         <tr>
             <td class="u-text-right compact" colspan="2">Tax ({{.Order.State.TaxRate.String}})</td>
-            <td class="u-text-right compact">{{.Receipt.Tax.String}}</td>
+            <td id="tax" class="u-text-right compact">{{.Receipt.Tax.String}}</td>
         </tr>
         <tr>
             <td class="u-text-right compact" colspan="2">Taxed Order Value</td>
@@ -38,6 +38,10 @@
         </tbody>
     </table>
     <form method="get">
+        <div class="row">
+            <label class="inline"><input type="checkbox" name="withoutDecimal" value=true><span
+                        class="label-body">Number of Items Without Decimal</span></label>
+        </div>
         <div class="row">
             <label class="inline"><input type="radio" name="state" value="" checked><span
                         class="label-body">Random</span></label>

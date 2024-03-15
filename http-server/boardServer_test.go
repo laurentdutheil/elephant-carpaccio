@@ -1,8 +1,6 @@
 package http_server_test
 
 import (
-	. "elephant_carpaccio/domain"
-	. "elephant_carpaccio/http-server"
 	"github.com/stretchr/testify/assert"
 	"net"
 	"net/http"
@@ -11,6 +9,9 @@ import (
 	"regexp"
 	"strings"
 	"testing"
+
+	. "elephant_carpaccio/domain"
+	. "elephant_carpaccio/http-server"
 )
 
 func TestBoardServer(t *testing.T) {
@@ -109,7 +110,7 @@ func TestBoardServer(t *testing.T) {
 		server.ServeHTTP(response, request)
 
 		assert.Equal(t, http.StatusOK, response.Code)
-		assert.Contains(t, response.Body.String(), "Tax (8.00%)")
+		assert.Regexp(t, regexp.MustCompile("<th id=\"stateLabel\".*>NV</th>"), response.Body.String())
 	})
 
 	t.Run("handle demo scoring page for a team with a order example with wrong state", func(t *testing.T) {
@@ -130,8 +131,7 @@ func TestBoardServer(t *testing.T) {
 				server.ServeHTTP(response, request)
 
 				assert.Equal(t, http.StatusOK, response.Code)
-				assert.Contains(t, response.Body.String(), "<caption>Witch user stories are done?</caption>")
-				assert.Regexp(t, regexp.MustCompile("Tax \\(\\d+.\\d{2}%\\)"), response.Body.String())
+				assert.Regexp(t, regexp.MustCompile("<th id=\"stateLabel\".*>[A-Z]{2}</th>"), response.Body.String())
 			})
 		}
 	})
@@ -147,7 +147,7 @@ func TestBoardServer(t *testing.T) {
 		server.ServeHTTP(response, request)
 
 		assert.Equal(t, http.StatusOK, response.Code)
-		assert.Contains(t, response.Body.String(), "Discount (7.00%)")
+		assert.Regexp(t, regexp.MustCompile("<td id=\"discount\".*>Discount \\(7.00%\\)</td>"), response.Body.String())
 	})
 
 	t.Run("handle demo scoring page for a team with a order example with wrong discount", func(t *testing.T) {
@@ -168,10 +168,23 @@ func TestBoardServer(t *testing.T) {
 				server.ServeHTTP(response, request)
 
 				assert.Equal(t, http.StatusOK, response.Code)
-				assert.Contains(t, response.Body.String(), "<caption>Witch user stories are done?</caption>")
-				assert.Regexp(t, regexp.MustCompile("Discount \\(\\d+.\\d{2}%\\)"), response.Body.String())
+				assert.Regexp(t, regexp.MustCompile("<td id=\"discount\".*>Discount \\(\\d+.\\d{2}%\\)</td>"), response.Body.String())
 			})
 		}
+	})
+
+	t.Run("handle demo scoring page for a team with a order with a nbOfItems without decimal", func(t *testing.T) {
+		game := NewGame()
+		server := NewBoardServer(game, localIpSeekerStub)
+		game.Register("A Team", "")
+
+		request, _ := http.NewRequest(http.MethodGet, "/demo/A Team?withoutDecimal=true", nil)
+		response := httptest.NewRecorder()
+
+		server.ServeHTTP(response, request)
+
+		assert.Equal(t, http.StatusOK, response.Code)
+		assert.Regexp(t, regexp.MustCompile("<th id=\"numberOfItems\".*>\\d+.00</th>"), response.Body.String())
 	})
 
 	t.Run("handle demo scoring post", func(t *testing.T) {

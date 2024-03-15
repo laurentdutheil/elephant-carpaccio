@@ -9,7 +9,7 @@ Purpose: help the facilitator to attribute points to the teams.
 - [x] propose some test data to the facilitator during demos
 - [x] use sse to update the board from server for team registration
 - [x] add notion of risk mitigation, cost of delay and business value to the score
-- [ ] permit to generate some test data without decimal
+- [x] add the possibility to generate some test data without decimal
 - [ ] add a page to present backlog
 - [ ] add pages to debrief of Story Points, Business Value, Risk Mitigation and Cost of Delay
 
