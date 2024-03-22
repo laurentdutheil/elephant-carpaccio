@@ -37,3 +37,15 @@ func (d Decimal) MarshalJSON() ([]byte, error) {
 	decimals := d % 100
 	return []byte(fmt.Sprintf("%d.%02d", units, decimals)), nil
 }
+
+func (d Decimal) Floor() Decimal {
+	return Decimal(math.Round(float64(d)*math.Pow10(-2)) * math.Pow10(2))
+}
+
+func (d Decimal) Ceil() Decimal {
+	floor := d.Floor()
+	if d == floor {
+		return d
+	}
+	return floor + Decimal(100)
+}

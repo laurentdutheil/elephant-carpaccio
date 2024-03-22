@@ -89,12 +89,12 @@ func (s BoardServer) handleDemoScoring(writer http.ResponseWriter, request *http
 				withoutDecimals = false
 			}
 
-			orderGenerator := NewOrderGenerator(NewOrderRandomizer()).
+			orderBuilder := NewRandomOrderBuilder(NewOrderRandomizer()).
 				WithDiscount(discount).
 				WithState(state).
 				WithoutDecimals(withoutDecimals)
 
-			randomOrder := orderGenerator.GenerateOrder()
+			randomOrder := orderBuilder.Build()
 			_ = s.templateRenderer.RenderDemoScoring(writer, selectedTeam, randomOrder)
 		case http.MethodPost:
 			storiesDone := s.extractStoryIdsSelected(request)

@@ -11,7 +11,8 @@ import (
 func TestOrderRandomizer_RandDecimal(t *testing.T) {
 	t.Run("should generate decimal greater or equal than min parameter", func(t *testing.T) {
 		randomizer := NewOrderRandomizer()
-		RandInt63n = func(_ int64) int64 { return 0 }
+		minRand63n := func(_ int64) int64 { return 0 }
+		defer stubRandInt63n(minRand63n)()
 
 		randDecimal := randomizer.RandDecimal(Decimal(12), Decimal(20))
 
@@ -20,7 +21,8 @@ func TestOrderRandomizer_RandDecimal(t *testing.T) {
 
 	t.Run("should generate decimal lower than max parameter", func(t *testing.T) {
 		randomizer := NewOrderRandomizer()
-		RandInt63n = func(n int64) int64 { return n - 1 }
+		maxRand63n := func(n int64) int64 { return n - 1 }
+		defer stubRandInt63n(maxRand63n)()
 
 		randDecimal := randomizer.RandDecimal(Decimal(12), Decimal(20))
 
@@ -31,40 +33,54 @@ func TestOrderRandomizer_RandDecimal(t *testing.T) {
 func TestOrderRandomizer_RandDecimalWithoutDecimals(t *testing.T) {
 	t.Run("should generate decimal greater or equal than min parameter", func(t *testing.T) {
 		randomizer := NewOrderRandomizer()
-		RandInt63n = func(_ int64) int64 { return 0 }
+		minRand63n := func(_ int64) int64 { return 0 }
+		defer stubRandInt63n(minRand63n)()
 
 		randDecimal := randomizer.RandDecimalWithoutDecimals(Decimal(123), Decimal(259))
 
-		assert.Equal(t, randDecimal, Decimal(100))
+		assert.Equal(t, Decimal(200), randDecimal)
 	})
 
 	t.Run("should generate decimal lower than max parameter", func(t *testing.T) {
 		randomizer := NewOrderRandomizer()
-		RandInt63n = func(n int64) int64 { return n - 1 }
+		maxRand63n := func(n int64) int64 { return n - 1 }
+		defer stubRandInt63n(maxRand63n)()
 
-		randDecimal := randomizer.RandDecimalWithoutDecimals(Decimal(123), Decimal(259))
+		randDecimal := randomizer.RandDecimalWithoutDecimals(Decimal(123), Decimal(359))
 
-		assert.Equal(t, randDecimal, Decimal(200))
+		assert.Equal(t, Decimal(300), randDecimal)
+	})
+
+	t.Run("should generate decimal lower than max parameter", func(t *testing.T) {
+		randomizer := NewOrderRandomizer()
+		minRand63n := func(_ int64) int64 { return 0 }
+		defer stubRandInt63n(minRand63n)()
+
+		randDecimal := randomizer.RandDecimalWithoutDecimals(Decimal(123), Decimal(300))
+
+		assert.Equal(t, Decimal(200), randDecimal)
 	})
 }
 
 func TestOrderRandomizer_RandDollar(t *testing.T) {
 	t.Run("should generate dollar greater or equal than minAmount parameter", func(t *testing.T) {
 		randomizer := NewOrderRandomizer()
-		RandInt63n = func(_ int64) int64 { return 0 }
+		minRand63n := func(_ int64) int64 { return 0 }
+		defer stubRandInt63n(minRand63n)()
 
 		randDollar := randomizer.RandDollar(NewDollar(Decimal(1200)), NewDollar(Decimal(2000)))
 
-		assert.Equal(t, randDollar, NewDollar(Decimal(1200)))
+		assert.Equal(t, NewDollar(Decimal(1200)), randDollar)
 	})
 
 	t.Run("should generate dollar lower than max parameter", func(t *testing.T) {
 		randomizer := NewOrderRandomizer()
-		RandInt63n = func(n int64) int64 { return n - 1 }
+		maxRand63n := func(n int64) int64 { return n - 1 }
+		defer stubRandInt63n(maxRand63n)()
 
 		randDollar := randomizer.RandDollar(NewDollar(Decimal(1200)), NewDollar(Decimal(2000)))
 
-		assert.Equal(t, randDollar, NewDollar(Decimal(1999)))
+		assert.Equal(t, NewDollar(Decimal(1999)), randDollar)
 	})
 }
 
@@ -83,7 +99,7 @@ func TestOrderRandomizer_RandState(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			randomizer := NewOrderRandomizer()
 			fixedIntRandom := func(_ int) int { return int(test.stateCode) }
-			RandIntn = fixedIntRandom
+			defer stubRandIntn(fixedIntRandom)()
 
 			randState := randomizer.RandState()
 
@@ -108,11 +124,23 @@ func TestOrderRandomizer_RandDiscount(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			randomizer := NewOrderRandomizer()
 			fixedIntRandom := func(_ int) int { return int(test.discountLevel) }
-			RandIntn = fixedIntRandom
+			defer stubRandIntn(fixedIntRandom)()
 
 			randDiscountLevel := randomizer.RandDiscountLevel()
 
 			assert.Equal(t, test.discountLevel.Discount(), randDiscountLevel)
 		})
 	}
+}
+
+func stubRandInt63n(stubRand func(_ int64) int64) (deferFunc func()) {
+	oldRandInt63n := RandInt63n
+	RandInt63n = stubRand
+	return func() { RandInt63n = oldRandInt63n }
+}
+
+func stubRandIntn(stubRand func(_ int) int) (deferFunc func()) {
+	oldRandIntn := RandIntn
+	RandIntn = stubRand
+	return func() { RandIntn = oldRandIntn }
 }

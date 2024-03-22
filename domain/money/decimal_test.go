@@ -33,6 +33,14 @@ func TestDecimal(t *testing.T) {
 
 		assert.Equal(t, Decimal(261), first.Divide(second))
 	})
+	t.Run("should Floor a Decimal", func(t *testing.T) {
+		assert.Equal(t, Decimal(100), Decimal(123).Floor())
+		assert.Equal(t, Decimal(100), Decimal(100).Floor())
+	})
+	t.Run("should Ceil a Decimal", func(t *testing.T) {
+		assert.Equal(t, Decimal(200), Decimal(123).Ceil())
+		assert.Equal(t, Decimal(100), Decimal(100).Ceil())
+	})
 }
 
 func TestDecimal_String(t *testing.T) {

@@ -31,11 +31,9 @@ func (dr OrderRandomizer) RandDecimal(min Decimal, max Decimal) Decimal {
 }
 
 func (dr OrderRandomizer) RandDecimalWithoutDecimals(min Decimal, max Decimal) Decimal {
-	rangeDecimal := max - min
-	randomRange := Decimal(RandInt63n(int64(rangeDecimal)))
-	randomRange = randomRange.Divide(Decimal(10000)).Multiply(Decimal(10000))
-	minWithoutDecimals := min.Divide(Decimal(10000)).Multiply(Decimal(10000))
-	return minWithoutDecimals + randomRange
+	rangeDecimal := max.Floor() - min.Ceil()
+	randomRange := Decimal(RandInt63n(int64(rangeDecimal.Divide(10000))))
+	return min.Ceil() + randomRange.Multiply(Decimal(10000))
 }
 
 func (dr OrderRandomizer) RandDollar(minAmount Dollar, maxAmount Dollar) Dollar {
