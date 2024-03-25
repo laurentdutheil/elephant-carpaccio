@@ -2,20 +2,21 @@ package http_server_test
 
 import (
 	"context"
-	"elephant_carpaccio/domain"
-	"elephant_carpaccio/http-server"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
+
+	. "elephant_carpaccio/domain"
+	. "elephant_carpaccio/http-server"
 )
 
 func TestSse(t *testing.T) {
 	t.Run("return error 500 when SSE is not supported", func(t *testing.T) {
-		game := domain.NewGame()
+		game := NewGame()
 		router := http.NewServeMux()
-		http_server.HandleSSE(router, game)
+		HandleSSE(router, game)
 
 		request, _ := http.NewRequest(http.MethodGet, "/sse", nil)
 		response := &NonSseSupportedResponseWriter{}
@@ -26,9 +27,9 @@ func TestSse(t *testing.T) {
 	})
 
 	t.Run("should set Header correctly", func(t *testing.T) {
-		game := domain.NewGame()
+		game := NewGame()
 		router := http.NewServeMux()
-		http_server.HandleSSE(router, game)
+		HandleSSE(router, game)
 
 		request, _ := http.NewRequest(http.MethodGet, "/sse", nil)
 		cancellingCtx, cancel := context.WithCancel(request.Context())
@@ -44,9 +45,9 @@ func TestSse(t *testing.T) {
 	})
 
 	t.Run("should add a GameObserver when connection is open", func(t *testing.T) {
-		game := domain.NewGame()
+		game := NewGame()
 		router := http.NewServeMux()
-		http_server.HandleSSE(router, game)
+		HandleSSE(router, game)
 
 		request, _ := http.NewRequest(http.MethodGet, "/sse", nil)
 		cancellingCtx, cancel := context.WithCancel(request.Context())
@@ -63,9 +64,9 @@ func TestSse(t *testing.T) {
 	})
 
 	t.Run("should remove GameObserver when connection is closed", func(t *testing.T) {
-		game := domain.NewGame()
+		game := NewGame()
 		router := http.NewServeMux()
-		http_server.HandleSSE(router, game)
+		HandleSSE(router, game)
 
 		request, _ := http.NewRequest(http.MethodGet, "/sse", nil)
 		cancellingCtx, cancel := context.WithCancel(request.Context())
@@ -84,12 +85,12 @@ func TestSse(t *testing.T) {
 	})
 
 	t.Run("should send score event when an iteration is completed", func(t *testing.T) {
-		game := domain.NewGame()
+		game := NewGame()
 		game.Register("A Team", "")
 		team := game.Teams()[0]
 
 		router := http.NewServeMux()
-		http_server.HandleSSE(router, game)
+		HandleSSE(router, game)
 
 		request, _ := http.NewRequest(http.MethodGet, "/sse", nil)
 		cancellingCtx, cancel := context.WithCancel(request.Context())
@@ -108,9 +109,9 @@ func TestSse(t *testing.T) {
 	})
 
 	t.Run("should send registration event when an team is registered", func(t *testing.T) {
-		game := domain.NewGame()
+		game := NewGame()
 		router := http.NewServeMux()
-		http_server.HandleSSE(router, game)
+		HandleSSE(router, game)
 
 		request, _ := http.NewRequest(http.MethodGet, "/sse", nil)
 		cancellingCtx, cancel := context.WithCancel(request.Context())

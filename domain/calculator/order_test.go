@@ -1,11 +1,11 @@
 package calculator_test
 
 import (
-	. "elephant_carpaccio/domain/money"
 	"github.com/stretchr/testify/assert"
 	"testing"
 
 	. "elephant_carpaccio/domain/calculator"
+	. "elephant_carpaccio/domain/money"
 )
 
 func TestCalculator(t *testing.T) {
