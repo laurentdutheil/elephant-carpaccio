@@ -5,11 +5,11 @@ type Team struct {
 	ip              string
 	backlog         Backlog
 	iterationScores []Score
-	scoreSubject    GameNotifier
+	gameNotifier    GameNotifier
 }
 
-func NewTeam(name string, ip string, scoreSubject GameNotifier) *Team {
-	return &Team{name: name, ip: ip, backlog: DefaultBacklog(), scoreSubject: scoreSubject}
+func NewTeam(name string, ip string, gameNotifier GameNotifier) *Team {
+	return &Team{name: name, ip: ip, backlog: DefaultBacklog(), gameNotifier: gameNotifier}
 }
 
 func (t *Team) Name() string {
@@ -35,8 +35,8 @@ func (t *Team) Done(userStoryIds ...StoryId) {
 func (t *Team) CompleteIteration() {
 	currentScore := t.backlog.Score(t.currentIteration())
 	t.iterationScores = append(t.iterationScores, currentScore)
-	if t.scoreSubject != nil {
-		t.scoreSubject.NotifyScore(t.name, currentScore)
+	if t.gameNotifier != nil {
+		t.gameNotifier.NotifyScore(t.name, currentScore)
 	}
 }
 

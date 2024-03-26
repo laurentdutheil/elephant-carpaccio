@@ -6,29 +6,17 @@ import (
 
 type Backlog []UserStory
 
-func (b Backlog) Done(currentIteration uint8, userStoryIds ...StoryId) {
+func (b Backlog) Done(inIteration uint8, userStoryIds ...StoryId) {
 	for i, story := range b {
-		if contains(userStoryIds, story.Id) {
-			b[i].Done(currentIteration)
+		if story.Id.IsIn(userStoryIds) {
+			b[i].Done(inIteration)
 		}
 	}
-}
-
-func contains(s []StoryId, e StoryId) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
 }
 
 func (b Backlog) Score(currentIteration uint8) Score {
-	backlogScore := NewScore(0, NewDollar(Decimal(0)), 0, NewDollar(Decimal(0)))
-	for _, story := range b {
-		backlogScore = backlogScore.AddScoreOf(story, currentIteration)
-	}
-	return backlogScore
+	scorer := NewBacklogScorer(b, currentIteration)
+	return scorer.Score()
 }
 
 func DefaultBacklog() Backlog {
@@ -52,63 +40,4 @@ func DefaultBacklog() Backlog {
 		NewUserStoryBuilder("EC-017").Description("Display details (order value, tax, discount").BusinessValueEstimation(NewDollar(Decimal(20000))).RiskEstimation(3).IterationEstimation(4).Build(),
 		NewUserStoryBuilder("EC-018").Description("Do not have to re-launch the application for each test").IterationEstimation(5).Build(),
 	}
-}
-
-type Score struct {
-	Point         int
-	BusinessValue Dollar
-	Risk          int
-	CostOfDelay   Dollar
-}
-
-func NewScore(point int, businessValue Dollar, risk int, costOfDelay Dollar) Score {
-	return Score{
-		Point:         point,
-		BusinessValue: businessValue,
-		Risk:          risk,
-		CostOfDelay:   costOfDelay,
-	}
-}
-
-func (s Score) AddScoreOf(u UserStory, currentIteration uint8) Score {
-	return NewScore(
-		s.addPoint(u),
-		s.addBusinessValue(u),
-		s.addRisk(u),
-		s.addCostOfDelay(u, currentIteration),
-	)
-}
-
-func (s Score) addPoint(u UserStory) int {
-	if u.IsDone() {
-		s.Point += u.pointEstimation
-	}
-	return s.Point
-}
-
-func (s Score) addBusinessValue(u UserStory) Dollar {
-	if u.IsDone() {
-		s.BusinessValue = s.BusinessValue.Add(u.businessValueEstimation)
-	}
-	return s.BusinessValue
-}
-
-func (s Score) addRisk(u UserStory) int {
-	if !u.IsDone() {
-		s.Risk += u.riskEstimation
-	}
-	return s.Risk
-}
-
-func (s Score) addCostOfDelay(u UserStory, currentIteration uint8) Dollar {
-	var nbOfWaitedIteration int
-	if u.IsDone() {
-		nbOfWaitedIteration = int(u.doneInIteration - u.iterationEstimation)
-	} else {
-		if currentIteration >= u.iterationEstimation {
-			nbOfWaitedIteration = int(currentIteration-u.iterationEstimation) + 1
-		}
-	}
-	cost := u.businessValueEstimation.Multiply(Decimal(nbOfWaitedIteration * 100))
-	return s.CostOfDelay.Add(cost)
 }

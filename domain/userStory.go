@@ -4,6 +4,15 @@ import "elephant_carpaccio/domain/money"
 
 type StoryId string
 
+func (id StoryId) IsIn(ids []StoryId) bool {
+	for _, i := range ids {
+		if i == id {
+			return true
+		}
+	}
+	return false
+}
+
 type UserStory struct {
 	Id                      StoryId
 	Description             string
@@ -15,10 +24,10 @@ type UserStory struct {
 	doneInIteration         uint8
 }
 
-func (u *UserStory) Done(currentIteration uint8) {
+func (u *UserStory) Done(inIteration uint8) {
 	if !u.done {
 		u.done = true
-		u.doneInIteration = currentIteration
+		u.doneInIteration = inIteration
 	}
 }
 
@@ -31,13 +40,12 @@ type UserStoryBuilder struct {
 }
 
 func NewUserStoryBuilder(id StoryId) *UserStoryBuilder {
-	userStory := &UserStory{
-		Id:                      id,
-		pointEstimation:         1,
-		businessValueEstimation: money.NewDollar(money.Decimal(0)),
+	return &UserStoryBuilder{
+		userStory: &UserStory{
+			Id:              id,
+			pointEstimation: 1,
+		},
 	}
-	b := &UserStoryBuilder{userStory: userStory}
-	return b
 }
 
 func (b *UserStoryBuilder) Description(description string) *UserStoryBuilder {
