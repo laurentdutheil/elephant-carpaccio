@@ -62,3 +62,7 @@ func (r TemplateRenderer) RenderDemoScoring(w io.Writer, team *Team, order Order
 	}
 	return r.template.ExecuteTemplate(w, "demo-team.gohtml", scoringModel)
 }
+
+func (r TemplateRenderer) RenderBacklog(w io.Writer, backlog Backlog) error {
+	return r.template.ExecuteTemplate(w, "backlog.gohtml", backlog)
+}

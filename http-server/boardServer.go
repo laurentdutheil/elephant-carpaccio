@@ -38,6 +38,7 @@ func NewBoardServer(game *Game, localIp net.IP) *BoardServer {
 	router.HandleFunc("/register", s.handleRegistration)
 	router.HandleFunc("/demo", s.handleDemoIndex)
 	router.HandleFunc("/demo/", s.handleDemoScoring)
+	router.HandleFunc("/backlog", s.handleDefaultBacklog)
 
 	HandleSSE(router, game)
 	HandleApi(router, game)
@@ -135,4 +136,8 @@ func (s BoardServer) extractStoryIdsSelected(request *http.Request) []StoryId {
 		storiesDone = append(storiesDone, StoryId(selectedStoryId))
 	}
 	return storiesDone
+}
+
+func (s BoardServer) handleDefaultBacklog(writer http.ResponseWriter, _ *http.Request) {
+	_ = s.templateRenderer.RenderBacklog(writer, DefaultBacklog())
 }

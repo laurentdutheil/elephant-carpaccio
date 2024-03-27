@@ -111,6 +111,24 @@ func TestTemplateRender(t *testing.T) {
 
 		approvals.VerifyString(t, buf.String(), ignoreTopAndFooter)
 	})
+
+	t.Run("it renders default backlog", func(t *testing.T) {
+		buf := bytes.Buffer{}
+
+		topScrubber, _ := regexp.Compile("(?s)<!DOCTYPE html>.*<main>")
+		footerScrubber, _ := regexp.Compile("(?s)</main>.*</html>")
+		ignoreTopAndFooter := approvals.Options().
+			WithRegexScrubber(topScrubber, "<<top template>>").
+			WithRegexScrubber(footerScrubber, "<<footer template>>")
+
+		backlog := DefaultBacklog()
+
+		if err := templateRenderer.RenderBacklog(&buf, backlog); err != nil {
+			t.Fatal(err)
+		}
+
+		approvals.VerifyString(t, buf.String(), ignoreTopAndFooter)
+	})
 }
 
 func simulateGame() *Game {

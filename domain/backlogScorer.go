@@ -35,33 +35,33 @@ func (t BacklogScorer) updateScoreWith(u UserStory) {
 
 func (t BacklogScorer) updatePointWith(u UserStory) {
 	if u.IsDone() {
-		t.score.Point += u.pointEstimation
+		t.score.Point += u.PointEstimation
 	}
 }
 
 func (t BacklogScorer) updateBusinessValueWith(u UserStory) {
 	if u.IsDone() {
-		t.score.BusinessValue = t.score.BusinessValue.Add(u.businessValueEstimation)
+		t.score.BusinessValue = t.score.BusinessValue.Add(u.BusinessValueEstimation)
 	}
 }
 
 func (t BacklogScorer) updateRiskWith(u UserStory) {
 	if !u.IsDone() {
-		t.score.Risk += u.riskEstimation
+		t.score.Risk += u.RiskEstimation
 	}
 }
 
 func (t BacklogScorer) updateCostOfDelayWith(u UserStory) {
 	nbOfWaitedIteration := t.nbOfWaitedIteration(u)
-	cost := u.businessValueEstimation.Multiply(Decimal(int(nbOfWaitedIteration) * 100))
+	cost := u.BusinessValueEstimation.Multiply(Decimal(int(nbOfWaitedIteration) * 100))
 	t.score.CostOfDelay = t.score.CostOfDelay.Add(cost)
 }
 
 func (t BacklogScorer) nbOfWaitedIteration(u UserStory) uint8 {
 	if u.IsDone() {
-		return u.doneInIteration - u.iterationEstimation
-	} else if t.currentIteration >= u.iterationEstimation {
-		return t.currentIteration - u.iterationEstimation + 1
+		return u.doneInIteration - u.IterationEstimation
+	} else if t.currentIteration >= u.IterationEstimation {
+		return t.currentIteration - u.IterationEstimation + 1
 	}
 	return 0
 }

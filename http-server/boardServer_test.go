@@ -208,6 +208,19 @@ func TestBoardServer(t *testing.T) {
 		assertStoriesDone(t, team.Backlog(), []StoryId{"EC-001", "EC-002", "EC-003", "EC-004"})
 		assertRedirection(t, response, "/demo")
 	})
+
+	t.Run("handle default backlog page", func(t *testing.T) {
+		game := NewGame()
+		server := NewBoardServer(game, localIpSeekerStub)
+
+		request, _ := http.NewRequest(http.MethodGet, "/backlog", nil)
+		response := httptest.NewRecorder()
+
+		server.ServeHTTP(response, request)
+
+		assert.Equal(t, http.StatusOK, response.Code)
+		assert.Contains(t, response.Body.String(), "<caption>You can sort the backlog</caption>")
+	})
 }
 
 func assertRedirection(t *testing.T, response *httptest.ResponseRecorder, expectedUrl string) {

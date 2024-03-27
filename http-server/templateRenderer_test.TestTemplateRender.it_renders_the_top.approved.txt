@@ -30,6 +30,8 @@
         <a href="/register">teams registration</a>
         &nbsp;&nbsp;&nbsp;
         <a href="/demo">demo scoring</a>
+        &nbsp;&nbsp;&nbsp;
+        <a href="/backlog">default backlog</a>
     </div>
 </nav>
 <<main and footer templates>>

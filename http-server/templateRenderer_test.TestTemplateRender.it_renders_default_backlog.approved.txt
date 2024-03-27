@@ -1,0 +1,182 @@
+<<top template>>
+
+<div class="container">
+    <div class="row">
+        <table id="backlogTable" class="compact hover">
+            <caption>You can sort the backlog</caption>
+            <thead>
+            <tr>
+                <th rowspan="2">User Story</th>
+                <th colspan="4" class="dt-head-center sorting_asc_disabled sorting_desc_disabled">Estimations</th>
+            </tr>
+            <tr>
+                <th class="dt-head-center">Point</th>
+                <th class="dt-head-center">Business Value</th>
+                <th class="dt-head-center">Risk</th>
+                <th class="dt-head-center">Done in Iteration</th>
+            </tr>
+            </thead>
+            <tbody>
+            
+                <tr>
+                    <td class="dt-left">Hello World</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$0.00</td>
+                    <td class="dt-body-center">30</td>
+                    <td class="dt-body-center">1</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">Can fill parameters</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$0.00</td>
+                    <td class="dt-body-center">15</td>
+                    <td class="dt-body-center">1</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">Compute order value without tax</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$1,000.00</td>
+                    <td class="dt-body-center">10</td>
+                    <td class="dt-body-center">1</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">Tax for UT</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$5,000.00</td>
+                    <td class="dt-body-center">10</td>
+                    <td class="dt-body-center">2</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">Tax for NV</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$2,600.00</td>
+                    <td class="dt-body-center">5</td>
+                    <td class="dt-body-center">2</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">Tax for TX</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$1,300.00</td>
+                    <td class="dt-body-center">2</td>
+                    <td class="dt-body-center">2</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">Tax for AL</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$700.00</td>
+                    <td class="dt-body-center">1</td>
+                    <td class="dt-body-center">2</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">Tax for CA</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$400.00</td>
+                    <td class="dt-body-center">0</td>
+                    <td class="dt-body-center">2</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">Can handle float for &#39;number of items&#39; AND &#39;price by item&#39;</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$1,000.00</td>
+                    <td class="dt-body-center">10</td>
+                    <td class="dt-body-center">2</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">15% Discount</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$500.00</td>
+                    <td class="dt-body-center">10</td>
+                    <td class="dt-body-center">3</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">10% Discount</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$260.00</td>
+                    <td class="dt-body-center">2</td>
+                    <td class="dt-body-center">3</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">7% Discount</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$130.00</td>
+                    <td class="dt-body-center">1</td>
+                    <td class="dt-body-center">3</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">5% Discount</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$70.00</td>
+                    <td class="dt-body-center">0</td>
+                    <td class="dt-body-center">3</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">3% Discount</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$40.00</td>
+                    <td class="dt-body-center">0</td>
+                    <td class="dt-body-center">3</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">Can handle rounding for result (two digits after the decimal point)</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$100.00</td>
+                    <td class="dt-body-center">0</td>
+                    <td class="dt-body-center">4</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">Prompts are clear. Display currency</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$100.00</td>
+                    <td class="dt-body-center">1</td>
+                    <td class="dt-body-center">4</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">Display details (order value, tax, discount</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$200.00</td>
+                    <td class="dt-body-center">3</td>
+                    <td class="dt-body-center">4</td>
+                </tr>
+            
+                <tr>
+                    <td class="dt-left">Do not have to re-launch the application for each test</td>
+                    <td class="dt-body-center">1</td>
+                    <td>$0.00</td>
+                    <td class="dt-body-center">0</td>
+                    <td class="dt-body-center">5</td>
+                </tr>
+            
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<link href="//cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css" rel="stylesheet" type="text/css">
+<script src="/static/lib/jquery-3.7.1.min.js"></script>
+<script src="/static/lib/datatables.min.js"></script>
+<script>
+    new DataTable('#backlogTable', {
+        info: false,
+        paging: false,
+        searching: false,
+        order: [],
+    });
+</script>
+
+<<footer template>>

@@ -1,0 +1,47 @@
+{{- /*gotype: elephant_carpaccio/domain.Backlog*/ -}}
+{{template "top" .}}
+<!-- Datatables -->
+<div class="container">
+    <div class="row">
+        <table id="backlogTable" class="compact hover">
+            <caption>You can sort the backlog</caption>
+            <thead>
+            <tr>
+                <th rowspan="2">User Story</th>
+                <th colspan="4" class="dt-head-center sorting_asc_disabled sorting_desc_disabled">Estimations</th>
+            </tr>
+            <tr>
+                <th class="dt-head-center">Point</th>
+                <th class="dt-head-center">Business Value</th>
+                <th class="dt-head-center">Risk</th>
+                <th class="dt-head-center">Done in Iteration</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{range .}}
+                <tr>
+                    <td class="dt-left">{{.Description}}</td>
+                    <td class="dt-body-center">{{.PointEstimation}}</td>
+                    <td>{{.BusinessValueEstimation}}</td>
+                    <td class="dt-body-center">{{.RiskEstimation}}</td>
+                    <td class="dt-body-center">{{.IterationEstimation}}</td>
+                </tr>
+            {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<link href="//cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css" rel="stylesheet" type="text/css">
+<script src="/static/lib/jquery-3.7.1.min.js"></script>
+<script src="/static/lib/datatables.min.js"></script>
+<script>
+    new DataTable('#backlogTable', {
+        info: false,
+        paging: false,
+        searching: false,
+        order: [],
+    });
+</script>
+
+{{template "footer" .}}

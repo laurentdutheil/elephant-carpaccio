@@ -16,10 +16,10 @@ func (id StoryId) IsIn(ids []StoryId) bool {
 type UserStory struct {
 	Id                      StoryId
 	Description             string
-	pointEstimation         int
-	businessValueEstimation money.Dollar
-	riskEstimation          int
-	iterationEstimation     uint8
+	PointEstimation         int
+	BusinessValueEstimation money.Dollar
+	RiskEstimation          int
+	IterationEstimation     uint8
 	done                    bool
 	doneInIteration         uint8
 }
@@ -43,7 +43,7 @@ func NewUserStoryBuilder(id StoryId) *UserStoryBuilder {
 	return &UserStoryBuilder{
 		userStory: &UserStory{
 			Id:              id,
-			pointEstimation: 1,
+			PointEstimation: 1,
 		},
 	}
 }
@@ -54,17 +54,17 @@ func (b *UserStoryBuilder) Description(description string) *UserStoryBuilder {
 }
 
 func (b *UserStoryBuilder) BusinessValueEstimation(businessValueEstimation money.Dollar) *UserStoryBuilder {
-	b.userStory.businessValueEstimation = businessValueEstimation
+	b.userStory.BusinessValueEstimation = businessValueEstimation
 	return b
 }
 
 func (b *UserStoryBuilder) RiskEstimation(riskEstimation int) *UserStoryBuilder {
-	b.userStory.riskEstimation = riskEstimation
+	b.userStory.RiskEstimation = riskEstimation
 	return b
 }
 
 func (b *UserStoryBuilder) IterationEstimation(iterationEstimation uint8) *UserStoryBuilder {
-	b.userStory.iterationEstimation = iterationEstimation
+	b.userStory.IterationEstimation = iterationEstimation
 	return b
 }
 
