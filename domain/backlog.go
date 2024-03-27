@@ -22,9 +22,9 @@ func (b Backlog) Score(currentIteration uint8) Score {
 func DefaultBacklog() Backlog {
 	return Backlog{
 		NewUserStoryBuilder("EC-001").Description("Hello World").RiskEstimation(30).IterationEstimation(1).Build(),
-		NewUserStoryBuilder("EC-002").Description("Can fill parameters").RiskEstimation(10).IterationEstimation(1).Build(),
+		NewUserStoryBuilder("EC-002").Description("Can fill parameters").RiskEstimation(15).IterationEstimation(1).Build(),
 		NewUserStoryBuilder("EC-003").Description("Compute order value without tax").BusinessValueEstimation(NewDollar(Decimal(100000))).RiskEstimation(10).IterationEstimation(1).Build(),
-		NewUserStoryBuilder("EC-004").Description("Tax for UT").BusinessValueEstimation(NewDollar(Decimal(500000))).RiskEstimation(15).IterationEstimation(2).Build(),
+		NewUserStoryBuilder("EC-004").Description("Tax for UT").BusinessValueEstimation(NewDollar(Decimal(500000))).RiskEstimation(10).IterationEstimation(2).Build(),
 		NewUserStoryBuilder("EC-005").Description("Tax for NV").BusinessValueEstimation(NewDollar(Decimal(260000))).RiskEstimation(5).IterationEstimation(2).Build(),
 		NewUserStoryBuilder("EC-006").Description("Tax for TX").BusinessValueEstimation(NewDollar(Decimal(130000))).RiskEstimation(2).IterationEstimation(2).Build(),
 		NewUserStoryBuilder("EC-007").Description("Tax for AL").BusinessValueEstimation(NewDollar(Decimal(70000))).RiskEstimation(1).IterationEstimation(2).Build(),

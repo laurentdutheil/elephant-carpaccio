@@ -96,7 +96,7 @@ riskChart = new Chart(document.getElementById('risk'), {
         datasets: [
             {
                 label: 'ideal',
-                data: [100, 50, 17, 4, 1, 0, 0],
+                data: [100, 45, 17, 4, 1, 0, 0],
                 borderWidth: 1,
                 tension: 0.3,
                 borderDash: [10, 5]
