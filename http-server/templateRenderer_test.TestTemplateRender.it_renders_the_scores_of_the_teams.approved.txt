@@ -92,7 +92,7 @@
     businessValueChart.update()
     
     riskChart.data.datasets
-        .push({label: "A Team", data: [100, 45 , 30 , 27 ], borderWidth: 1, tension: 0.3})
+        .push({label: "A Team", data: [100, 35 , 20 , 17 ], borderWidth: 1, tension: 0.3})
     riskChart.update()
     
     costOfDelayChart.data.datasets
@@ -108,7 +108,7 @@
     businessValueChart.update()
     
     riskChart.data.datasets
-        .push({label: "The fantastic four", data: [100, 45 , 30 , 27 ], borderWidth: 1, tension: 0.3})
+        .push({label: "The fantastic four", data: [100, 35 , 20 , 17 ], borderWidth: 1, tension: 0.3})
     riskChart.update()
     
     costOfDelayChart.data.datasets

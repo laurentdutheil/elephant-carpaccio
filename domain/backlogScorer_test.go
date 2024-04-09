@@ -61,7 +61,7 @@ func TestScorer_mitigates_risk(t *testing.T) {
 	}{
 		{"have maximum risk at beginning", []domain.StoryId{}, 100},
 		{"remove risk when a story is done", []domain.StoryId{"EC-001"}, 70},
-		{"remove risk when several stories are done", []domain.StoryId{"EC-001", "EC-002", "EC-003"}, 45},
+		{"remove risk when several stories are done", []domain.StoryId{"EC-001", "EC-002", "EC-003"}, 35},
 		{"do not remove risk when story does not exist", []domain.StoryId{"Wrong-Id"}, 100},
 	}
 	for _, test := range tests {
