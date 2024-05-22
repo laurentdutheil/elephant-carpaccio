@@ -1,6 +1,7 @@
 # Elephant Carpaccio
 
-This project proposes to gamify the Alistair Cockburn's workshop: the Elephant Carpaccio
+This project proposes to gamify the Alistair Cockburn's workshop: the Elephant Carpaccio.
+You can find the [handout](https://docs.google.com/document/d/1Ls6pTmhY_LV8LwFiboUXoFXenXZl0qVZWPZ8J4uoqpI) and the [facilitator guide](https://docs.google.com/document/u/1/d/1TCuuu-8Mm14oxsOnlk8DqfZAA1cvtYu9WGv67Yj_sSk/pub) in the footer (or in this readme)
 
 ![home screenshot of Elephant Carpaccio Game](home-screenshot.png)
 
