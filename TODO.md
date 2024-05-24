@@ -17,7 +17,7 @@ Purpose: help the facilitator to attribute points to the teams.
 
 Purpose: each team have to build an api to respond to the requests of the game server.
 
-- [x] create an API for team registration (name + ip)
+- [ ] create an API for team registration (name + ip)
 - [ ] create a scheduler to ping teams api
 - [ ] handle response to give feedback to team (ok + error)
 - [ ] add toggles to allow the facilitator to activate new test datasets

@@ -2,7 +2,6 @@ package domain
 
 type Team struct {
 	name            string
-	ip              string
 	backlog         Backlog
 	iterationScores []Score
 	gameNotifier    GameNotifier
@@ -14,14 +13,6 @@ func NewTeam(name string, gameNotifier GameNotifier) *Team {
 
 func (t *Team) Name() string {
 	return t.name
-}
-
-func (t *Team) IP() string {
-	return t.ip
-}
-
-func (t *Team) SetIp(ip string) {
-	t.ip = ip
 }
 
 func (t *Team) Backlog() Backlog {

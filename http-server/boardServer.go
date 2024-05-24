@@ -41,7 +41,6 @@ func NewBoardServer(game *Game, localIp net.IP) *BoardServer {
 	router.HandleFunc("/backlog", s.handleDefaultBacklog)
 
 	HandleSSE(router, game)
-	HandleApi(router, game)
 
 	s.Handler = router
 

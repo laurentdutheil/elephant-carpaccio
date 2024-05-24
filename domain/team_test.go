@@ -16,15 +16,6 @@ func TestTeamHaveAName(t *testing.T) {
 	assert.Equal(t, "A Team", teamName)
 }
 
-func TestTeamHaveAnIP(t *testing.T) {
-	team := NewTeam("A Team", nil)
-	team.SetIp("128.168.0.44")
-
-	ip := team.IP()
-
-	assert.Equal(t, "128.168.0.44", ip)
-}
-
 func TestTeamHaveADefaultBacklogAtBeginning(t *testing.T) {
 	team := NewTeam("A Team", nil)
 	backlog := team.Backlog()
