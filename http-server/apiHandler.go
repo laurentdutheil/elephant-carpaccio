@@ -30,13 +30,14 @@ func handleRegistration(game *domain.Game) http.Handler {
 			}
 
 			existingTeam := game.FindTeamByName(requestBody.TeamName)
-			if existingTeam != nil {
-				existingTeam.SetIp(requestBody.IP)
-				w.WriteHeader(http.StatusOK)
-			} else {
-				game.Register(requestBody.TeamName, requestBody.IP)
+			if existingTeam == nil {
+				game.Register(requestBody.TeamName)
+				existingTeam = game.FindTeamByName(requestBody.TeamName)
 				w.WriteHeader(http.StatusCreated)
+			} else {
+				w.WriteHeader(http.StatusOK)
 			}
+			existingTeam.SetIp(requestBody.IP)
 		default:
 			w.WriteHeader(http.StatusBadRequest)
 			_, _ = fmt.Fprint(w, "please use PUT method to register/update your team")

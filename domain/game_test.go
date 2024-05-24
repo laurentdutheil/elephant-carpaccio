@@ -9,20 +9,20 @@ import (
 
 func TestRegisterTeam(t *testing.T) {
 	game := NewGame()
-	game.Register("A Team", "128.168.0.44")
+	game.Register("A Team")
 
 	teams := game.Teams()
 
-	assert.Contains(t, teams, NewTeam("A Team", "128.168.0.44", game))
+	assert.Contains(t, teams, NewTeam("A Team", game))
 }
 
 func TestDontRegisterTeamIfNameIsBlank(t *testing.T) {
 	game := NewGame()
-	game.Register("", "128.168.0.44")
+	game.Register("")
 
 	teams := game.Teams()
 
-	assert.NotContains(t, teams, NewTeam("", "128.168.0.44", game))
+	assert.NotContains(t, teams, NewTeam("", game))
 	assert.Len(t, teams, 0)
 }
 
@@ -36,7 +36,7 @@ func TestFindNoTeamWhenNoRegistration(t *testing.T) {
 
 func TestFindTeamWhenItIsRegistered(t *testing.T) {
 	game := NewGame()
-	game.Register("A Team", "")
+	game.Register("A Team")
 
 	team := game.FindTeamByName("A Team")
 
@@ -49,7 +49,7 @@ func TestRegistrationShouldNotifyAllObserver(t *testing.T) {
 
 	game := NewGame()
 	game.AddGameObserver(mockScoreObserver)
-	game.Register("A Team", "")
+	game.Register("A Team")
 
 	mockScoreObserver.AssertCalled(t, "AddRegistration", "A Team")
 }

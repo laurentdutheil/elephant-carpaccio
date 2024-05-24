@@ -9,7 +9,7 @@ import (
 )
 
 func TestTeamHaveAName(t *testing.T) {
-	team := NewTeam("A Team", "", nil)
+	team := NewTeam("A Team", nil)
 
 	teamName := team.Name()
 
@@ -17,7 +17,8 @@ func TestTeamHaveAName(t *testing.T) {
 }
 
 func TestTeamHaveAnIP(t *testing.T) {
-	team := NewTeam("A Team", "128.168.0.44", nil)
+	team := NewTeam("A Team", nil)
+	team.SetIp("128.168.0.44")
 
 	ip := team.IP()
 
@@ -25,14 +26,14 @@ func TestTeamHaveAnIP(t *testing.T) {
 }
 
 func TestTeamHaveADefaultBacklogAtBeginning(t *testing.T) {
-	team := NewTeam("A Team", "", nil)
+	team := NewTeam("A Team", nil)
 	backlog := team.Backlog()
 
 	assert.Equal(t, DefaultBacklog(), backlog)
 }
 
 func TestCompleteFirstIteration(t *testing.T) {
-	team := NewTeam("A Team", "", nil)
+	team := NewTeam("A Team", nil)
 	team.Done("EC-001")
 	team.CompleteIteration()
 
@@ -40,7 +41,7 @@ func TestCompleteFirstIteration(t *testing.T) {
 }
 
 func TestCompleteSeveralIterations(t *testing.T) {
-	team := NewTeam("A Team", "", nil)
+	team := NewTeam("A Team", nil)
 	team.Done("EC-001")
 	team.CompleteIteration()
 	team.Done("EC-002", "EC-003")
@@ -53,7 +54,7 @@ func TestCompleteSeveralIterations(t *testing.T) {
 
 func TestCompleteIterationNotifyScoresListeners(t *testing.T) {
 	mockScoreSubject := MockGameSubject{}
-	team := NewTeam("A Team", "", &mockScoreSubject)
+	team := NewTeam("A Team", &mockScoreSubject)
 	team.Done("EC-001")
 
 	mockScoreSubject.On("NotifyScore", mock.Anything, mock.Anything)

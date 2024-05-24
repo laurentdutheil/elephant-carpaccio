@@ -88,7 +88,7 @@ func TestBoardServer(t *testing.T) {
 	t.Run("handle demo scoring page for a team", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
-		game.Register("A Team", "")
+		game.Register("A Team")
 
 		request, _ := http.NewRequest(http.MethodGet, "/demo/A Team", nil)
 		response := httptest.NewRecorder()
@@ -102,7 +102,7 @@ func TestBoardServer(t *testing.T) {
 	t.Run("handle demo scoring page for a team with a order example with fixed state", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
-		game.Register("A Team", "")
+		game.Register("A Team")
 
 		request, _ := http.NewRequest(http.MethodGet, "/demo/A Team?state=1", nil)
 		response := httptest.NewRecorder()
@@ -116,7 +116,7 @@ func TestBoardServer(t *testing.T) {
 	t.Run("handle demo scoring page for a team with a order example with wrong state", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
-		game.Register("A Team", "")
+		game.Register("A Team")
 		tests := []struct {
 			request string
 		}{
@@ -139,7 +139,7 @@ func TestBoardServer(t *testing.T) {
 	t.Run("handle demo scoring page for a team with a order with fixed discount", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
-		game.Register("A Team", "")
+		game.Register("A Team")
 
 		request, _ := http.NewRequest(http.MethodGet, "/demo/A Team?discount=3", nil)
 		response := httptest.NewRecorder()
@@ -153,7 +153,7 @@ func TestBoardServer(t *testing.T) {
 	t.Run("handle demo scoring page for a team with a order example with wrong discount", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
-		game.Register("A Team", "")
+		game.Register("A Team")
 		tests := []struct {
 			request string
 		}{
@@ -176,7 +176,7 @@ func TestBoardServer(t *testing.T) {
 	t.Run("handle demo scoring page for a team with a order with a nbOfItems without decimal", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
-		game.Register("A Team", "")
+		game.Register("A Team")
 
 		request, _ := http.NewRequest(http.MethodGet, "/demo/A Team?withoutDecimal=true", nil)
 		response := httptest.NewRecorder()
@@ -190,7 +190,7 @@ func TestBoardServer(t *testing.T) {
 	t.Run("handle demo scoring post", func(t *testing.T) {
 		game := NewGame()
 		server := NewBoardServer(game, localIpSeekerStub)
-		game.Register("A Team", "")
+		game.Register("A Team")
 		team := game.Teams()[0]
 
 		data := url.Values{}

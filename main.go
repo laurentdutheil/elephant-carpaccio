@@ -38,8 +38,8 @@ func main() {
 }
 
 func simulateGameForDev(game *Game) {
-	game.Register("A Team", "")
-	game.Register("The fantastic four", "")
+	game.Register("A Team")
+	game.Register("The fantastic four")
 
 	team1 := game.Teams()[0]
 	team1.Done("EC-001", "EC-002", "EC-003")

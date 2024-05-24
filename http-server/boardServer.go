@@ -57,7 +57,7 @@ func (s BoardServer) handleRegistration(writer http.ResponseWriter, request *htt
 	case http.MethodGet:
 		_ = s.templateRenderer.RenderRegistration(writer, s.game)
 	case http.MethodPost:
-		s.game.Register(request.FormValue("teamName"), "")
+		s.game.Register(request.FormValue("teamName"))
 		http.Redirect(writer, request, request.URL.String(), http.StatusFound)
 	}
 }

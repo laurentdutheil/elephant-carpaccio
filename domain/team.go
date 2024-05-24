@@ -8,8 +8,8 @@ type Team struct {
 	gameNotifier    GameNotifier
 }
 
-func NewTeam(name string, ip string, gameNotifier GameNotifier) *Team {
-	return &Team{name: name, ip: ip, backlog: DefaultBacklog(), gameNotifier: gameNotifier}
+func NewTeam(name string, gameNotifier GameNotifier) *Team {
+	return &Team{name: name, backlog: DefaultBacklog(), gameNotifier: gameNotifier}
 }
 
 func (t *Team) Name() string {

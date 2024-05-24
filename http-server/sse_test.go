@@ -86,7 +86,7 @@ func TestSse(t *testing.T) {
 
 	t.Run("should send score event when an iteration is completed", func(t *testing.T) {
 		game := NewGame()
-		game.Register("A Team", "")
+		game.Register("A Team")
 		team := game.Teams()[0]
 
 		router := http.NewServeMux()
@@ -120,7 +120,7 @@ func TestSse(t *testing.T) {
 		response := httptest.NewRecorder()
 
 		time.AfterFunc(time.Millisecond, func() {
-			game.Register("A Team", "")
+			game.Register("A Team")
 		})
 
 		router.ServeHTTP(response, request)

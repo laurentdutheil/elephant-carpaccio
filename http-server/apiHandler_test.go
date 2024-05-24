@@ -27,12 +27,13 @@ func TestApiRouter(t *testing.T) {
 		assert.Equal(t, http.StatusCreated, response.Code)
 		teams := game.Teams()
 		assert.Len(t, teams, 1)
-		assert.Contains(t, teams, NewTeam("A Team", "128.168.0.44", game))
+		assert.Equal(t, "A Team", teams[0].Name())
+		assert.Equal(t, "128.168.0.44", teams[0].IP())
 	})
 
 	t.Run("should update registered team on a PUT", func(t *testing.T) {
 		game := NewGame()
-		game.Register("A Team", "128.168.0.44")
+		game.Register("A Team")
 		router := http.NewServeMux()
 		HandleApi(router, game)
 
@@ -46,7 +47,8 @@ func TestApiRouter(t *testing.T) {
 		assert.Equal(t, http.StatusOK, response.Code)
 		teams := game.Teams()
 		assert.Len(t, teams, 1)
-		assert.Contains(t, teams, NewTeam("A Team", "128.168.0.55", game))
+		assert.Equal(t, "A Team", teams[0].Name())
+		assert.Equal(t, "128.168.0.55", teams[0].IP())
 	})
 
 	t.Run("should not register team on a POST", func(t *testing.T) {
