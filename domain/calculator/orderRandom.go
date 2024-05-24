@@ -44,10 +44,10 @@ func (dr OrderRandomizer) RandDollar(minAmount Dollar, maxAmount Dollar) Dollar 
 
 func (dr OrderRandomizer) RandDiscountLevel() *Discount {
 	randDiscountLevel := RandIntn(int(numberOfDiscounts))
-	return DiscountOf(randDiscountLevel)
+	return DiscountOf(DiscountLevel(randDiscountLevel))
 }
 
 func (dr OrderRandomizer) RandState() *State {
 	randStateCode := RandIntn(int(numberOfStates))
-	return StateOf(randStateCode)
+	return StateOf(StateCode(randStateCode))
 }

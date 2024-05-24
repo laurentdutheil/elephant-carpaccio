@@ -7,8 +7,8 @@ type State struct {
 	TaxRate money.Percent
 }
 
-func StateOf(value int) *State {
-	return StateCode(value).State()
+func StateOf(stateCode StateCode) *State {
+	return stateCode.State()
 }
 
 func (s State) ApplyTax(amount money.Dollar) money.Dollar {

@@ -112,7 +112,7 @@ func requestState(stateInRequest string) *State {
 		if err != nil {
 			return nil
 		}
-		return StateOf(parsedStateCode)
+		return StateOf(StateCode(parsedStateCode))
 	}
 	return nil
 }
@@ -123,7 +123,7 @@ func requestDiscount(discountInRequest string) *Discount {
 		if err != nil {
 			return nil
 		}
-		return DiscountOf(parsedDiscountLevel)
+		return DiscountOf(DiscountLevel(parsedDiscountLevel))
 	}
 	return nil
 }
