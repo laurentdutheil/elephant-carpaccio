@@ -13,7 +13,7 @@ type InterfaceAddrs = func() ([]net.Addr, error)
 func GetLocalIp(interfaceAddrsSeeker InterfaceAddrs) (net.IP, error) {
 	addrs, err := interfaceAddrsSeeker()
 	if err != nil {
-		return nil, fmt.Errorf("error during getting interface adresses")
+		return nil, fmt.Errorf("no local ip found")
 	}
 	for _, addr := range addrs {
 		ipNet, ok := addr.(*net.IPNet)

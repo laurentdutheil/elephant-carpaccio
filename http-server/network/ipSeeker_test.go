@@ -24,7 +24,7 @@ func TestGetLocalIpReturnErrorWhenInterfaceAddrsReturnError(t *testing.T) {
 	}
 	_, err := GetLocalIp(stub)
 	assert.Error(t, err)
-	assert.Equal(t, "error during getting interface adresses", err.Error())
+	assert.Equal(t, "no local ip found", err.Error())
 }
 
 func TestGetLocalIpReturnErrorWhenInterfaceAddrsReturnNothing(t *testing.T) {
