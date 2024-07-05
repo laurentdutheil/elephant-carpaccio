@@ -92,6 +92,7 @@ func TestScorer_add_cost_of_delay(t *testing.T) {
 		{"no cost of delay if stories are done in iteration estimation", []domain.StoryId{"EC-001", "EC-002", "EC-003"}, 1, money.NewDollar(money.Decimal(0))},
 		{"cost of delay if stories are done after iteration estimation", []domain.StoryId{"EC-001", "EC-002", "EC-003"}, 2, money.NewDollar(money.Decimal(1200000))},
 		{"do not change the cost of delay when story does not exist", []domain.StoryId{"Wrong-Id"}, 5, money.NewDollar(money.Decimal(5280000))},
+		{"do not change the cost of delay when story is done before prediction", []domain.StoryId{"EC-001", "EC-002", "EC-003", "EC-004"}, 1, money.NewDollar(money.Decimal(0))},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {

@@ -1,7 +1,7 @@
 package main
 
 import (
-	. "elephant_carpaccio/domain"
+	"elephant_carpaccio/domain"
 	httpserver "elephant_carpaccio/http-server"
 	"elephant_carpaccio/http-server/network"
 	"flag"
@@ -26,7 +26,7 @@ func realMain(interfaceAddrsFunc network.InterfaceAddrs, listenAndServeFunc func
 	}
 	_, _ = fmt.Fprintln(stdout, "local IP: "+localIp.String())
 
-	game := NewGame()
+	game := domain.NewGame()
 	server := httpserver.NewBoardServer(game, localIp)
 
 	addr := ":3000"
@@ -57,7 +57,7 @@ func handleFlags(stdout io.Writer) string {
 	return environment
 }
 
-func simulateGameForDev(game *Game) {
+func simulateGameForDev(game *domain.Game) {
 	game.Register("A Team")
 	game.Register("The fantastic four")
 

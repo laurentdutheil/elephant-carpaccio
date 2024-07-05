@@ -59,7 +59,9 @@ func (t BacklogScorer) updateCostOfDelayWith(u UserStory) {
 
 func (t BacklogScorer) nbOfWaitedIteration(u UserStory) uint8 {
 	if u.IsDone() {
-		return u.doneInIteration - u.IterationEstimation
+		if u.doneInIteration > u.IterationEstimation {
+			return u.doneInIteration - u.IterationEstimation
+		}
 	} else if t.currentIteration >= u.IterationEstimation {
 		return t.currentIteration - u.IterationEstimation + 1
 	}
