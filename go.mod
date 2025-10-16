@@ -3,8 +3,8 @@ module elephant_carpaccio
 go 1.21
 
 require (
-	github.com/approvals/go-approval-tests v0.0.0-20220530063708-32d5677069bd
-	github.com/stretchr/testify v1.9.0
+	github.com/approvals/go-approval-tests v1.6.0
+	github.com/stretchr/testify v1.11.1
 )
 
 require (
